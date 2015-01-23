@@ -4,7 +4,7 @@ This is home to our great project
 * Open Git bash, cd to your preferred folder 
 * Clone the project with command: git clone git@github.com:phuc10cdt2/MDP-Jan-2015.git
 * Make changes to the folder as you progress
-* After finish one change, add changes to the local directory with command: "git add ."
+* After finish one change, add changes to the local directory with command: "git add -A"
 * commit the changes: git commit -m "Your messages about changes come here"
 * push the changes to repository so that every one can see: git push
 *
