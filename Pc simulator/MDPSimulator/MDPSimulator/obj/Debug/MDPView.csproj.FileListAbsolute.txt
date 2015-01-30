@@ -1,0 +1,15 @@
+C:\Users\dinhphuc001\documents\visual studio 2013\Projects\MDPSimulator\MDPSimulator\bin\Debug\MDPSimulator.exe.config
+C:\Users\dinhphuc001\documents\visual studio 2013\Projects\MDPSimulator\MDPSimulator\bin\Debug\MDPSimulator.exe
+C:\Users\dinhphuc001\documents\visual studio 2013\Projects\MDPSimulator\MDPSimulator\bin\Debug\MDPSimulator.pdb
+C:\Users\dinhphuc001\documents\visual studio 2013\Projects\MDPSimulator\MDPSimulator\obj\Debug\MDPView.csprojResolveAssemblyReference.cache
+C:\Users\dinhphuc001\documents\visual studio 2013\Projects\MDPSimulator\MDPSimulator\obj\Debug\MainPage.baml
+C:\Users\dinhphuc001\documents\visual studio 2013\Projects\MDPSimulator\MDPSimulator\obj\Debug\MainPage.g.cs
+C:\Users\dinhphuc001\documents\visual studio 2013\Projects\MDPSimulator\MDPSimulator\obj\Debug\App.g.cs
+C:\Users\dinhphuc001\documents\visual studio 2013\Projects\MDPSimulator\MDPSimulator\obj\Debug\MDPSimulator_MarkupCompile.cache
+C:\Users\dinhphuc001\documents\visual studio 2013\Projects\MDPSimulator\MDPSimulator\obj\Debug\MDPSimulator.g.resources
+C:\Users\dinhphuc001\documents\visual studio 2013\Projects\MDPSimulator\MDPSimulator\obj\Debug\MDPSimulator.Properties.Resources.resources
+C:\Users\dinhphuc001\documents\visual studio 2013\Projects\MDPSimulator\MDPSimulator\obj\Debug\MDPView.csproj.GenerateResource.Cache
+C:\Users\dinhphuc001\documents\visual studio 2013\Projects\MDPSimulator\MDPSimulator\obj\Debug\MDPSimulator.exe
+C:\Users\dinhphuc001\documents\visual studio 2013\Projects\MDPSimulator\MDPSimulator\obj\Debug\MDPSimulator.pdb
+C:\Users\dinhphuc001\documents\visual studio 2013\Projects\MDPSimulator\MDPSimulator\bin\Debug\MDPModel.dll
+C:\Users\dinhphuc001\documents\visual studio 2013\Projects\MDPSimulator\MDPSimulator\bin\Debug\MDPModel.pdb

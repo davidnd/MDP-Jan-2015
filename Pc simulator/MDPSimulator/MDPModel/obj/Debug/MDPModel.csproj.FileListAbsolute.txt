@@ -1,0 +1,5 @@
+C:\Users\dinhphuc001\documents\visual studio 2013\Projects\MDPSimulator\MDPModel\obj\Debug\MDPModel.csprojResolveAssemblyReference.cache
+C:\Users\dinhphuc001\documents\visual studio 2013\Projects\MDPSimulator\MDPModel\bin\Debug\MDPModel.dll
+C:\Users\dinhphuc001\documents\visual studio 2013\Projects\MDPSimulator\MDPModel\bin\Debug\MDPModel.pdb
+C:\Users\dinhphuc001\documents\visual studio 2013\Projects\MDPSimulator\MDPModel\obj\Debug\MDPModel.dll
+C:\Users\dinhphuc001\documents\visual studio 2013\Projects\MDPSimulator\MDPModel\obj\Debug\MDPModel.pdb
