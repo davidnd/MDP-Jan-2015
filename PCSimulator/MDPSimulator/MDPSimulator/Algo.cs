@@ -11,23 +11,29 @@ namespace MDPSimulator
         private static int[,] virtualMap = new int[Map.height, Map.width];
         private static int[,] fullDottedMap = new int[Map.height+1, Map.width+1];
         private static int[,] movableDottedMap = new int[Map.height - 1, Map.width - 1];
-        private static int[,] exploredMap = new int[movableDottedMap.GetLength(0), movableDottedMap.GetLength(1)];
+        private static int[,] exploredDottedMap = new int[movableDottedMap.GetLength(0), movableDottedMap.GetLength(1)];
+        private static int[,] exploredVirtualMap = new int[virtualMap.GetLength(0), virtualMap.GetLength(1)];
         private static int xStart = 0, yStart = 0, xGoal = movableDottedMap.GetLength(1), yGoal = movableDottedMap.GetLength(0);
         private static int sensorRange = 1;
         public static void explore(int[,] map)
         {
             //virtual wall and boundaries of obstacles.
             preprocess(map);
-            exploreDottedMap(movableDottedMap);
-            Console.WriteLine("==========Explored map============");
-            printMap(exploredMap);
+            Console.WriteLine("==========Virtual map============");
+            printMap(virtualMap);
+            //exploreDottedMap(movableDottedMap);
+            //Console.WriteLine("==========Explored dotted map============");
+            //printMap(exploredDottedMap);
+
+            
+
         }
 
         public static void fastestRun(int[,] map)
         {
 
         }
-
+        //convert the cell grid to the dotted grid and then the robot-movable dotted grid
         public static void preprocess(int [,] map)
         {
             for (int i = 0; i < Map.height; i++)
@@ -80,6 +86,7 @@ namespace MDPSimulator
             printMap(movableDottedMap);
         }
 
+        //print a map
         public static void printMap(int[,] map)
         {
             for (int i = 0; i < map.GetLength(0); i++)
@@ -93,13 +100,14 @@ namespace MDPSimulator
             }
         }
 
+        //explore a dotted map
         public static void exploreDottedMap(int[,] map)
         {
             //dirs are U, D, L, R
             char dir = 'R';
             int currentX = xStart;
             int currentY = yStart;
-            exploredMap[currentX, currentY] = 1;
+            exploredDottedMap[currentX, currentY] = 1;
             Console.WriteLine("{0},{1}", map.GetLength(0), map.GetLength(1));
             do
             {
@@ -216,7 +224,7 @@ namespace MDPSimulator
                     Console.WriteLine(ex);
                 }
                 
-                exploredMap[currentY , currentX] = 1;
+                exploredDottedMap[currentY , currentX] = 1;
             } while (currentX != 0 || currentY != 0);
         }
 
@@ -232,19 +240,17 @@ namespace MDPSimulator
                         continue;
                     //wall or obstacles, label 2
                     if (map[y, x] == 1)
-                        exploredMap[y, x] = 2;
+                        exploredDottedMap[y, x] = 2;
                     else
                         //explored, empty space, label 1
-                        exploredMap[y, x] = 1;
+                        exploredDottedMap[y, x] = 1;
                     //unexplored space is lable 0
                 }
             }
         }
-
+        //check if a coordinates is within the map
         public static bool checkCoordinates(int[,] map, int x, int y)
         {
-            Console.WriteLine("{0},{1}", x, y);
-            Console.WriteLine(x >= 0 && x < map.GetLength(1) && y >= 0 && y < map.GetLength(0));
             return x >= 0 && x < map.GetLength(1) && y >= 0 && y < map.GetLength(0);
         }
 

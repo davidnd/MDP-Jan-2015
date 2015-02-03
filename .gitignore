@@ -9,7 +9,10 @@
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
-
+PCSimulator/MDPSimulator/*/bin
+PCSimulator/MDPSimulator/*/obj
+PCSimulator/progress.txt
+PCSimulator/MDPSimulator/map.txt
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/

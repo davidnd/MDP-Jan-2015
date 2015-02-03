@@ -1,5 +1,0 @@
-C:\Users\dinhphuc001\documents\visual studio 2013\Projects\MDPSimulator\MDPModelView\bin\Debug\MDPModelView.dll
-C:\Users\dinhphuc001\documents\visual studio 2013\Projects\MDPSimulator\MDPModelView\bin\Debug\MDPModelView.pdb
-C:\Users\dinhphuc001\documents\visual studio 2013\Projects\MDPSimulator\MDPModelView\obj\Debug\MDPViewModel.csprojResolveAssemblyReference.cache
-C:\Users\dinhphuc001\documents\visual studio 2013\Projects\MDPSimulator\MDPModelView\obj\Debug\MDPModelView.dll
-C:\Users\dinhphuc001\documents\visual studio 2013\Projects\MDPSimulator\MDPModelView\obj\Debug\MDPModelView.pdb

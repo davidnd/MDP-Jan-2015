@@ -65,7 +65,7 @@ namespace MDPSimulator.View
             string content = "";
             try
             {
-                using (StreamReader sr = new StreamReader("C:/Users/dinhphuc001/Documents/Visual Studio 2013/Projects/MDPSimulator/map.txt"))
+                using (StreamReader sr = new StreamReader("E:/Git/MDP-Jan-2015/PCSimulator/MDPSimulator/map.txt"))
                 {
                     string line;
                     while((line = sr.ReadLine())!=null)

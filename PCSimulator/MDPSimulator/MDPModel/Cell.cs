@@ -8,5 +8,15 @@ namespace MDPModel
 {
     class Cell
     {
+        public int Status { get; set;}
+
+        public Cell()
+        {
+            this.Status = 0;
+        }
+        public Cell(int st)
+        {
+            this.Status = st;
+        }
     }
 }
