@@ -13,6 +13,7 @@ namespace MDPSimulator
         private static int[,] movableDottedMap = new int[Map.height - 1, Map.width - 1];
         private static int[,] exploredMap = new int[movableDottedMap.GetLength(0), movableDottedMap.GetLength(1)];
         private static int xStart = 0, yStart = 0, xGoal = movableDottedMap.GetLength(1), yGoal = movableDottedMap.GetLength(0);
+        private static int sensorRange = 1;
         public static void explore(int[,] map)
         {
             //virtual wall and boundaries of obstacles.
@@ -86,6 +87,7 @@ namespace MDPSimulator
                 for (int j = 0; j < map.GetLength(1); j++)
                 {
                     Console.Write(map[map.GetLength(0)-i-1, j]);
+                    Console.Write(" ");
                 }
                 Console.WriteLine();
             }
@@ -104,7 +106,8 @@ namespace MDPSimulator
                 try
                 {
                     Console.WriteLine(dir);
-                    Console.WriteLine("{0}, {1}", currentX, currentY);       
+                    Console.WriteLine("{0}, {1}", currentX, currentY);
+                    senseAndUpdate(map, currentX, currentY);
                     switch (dir)
                     {
                         case 'R':
@@ -210,11 +213,40 @@ namespace MDPSimulator
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    Console.WriteLine(ex);
                 }
                 
                 exploredMap[currentY , currentX] = 1;
             } while (currentX != 0 || currentY != 0);
         }
+
+        private static void senseAndUpdate(int[,] map, int currentX, int currentY)
+        {
+            //throw new NotImplementedException();
+            for (int x = currentX - sensorRange; x <= currentX+sensorRange; x++)
+            {
+                for (int y = currentY-sensorRange; y <=currentY+sensorRange ; y++)
+                {
+                   
+                    if (!checkCoordinates(map, x, y))
+                        continue;
+                    //wall or obstacles, label 2
+                    if (map[y, x] == 1)
+                        exploredMap[y, x] = 2;
+                    else
+                        //explored, empty space, label 1
+                        exploredMap[y, x] = 1;
+                    //unexplored space is lable 0
+                }
+            }
+        }
+
+        public static bool checkCoordinates(int[,] map, int x, int y)
+        {
+            Console.WriteLine("{0},{1}", x, y);
+            Console.WriteLine(x >= 0 && x < map.GetLength(1) && y >= 0 && y < map.GetLength(0));
+            return x >= 0 && x < map.GetLength(1) && y >= 0 && y < map.GetLength(0);
+        }
+
     }
 }

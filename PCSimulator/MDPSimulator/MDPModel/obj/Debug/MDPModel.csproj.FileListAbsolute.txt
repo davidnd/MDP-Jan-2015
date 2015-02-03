@@ -3,3 +3,8 @@ C:\Users\dinhphuc001\documents\visual studio 2013\Projects\MDPSimulator\MDPModel
 C:\Users\dinhphuc001\documents\visual studio 2013\Projects\MDPSimulator\MDPModel\bin\Debug\MDPModel.pdb
 C:\Users\dinhphuc001\documents\visual studio 2013\Projects\MDPSimulator\MDPModel\obj\Debug\MDPModel.dll
 C:\Users\dinhphuc001\documents\visual studio 2013\Projects\MDPSimulator\MDPModel\obj\Debug\MDPModel.pdb
+E:\Git\MDP-Jan-2015\Pc simulator\MDPSimulator\MDPModel\bin\Debug\MDPModel.dll
+E:\Git\MDP-Jan-2015\Pc simulator\MDPSimulator\MDPModel\bin\Debug\MDPModel.pdb
+E:\Git\MDP-Jan-2015\Pc simulator\MDPSimulator\MDPModel\obj\Debug\MDPModel.csprojResolveAssemblyReference.cache
+E:\Git\MDP-Jan-2015\Pc simulator\MDPSimulator\MDPModel\obj\Debug\MDPModel.dll
+E:\Git\MDP-Jan-2015\Pc simulator\MDPSimulator\MDPModel\obj\Debug\MDPModel.pdb
