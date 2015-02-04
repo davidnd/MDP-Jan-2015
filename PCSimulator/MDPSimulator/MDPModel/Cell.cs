@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MDPModel
 {
-    class Cell
+    public class Cell
     {
         public int Status { get; set;}
 

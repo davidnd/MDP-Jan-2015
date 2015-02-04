@@ -10,7 +10,7 @@
             <Button x:Name="stopButton" Content="Stop" Height="54" Margin="20" FontSize="20"/>
             <Button x:Name="loadButton" Content="Load map" Height="54" Margin="20" FontSize="20" Click="loadMapClick"/>
         </StackPanel>
-        <Grid x:Name="map" Background="#FF645C5C" Height="600" Margin="10,20,10,0" Width="450" VerticalAlignment="Top"/>
+        <Grid x:Name="mapGrid" Background="#FF645C5C" Height="600" Margin="10,20,10,0" Width="450" VerticalAlignment="Top"/>
         <WrapPanel x:Name="statusPanel" Height="160" Margin="20,20,20,0" VerticalAlignment="Top" Width="270">
             <Label Content="Coverage:" Height="38" Width="130" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" BorderThickness="1"/>
             <Label Content="Coverage" Height="38" Width="122" HorizontalContentAlignment="Stretch" Margin="10,0,0,0"/>

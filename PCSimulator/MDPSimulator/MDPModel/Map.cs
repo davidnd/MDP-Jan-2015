@@ -16,6 +16,18 @@ namespace MDPModel
         {
             get { return this.grid; }
         }
+
+        public Map()
+        {
+            this.grid = new Cell[height, width];
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    this.grid[i, j] = new Cell();
+                }
+            }
+        }
         public Map(int[,] data)
         {
             grid = new Cell[height, width];
@@ -48,6 +60,10 @@ namespace MDPModel
         }
 
         public void saveToHardDrive()
+        {
+
+        }
+        public void draw()
         {
 
         }

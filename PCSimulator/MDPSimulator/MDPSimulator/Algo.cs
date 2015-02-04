@@ -15,10 +15,12 @@ namespace MDPSimulator
         private static int[,] exploredVirtualMap = new int[virtualMap.GetLength(0), virtualMap.GetLength(1)];
         private static int xStart = 0, yStart = 0, xGoal = movableDottedMap.GetLength(1), yGoal = movableDottedMap.GetLength(0);
         private static int sensorRange = 1;
-        public static void explore(int[,] map)
+        public static void explore(int[,] arena)
         {
             //virtual wall and boundaries of obstacles.
-            preprocess(map);
+            preprocess(arena);
+            Map map = new Map();
+            map.print();
             Console.WriteLine("==========Virtual map============");
             printMap(virtualMap);
             //exploreDottedMap(movableDottedMap);
@@ -82,8 +84,8 @@ namespace MDPSimulator
             }
             //Console.WriteLine("==========Full dotted map============");
             //printMap(fullDottedMap);
-            Console.WriteLine("==========Movable dotted map============");
-            printMap(movableDottedMap);
+            //Console.WriteLine("==========Movable dotted map============");
+            //printMap(movableDottedMap);
         }
 
         //print a map
