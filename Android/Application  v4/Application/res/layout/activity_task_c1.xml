@@ -1,0 +1,426 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusableInTouchMode="true"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.application.TaskC1" >   
+    
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        tools:ignore="UselessParent" >	
+        
+        <!-- 3 columns -->
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >			
+            
+            <!-- column 1 -->
+             <GridLayout
+            		android:id="@+id/GridLayout1"
+	            	android:layout_width="wrap_content"
+            		android:layout_height="wrap_content"            	
+            		android:columnCount="3" >
+    			
+    			<LinearLayout
+    			    android:layout_width="wrap_content"
+    			    android:layout_height="match_parent"
+    			    android:layout_gravity="left"
+    			    android:orientation="vertical"
+    			    android:padding="5dp" >
+            		
+    			    <Button
+    			        android:id="@+id/btnMainMenu"   
+    			        android:layout_width="60dp"
+    			        android:layout_height="55dp"
+    			        android:text="Main Menu"
+    			        android:textSize="9sp"
+    			        tools:ignore="HardcodedText,SmallSp" />
+
+    			    <Button
+    			        android:id="@+id/btnActivateBT"
+    			        android:layout_width="60dp"
+    			        android:layout_height="55dp"
+    			        android:text="Activate BT"
+    			        android:textSize="9sp"
+    			        tools:ignore="HardcodedText,SmallSp" />
+
+    			    <Button
+    			        android:id="@+id/btnDeactivateBT"
+    			        android:layout_width="60dp"
+    			        android:layout_height="55dp"
+    			        android:text="De-activate BT"
+    			        android:textSize="9sp"
+    			        android:visibility="gone"
+    			        tools:ignore="HardcodedText,SmallSp" />
+
+    			    <Button
+    			        android:id="@+id/btnListPairedDevices"
+    			        android:layout_width="60dp"
+    			        android:layout_height="55dp"
+    			        android:text="List Paired Devices"
+    			        android:textSize="9sp"
+    			        android:visibility="gone"
+    			        tools:ignore="HardcodedText,SmallSp" />
+
+    			    <Button
+    			        android:id="@+id/btnNewSearch"
+    			        android:layout_width="60dp"
+    			        android:layout_height="55dp"
+    			        android:text="New Search"
+    			        android:textSize="9sp"
+    			        android:visibility="gone"
+    			        tools:ignore="HardcodedText,SmallSp" />    		
+    			    
+    			    <Button
+			        	android:id="@+id/btnSend"
+	        			android:layout_width="60dp"
+    			        android:layout_height="55dp"
+	            		android:text="Send to AMD Tool"
+	            		android:textSize="9sp"
+	            		android:visibility="gone"
+	            		tools:ignore="HardcodedText,SmallSp"/>	   
+    			</LinearLayout>
+   
+            	<!-- column 2 -->
+				<LinearLayout 
+			    	android:orientation="vertical"
+					android:layout_gravity="start"
+					android:padding="5dp">    			   
+			
+			    	<TextView 
+	      				android:layout_width="wrap_content"
+            	    	android:layout_height="wrap_content" 					   				
+    					android:text="BT Status:"
+    					android:singleLine="false"
+    					tools:ignore="HardcodedText" />           	
+            	
+	            	<EditText
+            	    	android:id="@+id/editTextBTStatus"
+            	    	android:layout_width="220dp"
+            	    	android:layout_height="35dp"
+            	    	android:background="#C0C0C0"
+            	    	android:editable="false"
+            	    	android:ems="10"
+            	    	android:focusable="false"
+            	    	android:text=""
+            	    	tools:ignore="TextFields,HardcodedText,Deprecated" >				
+                		<requestFocus />                
+            		</EditText>           	
+            		
+	            	<TextView 
+	      				android:layout_width="wrap_content"
+            	    	android:layout_height="wrap_content" 					   				
+    					android:text="Tilt Direction:"
+    					android:singleLine="false"
+    					tools:ignore="HardcodedText" />    
+	            	
+	            	<TextView
+	            	    android:id="@+id/tiltDirection"
+	            	    android:layout_width="220dp"
+	            	    android:layout_height="35dp"
+	            	    android:background="#C0C0C0"
+	            	    android:editable="false"
+	            	    android:ems="10"
+	            	    android:focusable="false"
+	            	    android:text=""
+	            	    tools:ignore="Deprecated" />
+	            	
+	            	<TextView 
+	      				android:layout_width="wrap_content"
+            	    	android:layout_height="wrap_content" 					   				
+    					android:text="Robot Status:"
+    					android:singleLine="false"
+    					tools:ignore="HardcodedText" />   
+	 
+            		<TextView
+            		    android:id="@+id/robotStatus"
+            		    android:layout_width="220dp"
+            		    android:layout_height="35dp"
+            		    android:background="#C0C0C0"
+            		    android:editable="false"
+            		    android:ems="10"
+            		    android:focusable="false"
+            		    android:text=""
+            		    tools:ignore="Deprecated" />
+            	 
+            		<TextView 
+	      				android:layout_width="wrap_content"
+            	    	android:layout_height="wrap_content"   					   				
+    					android:text="Devices:"
+    					tools:ignore="HardcodedText" />                     	
+	            	
+            		<ListView
+		                android:id="@+id/listView1"
+                		android:layout_width="match_parent"
+                		android:layout_height="80dp"
+                		android:textColor="#FF0000"
+                		android:visibility="gone" >
+           			</ListView>     	           		         						         	      			            	           			
+            	</LinearLayout>					
+				
+				<!-- column 3 -->
+				<LinearLayout 
+			    	android:orientation="vertical"
+					android:layout_gravity="start"
+					android:padding="5dp">            	
+				    
+            		<TextView
+	            	    android:layout_width="wrap_content"
+            	    	android:layout_height="wrap_content"
+            	    	android:text="Input string to AMD Tool:"
+            	    	tools:ignore="HardcodedText" />
+	
+            		<EditText
+	            	    android:id="@+id/editText1"
+            	    	android:layout_width="wrap_content"
+            	    	android:layout_height="wrap_content"
+            	    	android:clickable="true"
+            	    	android:ems="10"
+	            	    android:focusableInTouchMode="true"
+	            	    android:gravity="top"
+            	    	android:inputType="textMultiLine"
+            	    	android:selectAllOnFocus="true"
+            	    	tools:ignore="TextFields,HardcodedText"
+            	    	android:visibility="gone" />
+	            
+	 				<TextView 
+	      				android:layout_width="wrap_content"
+            	    	android:layout_height="wrap_content"   				
+    					android:lines="2"					   				
+    					android:text="\nOutput string from AMD Tool:"
+    					tools:ignore="HardcodedText" /> 
+	 			
+            		<ListView
+		                android:id="@+id/listReceived"
+                		android:layout_width="match_parent"
+                		android:layout_height="170dp"
+                		android:visibility="gone">
+           			</ListView>		
+		 			
+            		<!-- 
+            		<EditText
+	            	    android:id="@+id/editText2"
+            	    	android:layout_width="wrap_content"
+            	    	android:layout_height="wrap_content"
+            	    	android:background="#C0C0C0"
+            	    	android:editable="false"
+            	    	android:ems="10"
+            	    	android:focusable="false"
+            	    	android:gravity="top"
+            	    	android:inputType="textMultiLine"
+            	    	android:scrollbars="vertical"
+            	    	android:text="   Awaiting output ..."
+            	    	tools:ignore="TextFields,HardcodedText,Deprecated" >	               	               
+            		</EditText>        	           	       	
+            		-->            	
+           		</LinearLayout>		           	
+           	</GridLayout>	
+        </TableRow>        	   
+        
+        <!-- table row for the map -->
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_span="3"
+            android:gravity="center"
+            android:layout_gravity="top"
+            tools:ignore="ObsoleteLayoutParam" >
+			
+			<LinearLayout 
+    			android:layout_width="match_parent"
+    			android:layout_height="350dp"    			
+    			android:orientation="vertical">
+               	            
+            	<draw.Draw
+            	    android:id="@+id/map"
+            	    android:layout_width="fill_parent"
+            	    android:layout_height="fill_parent"
+            	    android:visibility="gone" />
+            </LinearLayout>
+		</TableRow>    
+    
+    	<TableRow
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:layout_span="3"
+    	    android:gravity="center"
+    	    tools:ignore="ObsoleteLayoutParam" >
+    	
+    	    <LinearLayout 
+		    	android:orientation="vertical"
+				android:gravity="left" >
+    	
+    	        <TextView 
+    	            android:id="@+id/textViewNavigation"
+	      			android:layout_width="wrap_content"
+            	    android:layout_height="wrap_content" 					   				
+    				android:text="Navigation:"
+    				android:singleLine="false"
+    				tools:ignore="HardcodedText" 
+    				android:visibility="gone"/>      	        
+  			</LinearLayout>
+  		</TableRow>  	   
+		        
+        <!-- table row for navigation -->
+    	<TableRow
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:layout_span="3"
+    	    android:gravity="center"
+    	    tools:ignore="ObsoleteLayoutParam" >
+            
+    	    <LinearLayout 
+		    	android:orientation="horizontal"
+				android:gravity="center" >
+    	    
+            	<GridLayout
+            		android:id="@+id/GridLayout2"
+	            	android:layout_width="wrap_content"
+            		android:layout_height="wrap_content"            	
+            		android:columnCount="3"
+            		android:rowCount="1" >
+	
+            	    <!-- empty 
+    	            <Button
+	        			android:id="@+id/test1"    			        
+	        			android:layout_width="80dp"
+    			        android:layout_height="80dp"
+	            		android:visibility="gone" />    
+	            	-->              
+	                
+	                <Button
+		        		android:id="@+id/btnRotateLeft"
+	        			android:layout_width="65dp"
+    			        android:layout_height="65dp"
+	            		android:ems="5"
+	            		android:text="Rotate Left"
+	            		android:textSize="10sp"
+	            		tools:ignore="HardcodedText,SmallSp"
+	            		android:visibility="gone"/>
+	                
+	            	<Button
+		        		android:id="@+id/btnForward"
+	        			android:layout_width="65dp"
+    			        android:layout_height="65dp"
+						android:ems="5"
+		            	android:text="Move Forward"
+	            		android:textSize="10sp"
+	            		tools:ignore="HardcodedText,SmallSp"
+	            		android:visibility="gone"/> 	             	
+		            
+	    			<Button
+			        	android:id="@+id/btnRotateRight"
+	        			android:layout_width="65dp"
+    			        android:layout_height="65dp"
+	            		android:ems="5"
+		            	android:text="Rotate Right"
+	            		android:textSize="10sp"
+	            		tools:ignore="HardcodedText,SmallSp"
+	            		android:visibility="gone"/>         
+				</GridLayout>
+			</LinearLayout>	
+		</TableRow>     
+		
+    	<TableRow
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:layout_span="3"
+    	    android:gravity="center"
+    	    tools:ignore="ObsoleteLayoutParam" >
+    	
+    	    <LinearLayout 
+		    	android:orientation="vertical"
+				android:gravity="left" >
+    	
+    	        <TextView 
+    	            android:id="@+id/textViewOtherModes"
+	      			android:layout_width="wrap_content"
+            	    android:layout_height="wrap_content" 					   				
+    				android:text="Other modes:"
+    				android:singleLine="false"
+    				tools:ignore="HardcodedText" 
+    				android:visibility="gone"/>      	        
+  			</LinearLayout>
+  		</TableRow>  	           	        
+    	
+    	<!-- table row for other modes etc -->
+    	<TableRow
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:layout_span="3"
+    	    android:gravity="center"
+    	    tools:ignore="ObsoleteLayoutParam" >
+    	
+    	    <LinearLayout 
+		    	android:orientation="horizontal"
+				android:gravity="center" >              	
+		        
+    	         	<ToggleButton
+    	         	    android:id="@+id/tbAutoManual"
+    	         	    android:layout_width="70dp"
+    	         	    android:layout_height="65dp"
+    	         	    android:onClick="onToggleAutoManual"
+    	         	    android:textOff="Manual Update"
+    	         	    android:textOn="Auto Update"
+    	         	    android:textSize="10dp"
+    	         	    tools:ignore="SpUsage"
+    	         	    android:visibility="gone" />
+                		
+    	         	<Button
+    	         	    android:id="@+id/btnUpdateMap"
+    	         	    android:layout_width="70dp"
+    	         	    android:layout_height="65dp"
+    	         	    android:onClick="getMapData"
+    	         	    android:text="Update Map (Manual)"
+    	         	    android:textSize="10dp"
+    	         	    tools:ignore="SpUsage,HardcodedText" 
+    	         	    android:visibility="gone"/>
+            	
+            		<ToggleButton
+            		    android:id="@+id/tbTilt"
+    	         	    android:layout_width="70dp"
+    	         	    android:layout_height="65dp"
+            		    android:onClick="onToggleClicked"
+            		    android:textOff="Tilt Sensing Off"
+            		    android:textOn="Tilt Sensing On"
+            		    android:textSize="10dp"
+            		    tools:ignore="SpUsage" 
+            		    android:visibility="gone"/>      
+            		    
+            		<Button
+    	         	    android:id="@+id/btnGoPersistence"
+    	         	    android:layout_width="70dp"
+    	         	    android:layout_height="65dp"
+    	         	    android:text="Update Stored Strings"
+    	         	    android:textSize="10dp"
+    	         	    tools:ignore="SpUsage,HardcodedText" 
+    	         	    android:visibility="gone"/> 
+            		
+            		<Button
+    	         	    android:id="@+id/btnSendStoredString1"
+    	         	    android:layout_width="70dp"
+    	         	    android:layout_height="65dp"
+    	         	    android:text="Send Stored String 1"
+    	         	    android:textSize="10dp"
+    	         	    tools:ignore="SpUsage,HardcodedText" 
+    	         	    android:visibility="gone"/> 
+            		
+            		<Button
+    	         	    android:id="@+id/btnSendStoredString2"
+    	         	    android:layout_width="70dp"
+    	         	    android:layout_height="65dp"
+    	         	    android:text="Send Stored String 2"
+    	         	    android:textSize="10dp"
+    	         	    tools:ignore="SpUsage,HardcodedText" 
+    	         	    android:visibility="gone"/> 
+            </LinearLayout>
+    	</TableRow>
+	</TableLayout>
+</RelativeLayout>
