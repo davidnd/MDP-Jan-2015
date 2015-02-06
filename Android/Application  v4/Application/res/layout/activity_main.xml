@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView2"
         android:layout_centerHorizontal="true"
-        android:text="MDP Group 21&apos;s"
+        android:text="MDP Group 9&apos;s"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
@@ -62,7 +62,7 @@
     	    android:layout_width="500dp"
     	    android:layout_height="500dp"
     	    android:layout_x="25px"
-    	    android:layout_y="150px"
+    	    android:layout_y="250px"
     	    android:src="@drawable/pic"
     	    tools:ignore="PxUsage,ContentDescription" />    
 	</AbsoluteLayout>

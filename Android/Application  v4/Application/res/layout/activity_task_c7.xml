@@ -71,6 +71,66 @@
             	    android:inputType="textMultiLine"
             	    android:selectAllOnFocus="true"
             	    tools:ignore="TextFields,HardcodedText" />
+        		
+        		<TextView 
+	      			android:layout_width="wrap_content"
+            		android:layout_height="wrap_content" 					   				
+    				android:text="\nEnter Configurable Command 3:"
+    				android:singleLine="false"
+    				tools:ignore="HardcodedText" />
+        		
+        		<EditText
+	            	android:id="@+id/editTextString3"
+            	    android:layout_width="220dp"
+            		android:layout_height="35dp"
+            		android:background="#C0C0C0"
+            	    android:clickable="true"
+            	   	android:ems="10"
+	            	android:focusableInTouchMode="true"
+	            	android:gravity="top"
+            	    android:inputType="textMultiLine"
+            	    android:selectAllOnFocus="true"
+            	    tools:ignore="TextFields,HardcodedText" />
+        		
+        		<TextView 
+	      			android:layout_width="wrap_content"
+            		android:layout_height="wrap_content" 					   				
+    				android:text="\nEnter Configurable Command 4:"
+    				android:singleLine="false"
+    				tools:ignore="HardcodedText" />
+        		
+        		<EditText
+	            	android:id="@+id/editTextString4"
+            	    android:layout_width="220dp"
+            		android:layout_height="35dp"
+            		android:background="#C0C0C0"
+            	    android:clickable="true"
+            	   	android:ems="10"
+	            	android:focusableInTouchMode="true"
+	            	android:gravity="top"
+            	    android:inputType="textMultiLine"
+            	    android:selectAllOnFocus="true"
+            	    tools:ignore="TextFields,HardcodedText" />
+        		
+        		<TextView 
+	      			android:layout_width="wrap_content"
+            		android:layout_height="wrap_content" 					   				
+    				android:text="\nEnter Configurable Command 5:"
+    				android:singleLine="false"
+    				tools:ignore="HardcodedText" />
+        		
+        		<EditText
+	            	android:id="@+id/editTextString5"
+            	    android:layout_width="220dp"
+            		android:layout_height="35dp"
+            		android:background="#C0C0C0"
+            	    android:clickable="true"
+            	   	android:ems="10"
+	            	android:focusableInTouchMode="true"
+	            	android:gravity="top"
+            	    android:inputType="textMultiLine"
+            	    android:selectAllOnFocus="true"
+            	    tools:ignore="TextFields,HardcodedText" />
     		</LinearLayout>
     	</TableRow>  
     	
