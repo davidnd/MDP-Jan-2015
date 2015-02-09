@@ -24,13 +24,13 @@
     			android:orientation="vertical"
 				android:padding="5dp" >
             
-                <TextView 
-		      		android:layout_width="wrap_content"
-            		android:layout_height="wrap_content" 					   				
-    				android:text="Define string commands for the Robot.\n****************************************"
-    				android:singleLine="false"    				
-    			    android:textSize="15dp"
-    				tools:ignore="HardcodedText" />     
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="false"
+                    android:text="Define string commands for the Robot.\n----------------------------------------"
+                    android:textSize="15sp"
+                    tools:ignore="HardcodedText" />
                 
         		<TextView 
 		      		android:layout_width="wrap_content"
