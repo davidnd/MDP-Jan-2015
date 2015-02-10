@@ -60,9 +60,9 @@
     	<ImageView
     	    android:id="@+id/test_image"
     	    android:layout_width="500dp"
-    	    android:layout_height="500dp"
+    	    android:layout_height="450dp"
     	    android:layout_x="25px"
-    	    android:layout_y="250px"
+    	    android:layout_y="200px"
     	    android:src="@drawable/pic"
     	    tools:ignore="PxUsage,ContentDescription" />    
 	</AbsoluteLayout>
@@ -73,7 +73,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="Click to start!"
+        android:background="@drawable/start"
         android:textSize="@dimen/abc_action_bar_title_text_size" />    
 </RelativeLayout>
 

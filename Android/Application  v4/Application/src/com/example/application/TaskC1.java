@@ -5,7 +5,7 @@ import draw.Draw;
 
 import java.util.Set;
 
-import android.annotation.SuppressLint;
+import android.annotation.SuppressLint; 
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -197,7 +197,7 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
         {        
         	public void onClick(View v)
         	{
-        		Intent i=new Intent(TaskC1.this, TaskC7.class);
+        		Intent i=new Intent(TaskC1.this, TaskC8.class);
         		startActivity(i);
         	}
         });    

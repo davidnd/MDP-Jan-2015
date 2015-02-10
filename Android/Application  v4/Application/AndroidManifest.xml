@@ -38,7 +38,7 @@
         </activity>
         
         <activity
-            android:name=".TaskC7"
+            android:name=".TaskC8"
             android:label="@string/title_activity_task_c7" >
         </activity>
         <activity android:name=".DeviceList" />

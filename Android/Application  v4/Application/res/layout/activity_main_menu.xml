@@ -23,7 +23,7 @@
            	    android:layout_width="wrap_content"
            	    android:layout_height="wrap_content"
            	    android:lines="2"
-           	    android:text="Android Remote Controller Menu\n--------------------------------"
+           	    android:text="Android Deliverable Checklist\n*******************************"
            	    android:textSize="30dp"
            	    tools:ignore="HardcodedText,SpUsage" />
         
@@ -39,7 +39,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:lines="2"
-                android:text="Please select one set of feature"
+                android:text="Please select an item."
                 android:textSize="25dp"
                 tools:ignore="HardcodedText,SpUsage" />
                 
@@ -63,21 +63,25 @@
                 	tools:ignore="HardcodedText" />
 	
             	<Button
-            	    android:id="@+id/button1"
-            	    android:layout_width="230dp"
-            	    android:layout_height="wrap_content"
-            	    android:gravity="left|center_vertical"
-            	    android:text="Bluetooth &amp; Applications"
-            	    tools:ignore="HardcodedText" />
-
-            	<Button
-            	    android:id="@+id/bluetoothApplicationsButton"
-            	    android:layout_width="wrap_content"
-            	    android:layout_height="wrap_content"
-            	    android:text="What is this" />
+	                android:id="@+id/button1"
+                	android:layout_width="230dp"
+                	android:layout_height="wrap_content"
+                	android:gravity="left|center_vertical"
+                	android:text="Bluetooth + Applications"
+                	tools:ignore="HardcodedText" />	                	
+            	
+           		<ImageButton
+           		    android:id="@+id/imageButton1"
+           		    android:layout_width="45dp"
+           		    android:layout_height="45dp"
+           		    android:layout_gravity="center"
+           		    android:background="@android:drawable/btn_default_small"
+           		    android:onClick="infoc1"
+           		    android:scaleType="fitXY"
+           		    android:src="@drawable/info"
+           		    tools:ignore="ContentDescription" />
             	
         	</LinearLayout>
-
         </TableRow>
 	
         <TableRow
@@ -98,63 +102,25 @@
                 	tools:ignore="HardcodedText" />
 	
             	<Button
-            	    android:id="@+id/button2"
-            	    android:layout_width="230dp"
-            	    android:layout_height="wrap_content"
-            	    android:gravity="left|center_vertical"
-            	    android:text="Persistent configuration"
-            	    tools:ignore="HardcodedText" />
-
-            	<Button
-            	    android:id="@+id/persistentConfigurationButton"
-            	    android:layout_width="wrap_content"
-            	    android:layout_height="wrap_content"
-            	    android:text="What is this" />
-      
-        	</LinearLayout>
-    	
-    	</TableRow>
-    	
-        <TableRow
-            android:id="@+id/tableRow4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-	
-			<LinearLayout 
-                android:layout_gravity="start" >
+	                android:id="@+id/button2"
+                	android:layout_height="wrap_content"
+                	android:layout_width="230dp"
+                	android:text="Persistent control"
+                	android:gravity="left|center_vertical"
+	                tools:ignore="HardcodedText" />
             	
-            	<TextView
-	                android:id="@+id/textView5"
-                	android:layout_width="50dp"
-                	android:layout_height="wrap_content"     
-           			android:layout_gravity="center"           
-                	android:text="3"
-                	android:textSize="@dimen/abc_action_bar_title_text_size"
-                	tools:ignore="HardcodedText" />
-	
-            	<Button
-            	    android:id="@+id/button3"
-            	    android:layout_width="230dp"
-            	    android:layout_height="wrap_content"
-            	    android:gravity="left|center_vertical"
-            	    android:text="Beyond the basics"
-            	    tools:ignore="HardcodedText" />
-
-            	<Button
-            	    android:id="@+id/beyondTheBasicsButton"
-            	    android:layout_width="wrap_content"
-            	    android:layout_height="wrap_content"
-            	    android:text="What is this" />
+            	<ImageButton
+            	    android:id="@+id/imageButton2"
+            	    android:layout_width="45dp"
+            	    android:layout_height="45dp"
+            	    android:layout_gravity="center"
+            	    android:background="@android:drawable/btn_default_small"
+            	    android:onClick="infoc2"
+            	    android:scaleType="fitXY"
+            	    android:src="@drawable/info"
+            	    tools:ignore="ContentDescription" />
       
-        	</LinearLayout>
-    	
+        	</LinearLayout>    	
     	</TableRow>
-
-        <TextView
-            android:id="@+id/whatIsThisTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="\n" />
-
     </TableLayout>
 </RelativeLayout>

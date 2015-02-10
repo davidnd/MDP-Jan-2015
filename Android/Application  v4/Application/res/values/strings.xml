@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">MDP Group 21 Android Application</string>
+    <string name="app_name">MDP Group 9 Android Application</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_main_menu">Main Menu</string>
     <string name="title_activity_task_c1">Bluetooth</string>

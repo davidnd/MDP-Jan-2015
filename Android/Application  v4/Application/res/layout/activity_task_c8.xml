@@ -1,0 +1,166 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.application.TaskC8" >
+
+    <TableLayout
+    	android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        tools:ignore="UselessParent" >	
+        
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+        	
+            <LinearLayout
+    			android:layout_width="wrap_content"
+    			android:layout_height="match_parent"
+    			android:layout_gravity="left"
+    			android:orientation="vertical"
+				android:padding="5dp" >
+            
+                <TextView 
+		      		android:layout_width="wrap_content"
+            		android:layout_height="wrap_content" 					   				
+    				android:text="Define string commands for the Robot.\n****************************************"
+    				android:singleLine="false"    				
+    			    android:textSize="15dp"
+    				tools:ignore="HardcodedText" />     
+                
+        		<TextView 
+		      		android:layout_width="wrap_content"
+            		android:layout_height="wrap_content" 					   				
+    				android:text="\nEnter Configurable Command 1:"
+    				android:singleLine="false"
+    				tools:ignore="HardcodedText" />
+        		
+        		<EditText
+	           		android:id="@+id/editTextString1"
+            	   	android:layout_width="220dp"
+            		android:layout_height="35dp"
+            		android:background="#C0C0C0"
+            	    android:clickable="true"
+            	    android:ems="10"
+	            	android:focusableInTouchMode="true"
+	            	android:gravity="top"
+            	    android:inputType="textMultiLine"
+            	    android:selectAllOnFocus="true"
+            	    tools:ignore="TextFields,HardcodedText" />
+    
+        		<TextView 
+	      			android:layout_width="wrap_content"
+            		android:layout_height="wrap_content" 					   				
+    				android:text="\nEnter Configurable Command 2:"
+    				android:singleLine="false"
+    				tools:ignore="HardcodedText" />
+        		
+        		<EditText
+	            	android:id="@+id/editTextString2"
+            	    android:layout_width="220dp"
+            		android:layout_height="35dp"
+            		android:background="#C0C0C0"
+            	    android:clickable="true"
+            	   	android:ems="10"
+	            	android:focusableInTouchMode="true"
+	            	android:gravity="top"
+            	    android:inputType="textMultiLine"
+            	    android:selectAllOnFocus="true"
+            	    tools:ignore="TextFields,HardcodedText" />
+        		
+        		<TextView 
+	      			android:layout_width="wrap_content"
+            		android:layout_height="wrap_content" 					   				
+    				android:text="\nEnter Configurable Command 3:"
+    				android:singleLine="false"
+    				tools:ignore="HardcodedText" />
+        		
+        		<EditText
+	            	android:id="@+id/editTextString3"
+            	    android:layout_width="220dp"
+            		android:layout_height="35dp"
+            		android:background="#C0C0C0"
+            	    android:clickable="true"
+            	   	android:ems="10"
+	            	android:focusableInTouchMode="true"
+	            	android:gravity="top"
+            	    android:inputType="textMultiLine"
+            	    android:selectAllOnFocus="true"
+            	    tools:ignore="TextFields,HardcodedText" />
+        		
+        		<TextView 
+	      			android:layout_width="wrap_content"
+            		android:layout_height="wrap_content" 					   				
+    				android:text="\nEnter Configurable Command 4:"
+    				android:singleLine="false"
+    				tools:ignore="HardcodedText" />
+        		
+        		<EditText
+	            	android:id="@+id/editTextString4"
+            	    android:layout_width="220dp"
+            		android:layout_height="35dp"
+            		android:background="#C0C0C0"
+            	    android:clickable="true"
+            	   	android:ems="10"
+	            	android:focusableInTouchMode="true"
+	            	android:gravity="top"
+            	    android:inputType="textMultiLine"
+            	    android:selectAllOnFocus="true"
+            	    tools:ignore="TextFields,HardcodedText" />
+        		
+        		<TextView 
+	      			android:layout_width="wrap_content"
+            		android:layout_height="wrap_content" 					   				
+    				android:text="\nEnter Configurable Command 5:"
+    				android:singleLine="false"
+    				tools:ignore="HardcodedText" />
+        		
+        		<EditText
+	            	android:id="@+id/editTextString5"
+            	    android:layout_width="220dp"
+            		android:layout_height="35dp"
+            		android:background="#C0C0C0"
+            	    android:clickable="true"
+            	   	android:ems="10"
+	            	android:focusableInTouchMode="true"
+	            	android:gravity="top"
+            	    android:inputType="textMultiLine"
+            	    android:selectAllOnFocus="true"
+            	    tools:ignore="TextFields,HardcodedText" />
+    		</LinearLayout>
+    	</TableRow>  
+    	
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >     	
+        	
+            <LinearLayout
+    			android:layout_width="wrap_content"
+    			android:layout_height="match_parent"
+    			android:layout_gravity="center"
+    			android:orientation="horizontal"
+				android:padding="5dp" >
+     
+                <Button
+    				android:id="@+id/btnSaveReturn"
+    			    android:layout_width="120dp"
+    			    android:layout_height="60dp"
+    			    android:text="Save, Return"
+    			    android:textSize="11dp"
+    			    tools:ignore="HardcodedText,SmallSp" />      			 
+    			   
+                <Button
+    				android:id="@+id/btnAbortOperation"
+    			    android:layout_width="120dp"
+    			    android:layout_height="60dp"
+    			    android:text="Abort All Operations"
+    			    android:textSize="11dp"
+    			    tools:ignore="HardcodedText,SmallSp" />      
+        	</LinearLayout>
+        </TableRow>
+    </TableLayout>
+</RelativeLayout>
