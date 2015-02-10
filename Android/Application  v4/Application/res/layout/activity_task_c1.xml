@@ -296,34 +296,40 @@
 	            	-->              
 	                
 	                <Button
-		        		android:id="@+id/btnRotateLeft"
-	        			android:layout_width="65dp"
-    			        android:layout_height="65dp"
-	            		android:ems="5"
-	            		android:text="Rotate Left"
-	            		android:textSize="10sp"
-	            		tools:ignore="HardcodedText,SmallSp"
-	            		android:visibility="gone"/>
+	                    android:id="@+id/btnRotateLeft"
+	                    android:layout_width="65dp"
+	                    android:layout_height="65dp"
+	                    android:background="@drawable/left"
+	            	    android:ems="5"
+	            	    android:text="Rotate Left"
+	            	    android:textColor="#000000"
+	            	    android:textSize="10sp"
+	            	    tools:ignore="HardcodedText,SmallSp"
+	                    android:visibility="gone"/>
 	                
 	            	<Button
-		        		android:id="@+id/btnForward"
-	        			android:layout_width="65dp"
-    			        android:layout_height="65dp"
-						android:ems="5"
-		            	android:text="Move Forward"
-	            		android:textSize="10sp"
-	            		tools:ignore="HardcodedText,SmallSp"
-	            		android:visibility="gone"/> 	             	
+	            	    android:id="@+id/btnForward"
+	            	    android:layout_width="65dp"
+	            	    android:layout_height="65dp"
+	            	    android:background="@drawable/forward"
+	            	    android:ems="5"
+	            	    android:text="Move Forward"
+	            	    android:textColor="#000000"
+	            	    android:textSize="10sp"
+	            	    tools:ignore="HardcodedText,SmallSp" 
+	            	    android:visibility="gone"/>
 		            
 	    			<Button
 			        	android:id="@+id/btnRotateRight"
 	        			android:layout_width="65dp"
     			        android:layout_height="65dp"
-	            		android:ems="5"
-		            	android:text="Rotate Right"
-	            		android:textSize="10sp"
-	            		tools:ignore="HardcodedText,SmallSp"
-	            		android:visibility="gone"/>         
+	            		android:background="@drawable/right"
+	            	    android:ems="5"
+	            	    android:text="Rotate Right"
+	            	    android:textColor="#000000"
+	            	    android:textSize="10sp"
+	            	    tools:ignore="HardcodedText,SmallSp"
+	                    android:visibility="gone"/>    
 				</GridLayout>
 			</LinearLayout>	
 		</TableRow>     
@@ -419,7 +425,34 @@
     	         	    android:text="Send Stored String 2"
     	         	    android:textSize="10dp"
     	         	    tools:ignore="SpUsage,HardcodedText" 
-    	         	    android:visibility="gone"/> 
+    	         	    android:visibility="gone"/>
+            		
+            		<Button
+    	         	    android:id="@+id/btnSendStoredString3"
+    	         	    android:layout_width="70dp"
+    	         	    android:layout_height="65dp"
+    	         	    android:text="Send Stored String 3"
+    	         	    android:textSize="10dp"
+    	         	    tools:ignore="SpUsage,HardcodedText" 
+    	         	    android:visibility="gone"/>
+            		
+            		<Button
+    	         	    android:id="@+id/btnSendStoredString4"
+    	         	    android:layout_width="70dp"
+    	         	    android:layout_height="65dp"
+    	         	    android:text="Send Stored String 4"
+    	         	    android:textSize="10dp"
+    	         	    tools:ignore="SpUsage,HardcodedText" 
+    	         	    android:visibility="gone"/>
+            		
+            		<Button
+    	         	    android:id="@+id/btnSendStoredString5"
+    	         	    android:layout_width="70dp"
+    	         	    android:layout_height="65dp"
+    	         	    android:text="Send Stored String 5"
+    	         	    android:textSize="10dp"
+    	         	    tools:ignore="SpUsage,HardcodedText" 
+    	         	    android:visibility="gone"/>
             </LinearLayout>
     	</TableRow>
 	</TableLayout>

@@ -56,6 +56,10 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 	private Button btnGoPersistence;
 	private Button btnSendStoredString1;
 	private Button btnSendStoredString2;
+	private Button btnSendStoredString3;
+	private Button btnSendStoredString4;
+	private Button btnSendStoredString5; 
+	
 	private Button btnUpdateMap;	
 	
 	private ToggleButton tbTilt;
@@ -84,6 +88,9 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 	SharedPreferences preferences;
 	String StoredString1;
 	String StoredString2;
+	String StoredString3;
+	String StoredString4;
+	String StoredString5;
 	
 	private Handler mdHandler; //for Task C.3-5, 'mHandler' for Task C.1-2
 		
@@ -158,7 +165,10 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 		
 		preferences = getSharedPreferences("MyMsgFile", 0);		
 		StoredString1 = preferences.getString("key_msg1", "na");
-		StoredString2 = preferences.getString("key_msg2", "na");		
+		StoredString2 = preferences.getString("key_msg2", "na");
+		StoredString3 = preferences.getString("key_msg3", "na");
+		StoredString4 = preferences.getString("key_msg4", "na");
+		StoredString5 = preferences.getString("key_msg5", "na");
 
 		editTextBTStatus = (TextView) findViewById (R.id.editTextBTStatus);	
 		textViewNavigation = (TextView) findViewById(R.id.textViewNavigation);
@@ -190,6 +200,30 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
         	public void onClick(View v)
         	{
         		sendStoredStrings2();
+        	}
+        });
+		btnSendStoredString3 = (Button)findViewById(R.id.btnSendStoredString3);
+		btnSendStoredString3.setOnClickListener(new android.view.View.OnClickListener()
+        {        
+        	public void onClick(View v)
+        	{
+        		sendStoredStrings3();
+        	}
+        });
+		btnSendStoredString4 = (Button)findViewById(R.id.btnSendStoredString4);
+		btnSendStoredString4.setOnClickListener(new android.view.View.OnClickListener()
+        {        
+        	public void onClick(View v)
+        	{
+        		sendStoredStrings4();
+        	}
+        });
+		btnSendStoredString5 = (Button)findViewById(R.id.btnSendStoredString2);
+		btnSendStoredString5.setOnClickListener(new android.view.View.OnClickListener()
+        {        
+        	public void onClick(View v)
+        	{
+        		sendStoredStrings5();
         	}
         });
 		btnGoPersistence = (Button)findViewById(R.id.btnGoPersistence);
@@ -1145,6 +1179,21 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 		StoredString2 = preferences.getString("key_msg2", "na");
 		//Toast.makeText(getApplicationContext(), StoredString2, Toast.LENGTH_SHORT).show();
 		sendMessage(StoredString2);
+	}
+	
+	public void sendStoredStrings3() {
+		StoredString3 = preferences.getString("key_msg3", "na");
+		sendMessage(StoredString3);
+	}
+	
+	public void sendStoredStrings4() {
+		StoredString4 = preferences.getString("key_msg4", "na");
+		sendMessage(StoredString4);
+	}
+	
+	public void sendStoredStrings5() {
+		StoredString5 = preferences.getString("key_msg5", "na");
+		sendMessage(StoredString5);
 	}
 		
 	//methods across Task C.1, C.2, C.9
