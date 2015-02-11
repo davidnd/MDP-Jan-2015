@@ -24,7 +24,6 @@ public class TaskC8 extends Activity {
 	private String StoredString2;
 	private String StoredString3;
 	private String StoredString4;
-	private String StoredString5;
 	SharedPreferences preferences;
 	
 	@Override
@@ -91,28 +90,16 @@ public class TaskC8 extends Activity {
 					hideKeyboard(v);	 		    	
 	        }
 		});	
-		
-		editTextString5 = (EditText) findViewById(R.id.editTextString5);
-		editTextString5.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-			@Override		
-			public void onFocusChange(View v, boolean hasFocus) {			
-				//note necc attributes to be added to parent Relativelayout - focusableInTouchMode, clickable @ .xml file
-				if (!hasFocus)
-					hideKeyboard(v);	 		    	
-	        }
-		});	
-	
+			
 		preferences = getSharedPreferences("MyMsgFile", 1);
 		StoredString1 = preferences.getString("key_msg1", "Click Here");
 		StoredString2 = preferences.getString("key_msg2", "Click Here");
 		StoredString3 = preferences.getString("key_msg3", "Click Here");
 		StoredString4 = preferences.getString("key_msg4", "Click Here");
-		StoredString5 = preferences.getString("key_msg5", "Click Here");
 		editTextString1.setText(StoredString1);
 		editTextString2.setText(StoredString2);
 		editTextString3.setText(StoredString3);
 		editTextString4.setText(StoredString4);
-		editTextString5.setText(StoredString5);
 	}
 	
 	public void saveMsg() {
@@ -122,7 +109,6 @@ public class TaskC8 extends Activity {
         editor.putString("key_msg2", editTextString2.getText().toString());
         editor.putString("key_msg3", editTextString3.getText().toString());
         editor.putString("key_msg4", editTextString4.getText().toString());
-        editor.putString("key_msg5", editTextString5.getText().toString());
         editor.commit();
         //System.out.println(preferences.getString("key_msg1", "na"));
         //System.out.println(preferences.getString("key_msg2", "na"));

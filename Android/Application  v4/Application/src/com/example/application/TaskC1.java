@@ -57,8 +57,7 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 	private Button btnSendStoredString1;
 	private Button btnSendStoredString2;
 	private Button btnSendStoredString3;
-	private Button btnSendStoredString4;
-	private Button btnSendStoredString5; 
+	private Button btnSendStoredString4; 
 	
 	private Button btnUpdateMap;	
 	
@@ -90,7 +89,6 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 	String StoredString2;
 	String StoredString3;
 	String StoredString4;
-	String StoredString5;
 	
 	private Handler mdHandler; //for Task C.3-5, 'mHandler' for Task C.1-2
 		
@@ -168,7 +166,6 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 		StoredString2 = preferences.getString("key_msg2", "na");
 		StoredString3 = preferences.getString("key_msg3", "na");
 		StoredString4 = preferences.getString("key_msg4", "na");
-		StoredString5 = preferences.getString("key_msg5", "na");
 
 		editTextBTStatus = (TextView) findViewById (R.id.editTextBTStatus);	
 		textViewNavigation = (TextView) findViewById(R.id.textViewNavigation);
@@ -216,14 +213,6 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
         	public void onClick(View v)
         	{
         		sendStoredStrings4();
-        	}
-        });
-		btnSendStoredString5 = (Button)findViewById(R.id.btnSendStoredString2);
-		btnSendStoredString5.setOnClickListener(new android.view.View.OnClickListener()
-        {        
-        	public void onClick(View v)
-        	{
-        		sendStoredStrings5();
         	}
         });
 		btnGoPersistence = (Button)findViewById(R.id.btnGoPersistence);
@@ -490,6 +479,9 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 	  			btnGoPersistence.setVisibility(View.GONE);
 	  			btnSendStoredString1.setVisibility(View.GONE);
 	  			btnSendStoredString2.setVisibility(View.GONE);
+	  			btnSendStoredString3.setVisibility(View.GONE);
+	  			btnSendStoredString4.setVisibility(View.GONE);
+	  			//1234
 	  			
 	  			editTextBTStatus.setText("Disabled");
 	  			
@@ -602,6 +594,9 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 		btnGoPersistence.setVisibility(View.GONE);
 		btnSendStoredString1.setVisibility(View.GONE);
 		btnSendStoredString2.setVisibility(View.GONE);
+		btnSendStoredString3.setVisibility(View.GONE);
+		btnSendStoredString4.setVisibility(View.GONE);
+		//1234
     }
 
 	private final Handler mHandler = new Handler() {
@@ -634,6 +629,21 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
             	  			btnGoPersistence.setVisibility(View.VISIBLE);
             	  			btnSendStoredString1.setVisibility(View.VISIBLE);
             	  			btnSendStoredString2.setVisibility(View.VISIBLE);
+            	  			btnSendStoredString3.setVisibility(View.VISIBLE);
+            	  			btnSendStoredString4.setVisibility(View.VISIBLE);
+            	  			            	  			
+            	  			//Task C.5 change to other relevant ids and continue code setcoordinate
+            	  			TextView textViewSetCoordinate = (TextView) findViewById(R.id.textViewSetCoordinate);
+            	  			TextView textViewXcoord = (TextView)findViewById(R.id.textViewXcoord);
+            	  			EditText editTextXcoord = (EditText)findViewById(R.id.editTextXcoord);
+            	  			TextView textViewYcoord = (TextView)findViewById(R.id.textViewYcoord);
+            	  			EditText editTextYcoord = (EditText)findViewById(R.id.editTextYcoord);
+            	  			
+            	  			textViewSetCoordinate.setVisibility(View.VISIBLE);
+            	  			textViewXcoord.setVisibility(View.VISIBLE);
+            	  			editTextXcoord.setVisibility(View.VISIBLE);
+            	  			textViewYcoord.setVisibility(View.VISIBLE);
+            	  			editTextYcoord.setVisibility(View.VISIBLE);
             	  			
             	  			tbAutoManual.setChecked(false);
             	  			tbTilt.setChecked(false);      	  			
@@ -666,6 +676,9 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
             	  			btnGoPersistence.setVisibility(View.GONE);
             	  			btnSendStoredString1.setVisibility(View.GONE);
             	  			btnSendStoredString2.setVisibility(View.GONE);
+            	  			btnSendStoredString3.setVisibility(View.GONE);
+            	  			btnSendStoredString4.setVisibility(View.GONE);
+            	  			//1234
             		        break;
             		}
             		break;
@@ -976,7 +989,7 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 
 				case R.id.btnRotateRight:
 					right = true;
-					mdHandler = new Handler();
+					mdHandler = new Handler();    
 					mdHandler.postDelayed(mAction, 10);
 					break;
 					
@@ -1190,12 +1203,7 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 		StoredString4 = preferences.getString("key_msg4", "na");
 		sendMessage(StoredString4);
 	}
-	
-	public void sendStoredStrings5() {
-		StoredString5 = preferences.getString("key_msg5", "na");
-		sendMessage(StoredString5);
-	}
-		
+			
 	//methods across Task C.1, C.2, C.9
 	public void onResume() {
 		super.onResume();	

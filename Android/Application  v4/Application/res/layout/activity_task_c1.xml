@@ -253,32 +253,47 @@
     	    android:gravity="center"
     	    tools:ignore="ObsoleteLayoutParam" >
     	
-    	    <LinearLayout 
-		    	android:orientation="vertical"
-				android:gravity="left" >
-    	
-    	        <TextView 
-    	            android:id="@+id/textViewNavigation"
-	      			android:layout_width="wrap_content"
-            	    android:layout_height="wrap_content" 					   				
-    				android:text="Navigation:"
-    				android:singleLine="false"
-    				tools:ignore="HardcodedText" 
-    				android:visibility="gone"/>      	        
+    	    <LinearLayout
+    	        android:layout_width="fill_parent"
+    			android:layout_height="wrap_content"
+    			android:orientation="horizontal"
+    			android:gravity="left" >
+    	            	        
+    	        <TextView
+        			android:id="@+id/textViewNavigation"
+        			android:layout_width="0dp"
+			        android:layout_weight="1"
+			        android:layout_height="wrap_content"
+			        android:text="Navigation:" 
+			        android:layout_gravity="left"
+			        tools:ignore="HardcodedText"
+			        android:visibility="gone" />
+
+    			<TextView
+			        android:id="@+id/textViewSetCoordinate"
+			        android:layout_width="0dp"
+			        android:layout_weight="1"
+			        android:layout_height="wrap_content"
+			        android:text="Set X-Y Coordinates"
+			        android:layout_gravity="right" 
+			        tools:ignore="HardcodedText"
+			        android:visibility="gone" />
   			</LinearLayout>
   		</TableRow>  	   
 		        
         <!-- table row for navigation -->
-    	<TableRow
+    	<TableRow
     	    android:layout_width="wrap_content"
     	    android:layout_height="wrap_content"
     	    android:layout_span="3"
-    	    android:gravity="center"
+    	    android:gravity="center|fill"
     	    tools:ignore="ObsoleteLayoutParam" >
             
     	    <LinearLayout 
-		    	android:orientation="horizontal"
-				android:gravity="center" >
+    	        android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+			    android:orientation="horizontal" >
+				<!-- android:gravity="left" -->
     	    
             	<GridLayout
             		android:id="@+id/GridLayout2"
@@ -299,39 +314,89 @@
 	                    android:id="@+id/btnRotateLeft"
 	                    android:layout_width="65dp"
 	                    android:layout_height="65dp"
-	                    android:background="@drawable/left"
+	                    android:background="@drawable/rotateleft"
 	            	    android:ems="5"
 	            	    android:text="Rotate Left"
 	            	    android:textColor="#000000"
 	            	    android:textSize="10sp"
 	            	    tools:ignore="HardcodedText,SmallSp"
-	                    android:visibility="gone"/>
+	                    android:visibility="gone" />
 	                
 	            	<Button
 	            	    android:id="@+id/btnForward"
 	            	    android:layout_width="65dp"
 	            	    android:layout_height="65dp"
-	            	    android:background="@drawable/forward"
+	            	    android:background="@drawable/moveforward"
 	            	    android:ems="5"
 	            	    android:text="Move Forward"
 	            	    android:textColor="#000000"
 	            	    android:textSize="10sp"
 	            	    tools:ignore="HardcodedText,SmallSp" 
-	            	    android:visibility="gone"/>
+	            	    android:visibility="gone" />
 		            
 	    			<Button
 			        	android:id="@+id/btnRotateRight"
 	        			android:layout_width="65dp"
     			        android:layout_height="65dp"
-	            		android:background="@drawable/right"
+	            		android:background="@drawable/rotateright"
 	            	    android:ems="5"
 	            	    android:text="Rotate Right"
 	            	    android:textColor="#000000"
 	            	    android:textSize="10sp"
 	            	    tools:ignore="HardcodedText,SmallSp"
-	                    android:visibility="gone"/>    
+	                    android:visibility="gone" />
 				</GridLayout>
-			</LinearLayout>	
+
+            	<TextView
+            	    android:id="@+id/textViewXcoord"
+            	    android:layout_width="0dp"
+            	    android:layout_height="wrap_content"
+            	    android:layout_weight="0.16"
+            	    android:paddingLeft="100dp"
+            	    android:text="X:" 
+            	    android:visibility="gone" />
+            	   <!-- android:layout_gravity="left"
+            	    android:paddingLeft="10dp"
+            	    android:text="X:" />-->
+
+            	<EditText
+            	    android:id="@+id/editTextXcoord"
+            	    android:layout_width="65dp"
+            	    android:layout_height="65dp"
+            	    android:layout_weight="0.01"
+            	    android:ems="10"
+            	    android:paddingLeft="-10dp"
+            	    android:inputType="number" 
+            	    android:visibility="gone" />
+
+            	<TextView
+            	    android:id="@+id/textViewYcoord"
+            	    android:layout_width="wrap_content"
+            	    android:layout_height="wrap_content"
+            	    android:text="Y: "
+            	    android:visibility="gone" />
+            	
+            	<EditText
+            	    android:id="@+id/editTextYcoord"
+            	    android:layout_width="65dp"
+            	    android:layout_height="65dp"
+            	    android:layout_weight="0.01"
+            	    android:ems="10"
+            	    android:inputType="number" 
+            	    android:visibility="gone" />
+
+			</LinearLayout>
+
+    	    <Button
+    	        android:id="@+id/btnSetCoordinate"
+    	        android:layout_width="65dp"
+    	        android:layout_height="65dp"
+    	        android:ems="5"
+    	        android:text="Set X-Y Coordinate"
+    	        android:textSize="10sp"
+    	        tools:ignore="HardcodedText,SmallSp" 
+    	        android:visibility="gone" />
+	
 		</TableRow>     
 		
     	<TableRow
@@ -444,16 +509,14 @@
     	         	    android:textSize="10dp"
     	         	    tools:ignore="SpUsage,HardcodedText" 
     	         	    android:visibility="gone"/>
-            		
-            		<Button
-    	         	    android:id="@+id/btnSendStoredString5"
-    	         	    android:layout_width="70dp"
-    	         	    android:layout_height="65dp"
-    	         	    android:text="Send Stored String 5"
-    	         	    android:textSize="10dp"
-    	         	    tools:ignore="SpUsage,HardcodedText" 
-    	         	    android:visibility="gone"/>
             </LinearLayout>
     	</TableRow>
+
+    	<TableRow
+    	    android:id="@+id/tableRow2"
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content" >
+    	</TableRow>
+
 	</TableLayout>
 </RelativeLayout>
