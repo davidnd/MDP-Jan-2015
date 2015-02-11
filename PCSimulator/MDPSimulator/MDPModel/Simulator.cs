@@ -27,5 +27,9 @@ namespace MDPModel
             this.Robot.simulateExplore();
             this.Robot.Memory.print();
         }
+        public void simulateFastestRun()
+        {
+            this.Robot.fastestRun();
+        }
     }
 }

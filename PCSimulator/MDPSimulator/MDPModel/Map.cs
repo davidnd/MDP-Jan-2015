@@ -48,6 +48,7 @@ namespace MDPModel
         }
         public void print()
         {
+            Console.WriteLine("=========Map==========");
             for (int i = 0; i < this.Grid.GetLength(0); i++)
             {
                 for (int j = 0; j < this.Grid.GetLength(1); j++)

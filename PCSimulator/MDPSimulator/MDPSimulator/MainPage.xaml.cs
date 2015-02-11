@@ -23,6 +23,8 @@ namespace MDPSimulator.View
     {
         public int[,] mapDescriptor = new int[20, 15];
         public Map map;
+        public Robot robot;
+        public Simulator simulator;
         public MainPage()
         {
             InitializeComponent();
@@ -124,11 +126,11 @@ namespace MDPSimulator.View
         private void exploreButton_Click(object sender, RoutedEventArgs e)
         {
             //Algo.explore(arena);
-            Robot robot = new Robot();
-            robot.PropertyChanged += new PropertyChangedEventHandler(robotMovingHandler);
+            this.robot = new Robot();
+            this.robot.PropertyChanged += new PropertyChangedEventHandler(robotMovingHandler);
             this.map = new Map(mapDescriptor);
-            Simulator simulator = new Simulator(robot, map);
-            simulator.simulateExplore();
+            this.simulator = new Simulator(robot, map);
+            this.simulator.simulateExplore();
         }
 
         private void displayRobotPos(int x, int y)
@@ -146,6 +148,11 @@ namespace MDPSimulator.View
             var bc = new BrushConverter();
             Label label = mapGrid.Children.Cast<Label>().First(e => Grid.GetRow(e) == 19 - y && Grid.GetColumn(e) == x);
             label.Background = (Brush)bc.ConvertFrom("#FF171361");
+        }
+
+        private void runButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.simulator.simulateFastestRun();
         }
     }
 }

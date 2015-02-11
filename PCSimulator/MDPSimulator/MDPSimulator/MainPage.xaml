@@ -6,7 +6,7 @@
         <StackPanel x:Name="buttonsPanel" Width="164">
             <Button x:Name="connectButton" Content="Connect" Height="54" Margin="20" FontSize="20" ClickMode="Press"/>
             <Button x:Name="exploreButton" Content="Explore" Height="54" Margin="20" FontSize="20" Click="exploreButton_Click"/>
-            <Button x:Name="runButton" Content="Fastest run" Height="54" Margin="20" FontSize="20"/>
+            <Button x:Name="runButton" Content="Fastest run" Height="54" Margin="20" FontSize="20" Click="runButton_Click"/>
             <Button x:Name="stopButton" Content="Stop" Height="54" Margin="20" FontSize="20"/>
             <Button x:Name="loadButton" Content="Load map" Height="54" Margin="20" FontSize="20" Click="loadMapClick"/>
         </StackPanel>

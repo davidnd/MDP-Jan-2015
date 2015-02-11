@@ -10,8 +10,14 @@ namespace MDPModel
     public class Robot:INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        private int x;
-        private int y;
+        private int x, y;
+        public Node StartNode {get; set;}
+        public Node GoalNode { get; set; }
+        public int XStart { get; set; }
+        public int YStart { get; set; }
+        public int XGoal { get; set; }
+        public int YGoal { get; set; }
+        public List<Node> ShortestPath { get; set; }
         public int X
         {   get{return x;}
             set
@@ -36,7 +42,7 @@ namespace MDPModel
         public int Range { get; set; }
 
         public Map Env { get; set; }
-
+        public Map VirtualMap { get; set; }
         public Map Memory { get; set; }
 
         public Robot(int x, int y, int r, char d)
@@ -47,6 +53,14 @@ namespace MDPModel
             this.Dir = d;
             //empty memory for robot
             this.Memory = new Map();
+            this.XGoal = 13;
+            this.YGoal = 18;
+            this.XStart = 1;
+            this.YStart = 1;
+            this.StartNode = new Node(this.XStart, this.YStart);
+            this.GoalNode = new Node(this.XGoal, this.YGoal);
+            this.ShortestPath = new List<Node>();
+            this.VirtualMap = new Map();
         }
 
         public Robot()
@@ -56,6 +70,14 @@ namespace MDPModel
             this.Range = 1;
             this.Dir = 'U';
             this.Memory = new Map();
+            this.XGoal = 13;
+            this.YGoal = 18;
+            this.XStart = 1;
+            this.YStart = 1;
+            this.StartNode = new Node(this.XStart, this.YStart);
+            this.GoalNode = new Node(this.XGoal, this.YGoal);
+            this.ShortestPath = new List<Node>();
+            this.VirtualMap = new Map();
         }
 
 
@@ -342,6 +364,206 @@ namespace MDPModel
             {
                 handler(this, new PropertyChangedEventArgs(p));
             }
+        }
+
+        public void fastestRun()
+        {
+            List<Node> closedSet = new List<Node>();
+            List<Node> openSet = new List<Node>();
+            List<Node> neighbors = new List<Node>();
+            Node currentNode;
+            this.StartNode.GCost = 0;
+            this.StartNode.FCost = this.StartNode.GCost + computeH(this.StartNode);
+            openSet.Add(this.StartNode);
+            this.Dir = 'U';
+            for (int i = 0; i < this.Memory.Grid.GetLength(0); i++)
+            {
+                for (int j = 0; j < this.Memory.Grid.GetLength(1); j++)
+                {
+                    if (this.Memory.Grid[i, j].Status == 0)
+                    {
+                        this.Memory.Grid[i, j].Status = 1;
+                    }
+                }
+            }
+            computeVirtualMap();
+            while (openSet.Count != 0)
+            {
+                openSet.Sort();
+                Console.WriteLine("====open set=====");
+                printListNode(openSet);
+
+                currentNode = openSet[0];
+                currentNode.print();
+                if (currentNode.Equals(this.GoalNode))
+                {
+                    Console.WriteLine("Reached goal");
+                    constructPath(currentNode);
+                    break;
+                }
+                openSet.RemoveAt(0);
+                closedSet.Add(currentNode);
+                neighbors = getNeighbors(currentNode, openSet);
+                Console.WriteLine("==== neighbors =====");
+                printListNode(neighbors);
+                foreach (Node neighbor in neighbors)
+                {
+                    if (checkNodeInSet(neighbor, closedSet))
+                        continue;
+                    int tentativeGCost = currentNode.GCost + 1;
+                    bool inOpenSet = checkNodeInSet(neighbor, openSet);
+                    if (!inOpenSet || tentativeGCost < neighbor.GCost)
+                    {
+                        neighbor.CameFrom = currentNode;
+                        neighbor.GCost = tentativeGCost;
+                        neighbor.FCost = neighbor.GCost + neighbor.HCost;
+                        if(!inOpenSet)
+                            openSet.Add(neighbor);
+                    }
+                }
+            }
+            Console.WriteLine("out of while loop");
+        }
+        public void printListNode(List<Node> nodes) 
+        {
+            foreach (Node node in nodes)
+            {
+                node.print();
+            }
+        }
+        private void constructPath(Node node)
+        {
+            this.ShortestPath.Add(node);
+            Node temp = node.CameFrom;
+            while(!temp.Equals(this.StartNode) && temp !=null)
+            {
+                this.ShortestPath.Add(temp);
+                temp = temp.CameFrom;
+            }
+            this.ShortestPath.Reverse();
+            Console.WriteLine("========ShortestPath=========");
+            foreach (Node item in this.ShortestPath)
+            {
+                item.print();
+            }
+        }
+        private List<Node> getNeighbors(Node currentNode, List<Node> L)
+        {
+            int x = currentNode.XNode;
+            int y = currentNode.YNode;
+            List<Node> neighbors = new List<Node>();
+            //empty cell
+            if (this.VirtualMap.Grid[y,x+1].Status == 2)
+            {
+                Node neighbor = new Node(x+1, y);
+                neighbor.HCost = computeH(neighbor);
+                Node temp = getNodeInSet(neighbor, L);
+                if (temp == null)
+                {
+                    neighbors.Add(neighbor);
+                }
+                else
+                    neighbors.Add(temp);
+            }
+            if (this.VirtualMap.Grid[y, x-1].Status == 2)
+            {
+                Node neighbor = new Node(x - 1, y);
+                neighbor.HCost = computeH(neighbor);
+                Node temp = getNodeInSet(neighbor, L);
+                if (temp == null)
+                {
+                    neighbors.Add(neighbor);
+                }
+                else
+                    neighbors.Add(temp);
+            }
+            if (this.VirtualMap.Grid[y-1, x].Status == 2)
+            {
+                Node neighbor = new Node(x, y-1);
+                neighbor.HCost = computeH(neighbor);
+                Node temp = getNodeInSet(neighbor, L);
+                if (temp == null)
+                {
+                    neighbors.Add(neighbor);
+                }
+                else
+                    neighbors.Add(temp);
+            }
+            if (this.VirtualMap.Grid[y+1, x].Status == 2)
+            {
+                Node neighbor = new Node(x, y+1);
+                neighbor.HCost = computeH(neighbor);
+                Node temp = getNodeInSet(neighbor, L);
+                if (temp == null)
+                {
+                    neighbors.Add(neighbor);
+                }
+                else
+                    neighbors.Add(temp);
+            }
+            return neighbors;
+        }
+        
+        private int computeH(Node node)
+        {
+            return (XGoal - node.XNode) + (YGoal - node.YNode);
+        }
+
+        private void computeVirtualMap()
+        {
+            for (int i = 0; i < Map.height; i++)
+            {
+                for (int j = 0; j < Map.width; j++)
+                {
+                    if (i == 0 || j == 0 || i == Map.height - 1 || j == Map.width - 1)
+                    {
+                        //virtual wall
+                        this.VirtualMap.Grid[i, j].Status = 1;
+                    }
+                    if (this.Memory.Grid[i, j].Status == 1)
+                    {
+                        for (int m = i - 1; m <= i + 1; m++)
+                        {
+                            for (int n = j - 1; n <= j + 1; n++)
+                            {
+                                if (m < 0 || n < 0 || m > Map.height - 1 || n > Map.width - 1)
+                                    continue;
+                                try
+                                {
+                                    this.VirtualMap.Grid[m, n].Status = 1;
+                                }
+                                catch (Exception exc)
+                                {
+                                    Console.WriteLine(exc.Message);
+                                }
+                            }
+                        }
+                    }
+                    if(this.VirtualMap.Grid[i, j].Status == 0)
+                        this.VirtualMap.Grid[i, j].Status = this.Memory.Grid[i, j].Status;
+                }
+            }
+            this.VirtualMap.print();
+        }
+
+        private bool checkNodeInSet(Node n, List<Node> l)
+        {
+            foreach (Node item in l)
+            {
+                if (item.Equals(n))
+                    return true;
+            }
+            return false;
+        }
+
+        private Node getNodeInSet(Node n, List<Node> L)
+        {
+            foreach (Node item in L)
+            {
+                if (item.Equals(n))
+                    return item;
+            }
+            return null;
         }
     }
 }
