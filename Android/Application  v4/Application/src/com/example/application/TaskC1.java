@@ -58,7 +58,7 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 	private Button btnSendStoredString2;
 	private Button btnSendStoredString3;
 	private Button btnSendStoredString4; 
-	
+	private Button btnSetCoordinate;
 	private Button btnUpdateMap;	
 	
 	private ToggleButton tbTilt;
@@ -80,6 +80,11 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 	private ListView myListView;
 	private ListView mConversationView;
 	private EditText input;
+	private TextView textViewSetCoordinate;
+	private TextView textViewXcoord;
+	private EditText editTextXcoord;
+	private TextView textViewYcoord;
+	private EditText editTextYcoord;
 	
 	Robot robot;
 	Draw draw;
@@ -107,6 +112,9 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 	public static final int RIGHT = 1;
 	public static final int DOWN = 2;
 	public static final int LEFT = 3;
+	
+	private int xcoordinate;
+	private int ycoordinate;
 	
     // msg types sent from the BluetoothService Handler
     public static final int MESSAGE_STATE_CHANGE = 1;
@@ -183,6 +191,30 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 		//btnRotateOpposite = (Button)findViewById(R.id.btnRotateOpposite);
 		btnRotateLeft = (Button)findViewById(R.id.btnRotateLeft);
 		btnRotateRight = (Button)findViewById(R.id.btnRotateRight);		
+		
+		//Task C.5 change to other relevant ids and continue code setcoordinate
+		btnSetCoordinate = (Button)findViewById(R.id.btnSetCoordinate);
+		textViewSetCoordinate = (TextView) findViewById(R.id.textViewSetCoordinate);
+		textViewXcoord = (TextView)findViewById(R.id.textViewXcoord);
+		editTextXcoord = (EditText)findViewById(R.id.editTextXcoord);
+		textViewYcoord = (TextView)findViewById(R.id.textViewYcoord);
+		editTextYcoord = (EditText)findViewById(R.id.editTextYcoord);
+		
+		btnSetCoordinate.setOnClickListener(new OnClickListener(){				
+			public void onClick(View v) {	
+				EditText xcoord = (EditText) findViewById(R.id.editTextXcoord);
+				String message1 = xcoord.getText().toString();
+				int xcoordinate = Integer.parseInt(message1);
+				EditText ycoord = (EditText) findViewById(R.id.editTextYcoord);
+				String message2 = ycoord.getText().toString();
+				int ycoordinate = Integer.parseInt(message2);
+				//Set to map
+				Robot r1 = new Robot();
+				r1.setX(xcoordinate);
+				r1.setY(ycoordinate);	
+			}
+		});				
+		
 		btnSendStoredString1 = (Button)findViewById(R.id.btnSendStoredString1);
 		btnSendStoredString1.setOnClickListener(new android.view.View.OnClickListener()
         {        
@@ -482,6 +514,12 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 	  			btnSendStoredString3.setVisibility(View.GONE);
 	  			btnSendStoredString4.setVisibility(View.GONE);
 	  			//1234
+	  			btnSetCoordinate.setVisibility(View.GONE);
+	  			textViewSetCoordinate.setVisibility(View.GONE);
+	  			textViewXcoord.setVisibility(View.GONE);
+	  			editTextXcoord.setVisibility(View.GONE);
+	  			textViewYcoord.setVisibility(View.GONE);
+	  			editTextYcoord.setVisibility(View.GONE);
 	  			
 	  			editTextBTStatus.setText("Disabled");
 	  			
@@ -597,6 +635,12 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 		btnSendStoredString3.setVisibility(View.GONE);
 		btnSendStoredString4.setVisibility(View.GONE);
 		//1234
+		btnSetCoordinate.setVisibility(View.GONE);
+		textViewSetCoordinate.setVisibility(View.GONE);
+		textViewXcoord.setVisibility(View.GONE);
+		editTextXcoord.setVisibility(View.GONE);
+		textViewYcoord.setVisibility(View.GONE);
+		editTextYcoord.setVisibility(View.GONE);
     }
 
 	private final Handler mHandler = new Handler() {
@@ -630,15 +674,9 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
             	  			btnSendStoredString1.setVisibility(View.VISIBLE);
             	  			btnSendStoredString2.setVisibility(View.VISIBLE);
             	  			btnSendStoredString3.setVisibility(View.VISIBLE);
-            	  			btnSendStoredString4.setVisibility(View.VISIBLE);
-            	  			            	  			
-            	  			//Task C.5 change to other relevant ids and continue code setcoordinate
-            	  			TextView textViewSetCoordinate = (TextView) findViewById(R.id.textViewSetCoordinate);
-            	  			TextView textViewXcoord = (TextView)findViewById(R.id.textViewXcoord);
-            	  			EditText editTextXcoord = (EditText)findViewById(R.id.editTextXcoord);
-            	  			TextView textViewYcoord = (TextView)findViewById(R.id.textViewYcoord);
-            	  			EditText editTextYcoord = (EditText)findViewById(R.id.editTextYcoord);
-            	  			
+            	  			btnSendStoredString4.setVisibility(View.VISIBLE); 
+            	  			//1234
+            	  			btnSetCoordinate.setVisibility(View.VISIBLE);
             	  			textViewSetCoordinate.setVisibility(View.VISIBLE);
             	  			textViewXcoord.setVisibility(View.VISIBLE);
             	  			editTextXcoord.setVisibility(View.VISIBLE);
@@ -679,6 +717,12 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
             	  			btnSendStoredString3.setVisibility(View.GONE);
             	  			btnSendStoredString4.setVisibility(View.GONE);
             	  			//1234
+            	  			btnSetCoordinate.setVisibility(View.GONE);
+            	  			textViewSetCoordinate.setVisibility(View.GONE);
+            	  			textViewXcoord.setVisibility(View.GONE);
+            	  			editTextXcoord.setVisibility(View.GONE);
+            	  			textViewYcoord.setVisibility(View.GONE);
+            	  			editTextYcoord.setVisibility(View.GONE);
             		        break;
             		}
             		break;
