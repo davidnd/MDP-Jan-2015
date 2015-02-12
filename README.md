@@ -7,8 +7,6 @@ This is home to our great project
 * After finish one change, add changes to the local directory with command: "git add -A"
 * commit the changes: git commit -m "Your messages about changes come here"
 * push the changes to repository so that every one can see: git push
-*
-*
 * Want to see the changes of others: git pull
 * If 2 of you changed the same files, there may be conflicts. Google to know how to solve the conflict and commit again :)
 * Try not to make changes to the same files as it causes a lot of headache
