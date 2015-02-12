@@ -56,8 +56,8 @@ public class Draw extends View {
  
         puzzlearray = setPuzzle.split(" ");
  
-        gridY = 20;
-        gridX = 15;
+        gridY = 15;
+        gridX = 20;
 
         robot.setX(Integer.parseInt(puzzlearray[0]));
         robot.setY(Integer.parseInt(puzzlearray[1]));
@@ -98,7 +98,7 @@ public class Draw extends View {
     }
  
     protected void onSizeChanged(int w, int h, int oldw, int oldh) { 
-        width = (float) w / 20;
+        width = (float) w / 25;
         height = width;
         finalWidth = width;
         getRect(selX, selY, selRect);
@@ -168,7 +168,7 @@ public class Draw extends View {
         
         // Horizontal lines
         for (int i = 0; i <= gridY; i++) {
-            canvas.drawLine(0, i * height, getWidth(), i * height, painter);
+            canvas.drawLine(0, i * height, gridX * width, i * height, painter);
         }
         
         // Vertical lines

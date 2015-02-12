@@ -1083,11 +1083,12 @@ containing a value of this type.
         public static final int left=0x7f02005a;
         public static final int moveforward=0x7f02005b;
         public static final int pic=0x7f02005c;
-        public static final int right=0x7f02005d;
-        public static final int rotateleft=0x7f02005e;
-        public static final int rotateright=0x7f02005f;
-        public static final int smiley=0x7f020060;
-        public static final int start=0x7f020061;
+        public static final int question=0x7f02005d;
+        public static final int right=0x7f02005e;
+        public static final int rotateleft=0x7f02005f;
+        public static final int rotateright=0x7f020060;
+        public static final int smiley=0x7f020061;
+        public static final int start=0x7f020062;
     }
     public static final class id {
         public static final int GridLayout1=0x7f050048;
@@ -1103,11 +1104,11 @@ containing a value of this type.
         public static final int action_menu_divider=0x7f050016;
         public static final int action_menu_presenter=0x7f050017;
         public static final int action_mode_close_button=0x7f050024;
-        public static final int action_settings=0x7f050070;
+        public static final int action_settings=0x7f050071;
         public static final int activity_chooser_view_content=0x7f050025;
         public static final int always=0x7f05000b;
         public static final int beginning=0x7f050011;
-        public static final int btnAbortOperation=0x7f05006f;
+        public static final int btnAbortOperation=0x7f050070;
         public static final int btnActivateBT=0x7f05004a;
         public static final int btnDeactivateBT=0x7f05004b;
         public static final int btnForward=0x7f05005a;
@@ -1117,7 +1118,7 @@ containing a value of this type.
         public static final int btnNewSearch=0x7f05004d;
         public static final int btnRotateLeft=0x7f050059;
         public static final int btnRotateRight=0x7f05005b;
-        public static final int btnSaveReturn=0x7f05006e;
+        public static final int btnSaveReturn=0x7f05006f;
         public static final int btnSend=0x7f05004e;
         public static final int btnSendStoredString1=0x7f050066;
         public static final int btnSendStoredString2=0x7f050067;
@@ -1139,6 +1140,7 @@ containing a value of this type.
         public static final int editTextString2=0x7f05006b;
         public static final int editTextString3=0x7f05006c;
         public static final int editTextString4=0x7f05006d;
+        public static final int editTextString5=0x7f05006e;
         public static final int editTextXcoord=0x7f05005d;
         public static final int editTextYcoord=0x7f05005f;
         public static final int edit_query=0x7f050030;
@@ -1257,15 +1259,17 @@ containing a value of this type.
         public static final int activity_main=0x7f030018;
         public static final int activity_main_menu=0x7f030019;
         public static final int activity_task_c1=0x7f03001a;
-        public static final int activity_task_c8=0x7f03001b;
-        public static final int support_simple_spinner_dropdown_item=0x7f03001c;
+        public static final int activity_task_c7=0x7f03001b;
+        public static final int activity_task_c8=0x7f03001c;
+        public static final int support_simple_spinner_dropdown_item=0x7f03001d;
     }
     public static final class menu {
         public static final int main=0x7f0c0000;
         public static final int main_menu=0x7f0c0001;
         public static final int task_c1=0x7f0c0002;
         public static final int task_c2=0x7f0c0003;
-        public static final int task_c8=0x7f0c0004;
+        public static final int task_c7=0x7f0c0004;
+        public static final int task_c8=0x7f0c0005;
     }
     public static final class string {
         /**  Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] 
