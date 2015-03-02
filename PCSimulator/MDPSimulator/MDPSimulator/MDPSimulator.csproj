@@ -53,7 +53,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Algo.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -63,6 +62,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="models\Cell.cs" />
+    <Compile Include="models\Map.cs" />
+    <Compile Include="models\Node.cs" />
+    <Compile Include="models\Robot.cs" />
+    <Compile Include="models\Simulator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -90,12 +94,6 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MDPModel\MDPModel.csproj">
-      <Project>{d9f94dd3-eeeb-47e8-a6ba-a10f86b3a83a}</Project>
-      <Name>MDPModel</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainPage.xaml">

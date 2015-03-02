@@ -14,6 +14,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using MDPModel;
 using System.ComponentModel;
+using System.Threading;
+
 namespace MDPSimulator.View
 {
     /// <summary>
@@ -25,10 +27,12 @@ namespace MDPSimulator.View
         public Map map;
         public Robot robot;
         public Simulator simulator;
+        public int testID = 0;
         public MainPage()
         {
             InitializeComponent();
             setUpMap();
+
         }
         private void setUpMap()
         {
@@ -125,19 +129,28 @@ namespace MDPSimulator.View
 
         private void exploreButton_Click(object sender, RoutedEventArgs e)
         {
-            //Algo.explore(arena);
             this.robot = new Robot();
-            this.robot.PropertyChanged += new PropertyChangedEventHandler(robotMovingHandler);
+            //robot.RobotMoving += new EventHandler(updateRobotPosition);
             this.map = new Map(mapDescriptor);
+            this.robot.ChangePosition += new Robot.RobotMovingHandler(updateRobotPosition);
             this.simulator = new Simulator(robot, map);
-            this.simulator.simulateExplore();
+            Thread thread = new Thread(this.simulator.simulateExplore);
+            thread.Start();
+            //this.simulator.simulateExplore() ;
         }
-
-        private void displayRobotPos(int x, int y)
+        public void updateRobotPosition(int x, int y)
         {
+            Console.WriteLine("Inside main thread");
+            Console.WriteLine("X: {0}", x);
+            Console.WriteLine("Y: {0}", y);
             var bc = new BrushConverter();
-            Label label = mapGrid.Children.Cast<Label>().First(e => Grid.GetRow(e) == 19-y && Grid.GetColumn(e) == x);
-            label.Background = (Brush) bc.ConvertFrom("#FF28701C");
+            Application.Current.Dispatcher.BeginInvoke(
+                System.Windows.Threading.DispatcherPriority.Background,
+                new Action(delegate{
+                    Label label = this.mapGrid.Children.Cast<Label>().First(e => Grid.GetRow(e) == 19 - y && Grid.GetColumn(e) == x);
+                    label.Background = (Brush)bc.ConvertFrom("#FF171361");
+                }));
+            
         }
         private void robotMovingHandler(object sender, PropertyChangedEventArgs ev)
         {

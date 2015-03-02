@@ -5,11 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Threading;
+using MDPSimulator.View;
+
 namespace MDPModel
 {
-    public class Robot:INotifyPropertyChanged
+    public class Robot
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        public delegate void RobotMovingHandler(int x, int y);
+        public event RobotMovingHandler ChangePosition;
         private int x, y;
         public Node StartNode {get; set;}
         public Node GoalNode { get; set; }
@@ -23,7 +27,7 @@ namespace MDPModel
             set
             {
                 x = value;
-                OnPropertyChanged("X");
+                OnPositionChanged();
             }
         }
 
@@ -34,7 +38,7 @@ namespace MDPModel
             set
             {
                 this.y = value;
-                OnPropertyChanged("Y");
+                OnPositionChanged();
             } 
         }
         public int Dir{ get;set; }
@@ -145,6 +149,17 @@ namespace MDPModel
             }
         }
 
+        protected virtual void OnPositionChanged()
+        {
+            if (ChangePosition != null)
+            {
+                ChangePosition(this.X, this.Y);
+            }
+            else
+            {
+                Console.WriteLine("Position changed!");
+            }
+        }
         public void turnAround()
         {
             switch (this.Dir)
@@ -206,10 +221,11 @@ namespace MDPModel
                 catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
+                    Console.WriteLine(e);
                 }
+                Thread.Sleep(500);
             } while ((this.X != 1 || this.Y != 1) || !moved);
         }
-
 
         public bool scanFront()
         {
@@ -357,15 +373,16 @@ namespace MDPModel
             return isBlocked;
         }
 
-        private void OnPropertyChanged(string p)
-        {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(p));
-            }
-        }
-
+        //private void OnPropertyChanged(string p)
+        //{
+        //    testMethod();
+        //    PropertyChangedEventHandler handler = PropertyChanged;
+        //    if (handler != null)
+        //    {
+        //        handler(this, new PropertyChangedEventArgs(p));
+        //    }
+        //}
+        
         public void fastestRun()
         {
             List<Node> closedSet = new List<Node>();
