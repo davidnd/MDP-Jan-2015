@@ -31,5 +31,9 @@ namespace MDPModel
         {
             this.Robot.fastestRun();
         }
+        public void test()
+        {
+            this.Robot.exploreWithDFS();
+        }
     }
 }

@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="models\Cell.cs" />
+    <Compile Include="models\DFSNode.cs" />
     <Compile Include="models\Map.cs" />
     <Compile Include="models\Node.cs" />
     <Compile Include="models\Robot.cs" />

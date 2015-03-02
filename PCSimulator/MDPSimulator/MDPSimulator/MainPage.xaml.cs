@@ -208,5 +208,17 @@ namespace MDPSimulator.View
             Thread thread = new Thread(this.simulator.simulateFastestRun);
             thread.Start();
         }
+
+        private void testButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.robot = new Robot();
+            //robot.RobotMoving += new EventHandler(updateRobotPosition);
+            this.map = new Map(mapDescriptor);
+            this.robot.ChangePosition += new Robot.RobotMovingHandler(updateRobotPosition);
+            this.simulator = new Simulator(robot, map);
+            Thread thread = new Thread(this.simulator.test);
+            thread.Start();
+            //this.simulator.simulateExplore() ;
+        }
     }
 }
