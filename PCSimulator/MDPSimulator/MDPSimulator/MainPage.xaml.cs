@@ -143,14 +143,54 @@ namespace MDPSimulator.View
             Console.WriteLine("Inside main thread");
             Console.WriteLine("X: {0}", x);
             Console.WriteLine("Y: {0}", y);
-            var bc = new BrushConverter();
             Application.Current.Dispatcher.BeginInvoke(
                 System.Windows.Threading.DispatcherPriority.Background,
-                new Action(delegate{
-                    Label label = this.mapGrid.Children.Cast<Label>().First(e => Grid.GetRow(e) == 19 - y && Grid.GetColumn(e) == x);
+                new Action(delegate { drawMap(x, y); }));
+        }
+        public void drawMap(int x, int y) 
+        {
+            var bc = new BrushConverter();
+            this.mapGrid.Children.Clear();
+            this.mapGrid.RowDefinitions.Clear();
+            this.mapGrid.ColumnDefinitions.Clear();
+            setUpMap();
+            Map robotMemory = robot.Memory;
+            for (int i = 0; i < robotMemory.Grid.GetLength(0); i++)
+            {
+                for (int j = 0; j < robotMemory.Grid.GetLength(1); j++)
+                {
+                    Label label = new Label();
+                    if(i<3 && j < 3 || i>16 && j>11)
+                    {
+                        //Grid.SetColumn(label, j);
+                        //Grid.SetRow(label, 19 - i);
+                        //this.mapGrid.Children.Add(label);
+                        continue;
+                    }
+                    if (robotMemory.Grid[i, j].Status == 1)
+                    {
+                        label.Background = (Brush)bc.ConvertFrom("#FF952900");                        
+                    }
+                    if (robotMemory.Grid[i, j].Status == 2)
+                    {
+                        label.Background = (Brush)bc.ConvertFrom("#FF1EDED5");                        
+                    }
+                    Grid.SetColumn(label, j);
+                    Grid.SetRow(label, 19 - i);
+                    this.mapGrid.Children.Add(label);
+                }
+            }
+            //draw robot
+            for (int i = x-1; i <= x+1; i++)
+            {
+                for (int j = y-1; j <= y+1; j++)
+                {
+                    Label label = this.mapGrid.Children.Cast<Label>().First(e => Grid.GetRow(e) == 19 - j && Grid.GetColumn(e) == i);
                     label.Background = (Brush)bc.ConvertFrom("#FF171361");
-                }));
-            
+                }
+            }
+            //draw maze
+
         }
         private void robotMovingHandler(object sender, PropertyChangedEventArgs ev)
         {

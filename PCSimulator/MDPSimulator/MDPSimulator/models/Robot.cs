@@ -372,16 +372,6 @@ namespace MDPModel
             }
             return isBlocked;
         }
-
-        //private void OnPropertyChanged(string p)
-        //{
-        //    testMethod();
-        //    PropertyChangedEventHandler handler = PropertyChanged;
-        //    if (handler != null)
-        //    {
-        //        handler(this, new PropertyChangedEventArgs(p));
-        //    }
-        //}
         
         public void fastestRun()
         {
