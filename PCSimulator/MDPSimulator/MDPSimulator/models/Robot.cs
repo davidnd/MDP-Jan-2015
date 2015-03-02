@@ -223,7 +223,7 @@ namespace MDPModel
                     Console.WriteLine(e.Message);
                     Console.WriteLine(e);
                 }
-                Thread.Sleep(500);
+                Thread.Sleep(200);
             } while ((this.X != 1 || this.Y != 1) || !moved);
         }
 
@@ -452,6 +452,8 @@ namespace MDPModel
             foreach (Node item in this.ShortestPath)
             {
                 item.print();
+                this.X = item.XNode;
+                this.Y = item.YNode;
             }
         }
         private List<Node> getNeighbors(Node currentNode, List<Node> L)
@@ -571,6 +573,11 @@ namespace MDPModel
                     return item;
             }
             return null;
+        }
+
+        private void exploreWithDFS()
+        {
+
         }
     }
 }

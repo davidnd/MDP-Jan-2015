@@ -205,7 +205,8 @@ namespace MDPSimulator.View
 
         private void runButton_Click(object sender, RoutedEventArgs e)
         {
-            this.simulator.simulateFastestRun();
+            Thread thread = new Thread(this.simulator.simulateFastestRun);
+            thread.Start();
         }
     }
 }
