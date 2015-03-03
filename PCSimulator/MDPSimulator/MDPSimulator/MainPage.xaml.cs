@@ -140,9 +140,9 @@ namespace MDPSimulator.View
         }
         public void updateRobotPosition(int x, int y)
         {
-            Console.WriteLine("Inside main thread");
-            Console.WriteLine("X: {0}", x);
-            Console.WriteLine("Y: {0}", y);
+            //Console.WriteLine("Inside main thread");
+            //Console.WriteLine("X: {0}", x);
+            //Console.WriteLine("Y: {0}", y);
             Application.Current.Dispatcher.BeginInvoke(
                 System.Windows.Threading.DispatcherPriority.Background,
                 new Action(delegate { drawMap(x, y); }));

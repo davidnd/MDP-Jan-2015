@@ -241,9 +241,9 @@ namespace MDPModel
                 case 'L':
                     return checkLeftSide();
                 case 'U':
-                    return checkUp();
+                    return checkTopSide();
                 case 'D':
-                    return checkDown();
+                    return checkBottomSide();
                 default:
                     return true;
             }    
@@ -254,9 +254,9 @@ namespace MDPModel
             switch (this.Dir)
             {
                 case 'R':
-                    return checkUp();
+                    return checkTopSide();
                 case 'L':
-                    return checkDown();
+                    return checkBottomSide();
                 case 'U':
                     return checkLeftSide();
                 case 'D':
@@ -271,9 +271,9 @@ namespace MDPModel
             switch (this.Dir)
             {
                 case 'R':
-                    return checkDown();
+                    return checkBottomSide();
                 case 'L':
-                    return checkUp();
+                    return checkTopSide();
                 case 'U':
                     return checkRightSide();
                 case 'D':
@@ -283,7 +283,7 @@ namespace MDPModel
             }
         }
 
-        public bool checkUp()
+        public bool checkTopSide()
         {
             bool isBlocked = false;
             if (this.Y + this.Range + 1 >= this.Env.Grid.GetLength(0))
@@ -355,7 +355,7 @@ namespace MDPModel
             return isBlocked;
         }
 
-        public bool checkDown()
+        public bool checkBottomSide()
         {
             bool isBlocked = false;
             if (this.Y - this.Range - 1 < 0)
@@ -586,45 +586,55 @@ namespace MDPModel
             this.StartDFSNode = new DFSNode(StartNode.XNode, StartNode.YNode);
             this.GoalDFSNode = new DFSNode(GoalNode.XNode, GoalNode.YNode);
             DFSNode currentNode = StartDFSNode;
-            this.DFSNodes.Add(currentNode);            
-            while (stack.Count > 0 || currentNode !=null)
+            this.DFSNodes.Add(currentNode);
+            try
             {
-                if (currentNode != null)
+                while (stack.Count > 0 || currentNode != null)
                 {
-                    currentNode.print();
-                    currentNode.isVisited = true;
-                    getDFSChildren(currentNode);
-                    if (currentNode.BottomChild != null)
+                    if (currentNode != null)
                     {
-                        stack.Push(currentNode.BottomChild);
-                        this.DFSNodes.Add(currentNode.BottomChild);
+                        Console.WriteLine("Visiting node X = {0}, Y = {1}", currentNode.X, currentNode.Y);
+                        currentNode.isVisited = true;
+                        this.X = currentNode.X;
+                        this.Y = currentNode.Y;
+                        getDFSChildren(currentNode);
+                        if (currentNode.BottomChild != null)
+                        {
+                            stack.Push(currentNode.BottomChild);
+                            this.DFSNodes.Add(currentNode.BottomChild);
+                        }
+                        if (currentNode.LeftChild != null)
+                        {
+                            stack.Push(currentNode.LeftChild);
+                            this.DFSNodes.Add(currentNode.LeftChild);
+                        }
+                        if (currentNode.TopChild != null)
+                        {
+                            stack.Push(currentNode.TopChild);
+                            this.DFSNodes.Add(currentNode.TopChild);
+                        }
+                        if (currentNode.RightChild != null)
+                        {
+                            stack.Push(currentNode.RightChild);
+                            this.DFSNodes.Add(currentNode.RightChild);
+                        }
+                        printStack();
+                        currentNode = (DFSNode)stack.Pop();
+                        //this.X = currentNode.X;
+                        //this.Y = currentNode.Y;
                     }
-                    if (currentNode.LeftChild !=null)
+                    else
                     {
-                        stack.Push(currentNode.LeftChild);
-                        this.DFSNodes.Add(currentNode.LeftChild);
+                        currentNode = (DFSNode)stack.Pop();
                     }
-                    if (currentNode.TopChild != null)
-                    {
-                        stack.Push(currentNode.TopChild);
-                        this.DFSNodes.Add(currentNode.TopChild);
-                    }   
-                    if (currentNode.RightChild != null)
-                    {
-                        stack.Push(currentNode.RightChild);
-                        this.DFSNodes.Add(currentNode.RightChild);
-                    }
-                    currentNode = (DFSNode)stack.Pop();
-                    this.X = currentNode.X;
-                    this.Y = currentNode.Y;
+                    Thread.Sleep(300);
                 }
-                else
-                {
-                    currentNode = (DFSNode)stack.Pop();
-                }
-                printStack();
-                Thread.Sleep(300);
             }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            
         }
         public void getDFSChildren(DFSNode node)
         {
@@ -633,37 +643,36 @@ namespace MDPModel
             if (!checkRightSide())
             {
                 DFSNode rightChild = new DFSNode(x + 1, y);
+                rightChild.ParentNode = node;
                 if (!checkDFSNodeInStack(rightChild))
+                {
                     node.RightChild = rightChild;
+                }
             }
-            else
-            {
-                Console.WriteLine("right side is blocked");
-            }
-            if (!checkUp())
+
+            if (!checkTopSide())
             {
                 DFSNode topChild = new DFSNode(x, y + 1);
+                topChild.ParentNode = node;
                 if (!checkDFSNodeInStack(topChild))
                     node.TopChild = topChild;
-            }else
-                Console.WriteLine("top side is blocked");
+            }
+
             if (!checkLeftSide())
             {
                 DFSNode leftChild = new DFSNode(x - 1, y);
+                leftChild.ParentNode = node;
                 if (!checkDFSNodeInStack(leftChild))
                     node.LeftChild = leftChild;
             }
-            else
-                Console.WriteLine("left side is blocked");
-            if (!checkDown())
+            
+            if (!checkBottomSide())
             {
-                DFSNode bottomChild = new DFSNode(x, y - this.Range - 1);
+                DFSNode bottomChild = new DFSNode(x, y - 1);
+                bottomChild.ParentNode = node;
                 if (!checkDFSNodeInStack(bottomChild))
                     node.BottomChild = bottomChild;
             }
-            else
-                Console.WriteLine("bottom side is blocked");
-
         }
         public bool checkDFSNodeInStack(DFSNode node)
         {
@@ -685,6 +694,7 @@ namespace MDPModel
             {
                 item.print();
             }
+            Console.WriteLine("=======End stack========");
         }
     }
 }

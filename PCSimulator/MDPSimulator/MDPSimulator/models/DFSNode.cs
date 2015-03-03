@@ -15,6 +15,7 @@ namespace MDPModel
         public DFSNode LeftChild { get; set; }
         public DFSNode BottomChild { get; set; }
         public bool isVisited { get; set; }
+        public DFSNode ParentNode { get; set; }
         public DFSNode(int x, int y)
         {
             this.X = x;
@@ -23,7 +24,7 @@ namespace MDPModel
         }
         public void print()
         {
-            Console.WriteLine("Current Node at X = {0}, Y = {1}", this.X, this.Y);
+            Console.WriteLine("Node at X = {0}, Y = {1}", this.X, this.Y);
         }
 
         public override bool Equals(Object other)
@@ -36,6 +37,10 @@ namespace MDPModel
                 return (n.X == this.X) && (n.Y == this.Y);
             }
 
+        }
+        public bool allChildrenVisited()
+        {
+            return BottomChild.isVisited && TopChild.isVisited && LeftChild.isVisited && RightChild.isVisited;
         }
     }
 }
