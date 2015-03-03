@@ -2,6 +2,7 @@ package model;
 
 import entity.Cell;
 import observer.RobotObserver;
+import com.example.application.TaskC1;
 
 public class Robot {
 	private static final Robot robot = new Robot();

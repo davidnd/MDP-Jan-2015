@@ -56,8 +56,8 @@ public class Draw extends View {
  
         puzzlearray = setPuzzle.split(" ");
  
-        gridY = 20;
-        gridX = 15;
+        gridY = 15;
+        gridX = 20;
 
         robot.setX(Integer.parseInt(puzzlearray[0]));
         robot.setY(Integer.parseInt(puzzlearray[1]));
@@ -98,7 +98,7 @@ public class Draw extends View {
     }
  
     protected void onSizeChanged(int w, int h, int oldw, int oldh) { 
-        width = (float) w / 20;
+        width = (float) w / 25;
         height = width;
         finalWidth = width;
         getRect(selX, selY, selRect);
@@ -168,7 +168,8 @@ public class Draw extends View {
         
         // Horizontal lines
         for (int i = 0; i <= gridY; i++) {
-            canvas.drawLine(0, i * height, getWidth(), i * height, painter);
+            //canvas.drawLine(0, i * height, getWidth(), i * height, painter);
+            canvas.drawLine(0, i * height, gridX * width, i * height, painter);
         }
         
         // Vertical lines
@@ -199,8 +200,8 @@ public class Draw extends View {
         Paint painter1 = new Paint();
         painter1.setColor(getResources().getColor(R.color.holo_red_light));
         painter1.setStyle(Style.FILL);
-        canvas.drawRect(new RectF(0 * width, 0 * height, 1 * width, 1 * height), painter1);
-        canvas.drawRect(new RectF((gridX - 1) * width, (gridY - 1) * height, gridX * width, gridY * height), painter1);
+        canvas.drawRect(new RectF(0 * width, 0 * height, 3 * width, 3 * height), painter1);
+        canvas.drawRect(new RectF((gridX - 3) * width, (gridY - 3) * height, gridX * width, gridY * height), painter1);
  
         Log.d("painting", "paint arena");
     }

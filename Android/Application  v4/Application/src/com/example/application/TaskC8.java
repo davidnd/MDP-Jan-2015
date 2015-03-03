@@ -12,13 +12,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class TaskC8 extends Activity { 
+public class TaskC8 extends Activity {
 	private Button btnSaveReturn;
 	private Button btnAbortOperation;
 	private EditText editTextString1;
 	private EditText editTextString2;
 	private EditText editTextString3;
 	private EditText editTextString4;
+	private EditText editTextString5;
 	private String StoredString1;
 	private String StoredString2;
 	private String StoredString3;
