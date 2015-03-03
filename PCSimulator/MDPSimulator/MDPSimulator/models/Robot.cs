@@ -618,6 +618,15 @@ namespace MDPModel
                             stack.Push(currentNode.RightChild);
                             this.DFSNodes.Add(currentNode.RightChild);
                         }
+                        while(currentNode.allChildrenVisited())
+                        {
+                            Console.WriteLine("No more children, backtracking!!!");
+                            //no more children, backtracking
+                            currentNode = currentNode.ParentNode;
+                            Thread.Sleep(500);
+                            this.X = currentNode.X;
+                            this.Y = currentNode.Y;
+                        }
                         printStack();
                         currentNode = (DFSNode)stack.Pop();
                         //this.X = currentNode.X;
@@ -627,7 +636,7 @@ namespace MDPModel
                     {
                         currentNode = (DFSNode)stack.Pop();
                     }
-                    Thread.Sleep(300);
+                    Thread.Sleep(500);
                 }
             }
             catch (Exception e)

@@ -40,7 +40,21 @@ namespace MDPModel
         }
         public bool allChildrenVisited()
         {
-            return BottomChild.isVisited && TopChild.isVisited && LeftChild.isVisited && RightChild.isVisited;
+            if (RightChild != null && !RightChild.isVisited)
+            {
+                return false;
+            }
+            if (TopChild != null && !TopChild.isVisited)
+                return false;
+            if (LeftChild != null && !LeftChild.isVisited)
+                return false;
+            if (BottomChild != null && !BottomChild.isVisited)
+                return false;
+            return true;
+        }
+        public bool hasChildren()
+        {
+            return (BottomChild != null) || (TopChild != null) || (LeftChild != null) || (RightChild != null); 
         }
     }
 }
