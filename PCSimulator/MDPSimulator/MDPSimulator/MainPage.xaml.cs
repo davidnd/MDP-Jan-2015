@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using MDPModel;
 using System.ComponentModel;
 using System.Threading;
+using System.Windows.Threading;
 
 namespace MDPSimulator.View
 {
@@ -28,11 +29,15 @@ namespace MDPSimulator.View
         public Robot robot;
         public Simulator simulator;
         public int testID = 0;
+        private DispatcherTimer timer;
+        private int timeLimit;
+        private double coverageLimit;
+        private Thread exploreThread;
         public MainPage()
         {
             InitializeComponent();
             setUpMap();
-
+            this.timer = new DispatcherTimer();
         }
         private void setUpMap()
         {
@@ -132,11 +137,36 @@ namespace MDPSimulator.View
             this.robot = new Robot();
             //robot.RobotMoving += new EventHandler(updateRobotPosition);
             this.map = new Map(mapDescriptor);
+            
             this.robot.ChangePosition += new Robot.RobotMovingHandler(updateRobotPosition);
             this.simulator = new Simulator(robot, map);
-            Thread thread = new Thread(this.simulator.simulateExplore);
-            thread.Start();
+            this.timeLimit = UserSetting.TimeLimit;
+            timer.Interval = new TimeSpan(0, 0, 1);
+            timer.Tick += new EventHandler(timer_Tick);
+            timer.Start();
+            exploreThread = new Thread(this.simulator.simulateExplore);
+            exploreThread.Start();
             //this.simulator.simulateExplore() ;
+        }
+
+        private void timer_Tick(object sender, EventArgs e)
+        {
+            if (timeLimit > 10)
+            {
+                timeLimit--;
+                timeLabel.Content = string.Format("00:0{0}:{1}", timeLimit / 60, timeLimit % 60);
+            }
+            else
+            {
+                timeLimit--;
+                timeLabel.Content = string.Format("00:0{0}:0{1}", timeLimit / 60, timeLimit % 60);
+            }
+            if (timeLimit == 0)
+            {
+                exploreThread.Abort();
+                timer.Stop();
+                Console.WriteLine("Time is up");
+            }
         }
         public void updateRobotPosition(int x, int y)
         {
@@ -194,7 +224,13 @@ namespace MDPSimulator.View
             this.xLabel.Content = this.robot.X.ToString();
             this.yLabel.Content = this.robot.Y.ToString();
             this.speedLabel.Content = UserSetting.Speed.ToString();
-            this.coverageLabel.Content = String.Format("{0:0.00}", this.simulator.computeCoverage()) +" %";
+            double currentCoverage = this.simulator.computeCoverage();
+            this.coverageLabel.Content = String.Format("{0:0.00}", currentCoverage) +" %";
+            if (currentCoverage >= UserSetting.CoverageLimit)
+            {
+                Console.WriteLine("Coverage limit reached!");
+                exploreThread.Abort();
+            }
         }
         //private void robotMovingHandler(object sender, PropertyChangedEventArgs ev)
         //{
@@ -209,20 +245,25 @@ namespace MDPSimulator.View
 
         private void runButton_Click(object sender, RoutedEventArgs e)
         {
-            Thread thread = new Thread(this.simulator.simulateFastestRun);
-            thread.Start();
+            exploreThread = new Thread(this.simulator.simulateFastestRun);
+            exploreThread.Start();
         }
 
-        private void testButton_Click(object sender, RoutedEventArgs e)
+        private void dfsExplore_Click(object sender, RoutedEventArgs e)
         {
             this.robot = new Robot();
             //robot.RobotMoving += new EventHandler(updateRobotPosition);
             this.map = new Map(mapDescriptor);
             this.robot.ChangePosition += new Robot.RobotMovingHandler(updateRobotPosition);
             this.simulator = new Simulator(robot, map);
-            Thread thread = new Thread(this.simulator.test);
-            thread.Start();
-            //this.simulator.simulateExplore() ;
+            this.timeLimit = UserSetting.TimeLimit;
+            this.coverageLimit = UserSetting.CoverageLimit;
+            timer.Interval = new TimeSpan(0, 0, 1);
+            timer.Tick += new EventHandler(timer_Tick);
+            timer.Start();
+            exploreThread = new Thread(this.simulator.test);
+            exploreThread.Start();
+            //this.simulator.simulateExplore();
         }
 
         private void settingsButton_Click(object sender, RoutedEventArgs e)
@@ -238,7 +279,6 @@ namespace MDPSimulator.View
                 Console.WriteLine("Time = " + settings.getTimeLimit());
                 Console.WriteLine("Coverage = " + settings.getCoverageLimit());       
             }
-            
         }
 
     }

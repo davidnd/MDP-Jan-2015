@@ -9,10 +9,10 @@
             <Button x:Name="runButton" Content="Fastest run" Height="54" Margin="20" FontSize="20" Click="runButton_Click"/>
             <Button x:Name="settingsButton" Content="Settings" Height="54" Margin="20" FontSize="20" Click="settingsButton_Click"/>
             <Button x:Name="loadButton" Content="Load map" Height="54" Margin="20" FontSize="20" Click="loadMapClick"/>
-            <Button x:Name="testButton" Content="DFS Explore" Height="54" Margin="20" FontSize="20" Click="testButton_Click"/>
+            <Button x:Name="testButton" Content="DFS Explore" Height="54" Margin="20" FontSize="20" Click="dfsExplore_Click"/>
         </StackPanel>
         <Grid x:Name="mapGrid" Background="#FF645C5C" Height="600" Margin="10,20,10,0" Width="450" VerticalAlignment="Top"/>
-        <WrapPanel x:Name="statusPanel" Height="160" Margin="20,20,20,0" VerticalAlignment="Top" Width="270">
+        <WrapPanel x:Name="statusPanel" Height="206" Margin="20,20,20,0" VerticalAlignment="Top" Width="270">
             <Label Content="Coverage:" Height="38" Width="130" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" BorderThickness="1"/>
             <Label x:Name="coverageLabel" Content="0%" Height="38" Width="122" HorizontalContentAlignment="Stretch" Margin="10,0,0,0"/>
             <Label Content="x-coordinate:" Height="38" Width="130" HorizontalContentAlignment="Right"/>
@@ -21,6 +21,8 @@
             <Label x:Name="yLabel" Content="1" Height="38" Width="122" Margin="10,0,0,0"/>
             <Label Content="Speed:" Height="38" Width="130" HorizontalContentAlignment="Right"/>
             <Label x:Name="speedLabel" Content="0" Height="38" Width="122" Margin="10,0,0,0"/>
+            <Label Content="Time limit:" Height="38" Width="130" HorizontalContentAlignment="Right"/>
+            <Label x:Name="timeLabel" Content="360" Height="38" Width="122" Margin="10,0,0,0"/>
         </WrapPanel>
 
     </DockPanel>
