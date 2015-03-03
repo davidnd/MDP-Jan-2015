@@ -623,21 +623,36 @@ namespace MDPModel
                             Console.WriteLine("No more children, backtracking!!!");
                             //no more children, backtracking
                             currentNode = currentNode.ParentNode;
-                            Thread.Sleep(500);
+                            Thread.Sleep(300);
                             this.X = currentNode.X;
                             this.Y = currentNode.Y;
+                            if (currentNode == StartDFSNode)
+                            {
+                                break;
+                            }
                         }
                         printStack();
-                        currentNode = (DFSNode)stack.Pop();
+                        if (stack.Count > 0)
+                        {
+                            currentNode = (DFSNode)stack.Pop();
+                        }
+                        else
+                            break;
                         //this.X = currentNode.X;
                         //this.Y = currentNode.Y;
                     }
                     else
                     {
-                        currentNode = (DFSNode)stack.Pop();
+                        if (stack.Count > 0)
+                        {
+                            currentNode = (DFSNode)stack.Pop();
+                        }
+                        else
+                            break;
                     }
-                    Thread.Sleep(500);
+                    Thread.Sleep(300);
                 }
+                Console.WriteLine("Exploration finished!!!");
             }
             catch (Exception e)
             {

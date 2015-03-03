@@ -220,5 +220,12 @@ namespace MDPSimulator.View
             thread.Start();
             //this.simulator.simulateExplore() ;
         }
+
+        private void settingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            Settings settings = new Settings();
+            settings.Show();
+        }
+
     }
 }

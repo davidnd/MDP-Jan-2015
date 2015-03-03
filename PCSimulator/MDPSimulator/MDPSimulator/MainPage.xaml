@@ -5,11 +5,11 @@
     <DockPanel LastChildFill="False">
         <StackPanel x:Name="buttonsPanel" Width="164">
             <Button x:Name="connectButton" Content="Connect" Height="54" Margin="20" FontSize="20" ClickMode="Press"/>
-            <Button x:Name="exploreButton" Content="Explore" Height="54" Margin="20" FontSize="20" Click="exploreButton_Click"/>
+            <Button x:Name="exploreButton" Content="WF Explore" Height="54" Margin="20" FontSize="20" Click="exploreButton_Click"/>
             <Button x:Name="runButton" Content="Fastest run" Height="54" Margin="20" FontSize="20" Click="runButton_Click"/>
-            <Button x:Name="stopButton" Content="Stop" Height="54" Margin="20" FontSize="20"/>
+            <Button x:Name="settingsButton" Content="Settings" Height="54" Margin="20" FontSize="20" Click="settingsButton_Click"/>
             <Button x:Name="loadButton" Content="Load map" Height="54" Margin="20" FontSize="20" Click="loadMapClick"/>
-            <Button x:Name="testButton" Content="Test" Height="54" Margin="20" FontSize="20" Click="testButton_Click"/>
+            <Button x:Name="testButton" Content="DFS Explore" Height="54" Margin="20" FontSize="20" Click="testButton_Click"/>
         </StackPanel>
         <Grid x:Name="mapGrid" Background="#FF645C5C" Height="600" Margin="10,20,10,0" Width="450" VerticalAlignment="Top"/>
         <WrapPanel x:Name="statusPanel" Height="160" Margin="20,20,20,0" VerticalAlignment="Top" Width="270">
