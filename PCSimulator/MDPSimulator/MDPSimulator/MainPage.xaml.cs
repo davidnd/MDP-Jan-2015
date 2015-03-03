@@ -189,19 +189,23 @@ namespace MDPSimulator.View
                     label.Background = (Brush)bc.ConvertFrom("#FF171361");
                 }
             }
-            //draw maze
 
+            //update index
+            this.xLabel.Content = this.robot.X.ToString();
+            this.yLabel.Content = this.robot.Y.ToString();
+            this.speedLabel.Content = UserSetting.Speed.ToString();
+            this.coverageLabel.Content = String.Format("{0:0.00}", this.simulator.computeCoverage()) +" %";
         }
-        private void robotMovingHandler(object sender, PropertyChangedEventArgs ev)
-        {
-            Robot robot = (Robot)sender;
-            int x = robot.X;
-            int y = robot.Y;
-            //displayRobotPos(robot.X, robot.Y);
-            var bc = new BrushConverter();
-            Label label = mapGrid.Children.Cast<Label>().First(e => Grid.GetRow(e) == 19 - y && Grid.GetColumn(e) == x);
-            label.Background = (Brush)bc.ConvertFrom("#FF171361");
-        }
+        //private void robotMovingHandler(object sender, PropertyChangedEventArgs ev)
+        //{
+        //    Robot robot = (Robot)sender;
+        //    int x = robot.X;
+        //    int y = robot.Y;
+        //    //displayRobotPos(robot.X, robot.Y);
+        //    var bc = new BrushConverter();
+        //    Label label = mapGrid.Children.Cast<Label>().First(e => Grid.GetRow(e) == 19 - y && Grid.GetColumn(e) == x);
+        //    label.Background = (Brush)bc.ConvertFrom("#FF171361");
+        //}
 
         private void runButton_Click(object sender, RoutedEventArgs e)
         {
@@ -224,7 +228,17 @@ namespace MDPSimulator.View
         private void settingsButton_Click(object sender, RoutedEventArgs e)
         {
             Settings settings = new Settings();
-            settings.Show();
+            if (settings.ShowDialog() == true)
+            {
+                UserSetting.Speed = settings.getSpeed();
+                UserSetting.TimeLimit = settings.getTimeLimit();
+                UserSetting.CoverageLimit = settings.getCoverageLimit();
+
+                Console.WriteLine("Speed = " + settings.getSpeed());
+                Console.WriteLine("Time = " + settings.getTimeLimit());
+                Console.WriteLine("Coverage = " + settings.getCoverageLimit());       
+            }
+            
         }
 
     }

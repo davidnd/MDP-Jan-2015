@@ -35,5 +35,23 @@ namespace MDPModel
         {
             this.Robot.exploreWithDFS();
         }
+        public double computeCoverage()
+        {
+            Map robotMemory = this.Robot.Memory;
+            int firstDm = robotMemory.Grid.GetLength(0);
+            int secondDm = robotMemory.Grid.GetLength(1);
+            int explored = 0;
+            for (int i = 0; i < firstDm; i++)
+            {
+                for (int j = 0; j < secondDm; j++)
+                {
+                    if (robotMemory.Grid[i, j].Status != 0)
+                    {
+                        explored++;
+                    }
+                }
+            }
+            return (double)explored/(firstDm*secondDm)*100;
+        }
     }
 }

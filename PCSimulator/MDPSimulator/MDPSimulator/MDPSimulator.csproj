@@ -63,6 +63,7 @@
     <Compile Include="Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserSetting.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="models\Cell.cs" />

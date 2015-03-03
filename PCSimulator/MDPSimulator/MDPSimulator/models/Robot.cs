@@ -8,7 +8,7 @@ using System.Diagnostics;
 using System.Threading;
 using MDPSimulator.View;
 using System.Collections;
-
+using MDPSimulator;
 namespace MDPModel
 {
     public class Robot
@@ -623,7 +623,7 @@ namespace MDPModel
                             Console.WriteLine("No more children, backtracking!!!");
                             //no more children, backtracking
                             currentNode = currentNode.ParentNode;
-                            Thread.Sleep(300);
+                            Thread.Sleep(1000 / UserSetting.Speed);
                             this.X = currentNode.X;
                             this.Y = currentNode.Y;
                             if (currentNode == StartDFSNode)
@@ -650,7 +650,7 @@ namespace MDPModel
                         else
                             break;
                     }
-                    Thread.Sleep(300);
+                    Thread.Sleep(1000/UserSetting.Speed);
                 }
                 Console.WriteLine("Exploration finished!!!");
             }

@@ -1,7 +1,7 @@
 ﻿<Window x:Class="MDPSimulator.View.MainPage"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainPage" Height="697" Width="934" VerticalContentAlignment="Stretch" WindowStartupLocation="CenterScreen" HorizontalContentAlignment="Stretch" FontSize="20">
+        Title="MDP Group 9" Height="697" Width="934" VerticalContentAlignment="Stretch" WindowStartupLocation="CenterScreen" HorizontalContentAlignment="Stretch" FontSize="20">
     <DockPanel LastChildFill="False">
         <StackPanel x:Name="buttonsPanel" Width="164">
             <Button x:Name="connectButton" Content="Connect" Height="54" Margin="20" FontSize="20" ClickMode="Press"/>
@@ -14,13 +14,13 @@
         <Grid x:Name="mapGrid" Background="#FF645C5C" Height="600" Margin="10,20,10,0" Width="450" VerticalAlignment="Top"/>
         <WrapPanel x:Name="statusPanel" Height="160" Margin="20,20,20,0" VerticalAlignment="Top" Width="270">
             <Label Content="Coverage:" Height="38" Width="130" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" BorderThickness="1"/>
-            <Label x:Name="coverage" Content="Coverage" Height="38" Width="122" HorizontalContentAlignment="Stretch" Margin="10,0,0,0"/>
+            <Label x:Name="coverageLabel" Content="0%" Height="38" Width="122" HorizontalContentAlignment="Stretch" Margin="10,0,0,0"/>
             <Label Content="x-coordinate:" Height="38" Width="130" HorizontalContentAlignment="Right"/>
-            <Label Content="Coverage" Height="38" Width="122" Margin="10,0,0,0"/>
+            <Label x:Name="xLabel" Content="1" Height="38" Width="122" Margin="10,0,0,0"/>
             <Label Content="y-coordinate:" Height="38" Width="130" HorizontalContentAlignment="Right"/>
-            <Label Content="Coverage" Height="38" Width="122" Margin="10,0,0,0"/>
+            <Label x:Name="yLabel" Content="1" Height="38" Width="122" Margin="10,0,0,0"/>
             <Label Content="Speed:" Height="38" Width="130" HorizontalContentAlignment="Right"/>
-            <Label Content="Coverage" Height="38" Width="122" Margin="10,0,0,0"/>
+            <Label x:Name="speedLabel" Content="0" Height="38" Width="122" Margin="10,0,0,0"/>
         </WrapPanel>
 
     </DockPanel>
