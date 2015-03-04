@@ -104,6 +104,7 @@ namespace MDPSimulator.View
                     mapDescriptor[i / 15, i % 15] = 0;
             }
             updateMap();
+            this.displayConsoleMessage("Map loaded!");
         }
         private void updateMap()
         {
@@ -137,7 +138,7 @@ namespace MDPSimulator.View
             this.robot = new Robot();
             //robot.RobotMoving += new EventHandler(updateRobotPosition);
             this.map = new Map(mapDescriptor);
-            
+            this.displayConsoleMessage("Exploring using wall follower!!!");
             this.robot.ChangePosition += new Robot.RobotMovingHandler(updateRobotPosition);
             this.simulator = new Simulator(robot, map);
             this.timeLimit = UserSetting.TimeLimit;
@@ -166,6 +167,7 @@ namespace MDPSimulator.View
                 exploreThread.Abort();
                 timer.Stop();
                 Console.WriteLine("Time is up");
+                this.displayConsoleMessage("Time limit reached!");
             }
         }
         public void updateRobotPosition(int x, int y)
@@ -219,18 +221,12 @@ namespace MDPSimulator.View
                     label.Background = (Brush)bc.ConvertFrom("#FF171361");
                 }
             }
-
             //update index
             this.xLabel.Content = this.robot.X.ToString();
             this.yLabel.Content = this.robot.Y.ToString();
             this.speedLabel.Content = UserSetting.Speed.ToString();
-            double currentCoverage = this.simulator.computeCoverage();
+            double currentCoverage = this.simulator.getCoverage();
             this.coverageLabel.Content = String.Format("{0:0.00}", currentCoverage) +" %";
-            if (currentCoverage >= UserSetting.CoverageLimit)
-            {
-                Console.WriteLine("Coverage limit reached!");
-                exploreThread.Abort();
-            }
         }
         //private void robotMovingHandler(object sender, PropertyChangedEventArgs ev)
         //{
@@ -245,16 +241,25 @@ namespace MDPSimulator.View
 
         private void runButton_Click(object sender, RoutedEventArgs e)
         {
-            exploreThread = new Thread(this.simulator.simulateFastestRun);
-            exploreThread.Start();
+            if (this.simulator == null || !this.simulator.isExplored())
+            {
+                displayConsoleMessage("Maze is not explored yet! Explore before conducting fastest run!");
+                return;
+            }
+            displayConsoleMessage("Computing shortest path.....");       
+            Thread fastestRunThread = new Thread(this.simulator.simulateFastestRun);
+            fastestRunThread.Start();
+            timer.Stop();
         }
 
         private void dfsExplore_Click(object sender, RoutedEventArgs e)
         {
+            this.displayConsoleMessage("Exploring using DFS...");
             this.robot = new Robot();
             //robot.RobotMoving += new EventHandler(updateRobotPosition);
             this.map = new Map(mapDescriptor);
             this.robot.ChangePosition += new Robot.RobotMovingHandler(updateRobotPosition);
+            this.robot.SendingMessage += new Robot.RobotSendingMessage(displayRobotMessage);
             this.simulator = new Simulator(robot, map);
             this.timeLimit = UserSetting.TimeLimit;
             this.coverageLimit = UserSetting.CoverageLimit;
@@ -264,6 +269,19 @@ namespace MDPSimulator.View
             exploreThread = new Thread(this.simulator.test);
             exploreThread.Start();
             //this.simulator.simulateExplore();
+        }
+        private void displayRobotMessage(string s)
+        {
+            Application.Current.Dispatcher.BeginInvoke(
+                System.Windows.Threading.DispatcherPriority.Background,
+                new Action(delegate { displayConsoleMessage(s); }));
+        }
+        private void displayConsoleMessage(string s)
+        {
+            this.consoleBlock.Inlines.Add(new LineBreak());
+            this.consoleBlock.Inlines.Add(new LineBreak());
+            this.consoleBlock.Inlines.Add(s);
+            this.scrollViewer.ScrollToBottom();
         }
 
         private void settingsButton_Click(object sender, RoutedEventArgs e)
@@ -288,6 +306,7 @@ namespace MDPSimulator.View
                     timeLabel.Content = string.Format("0{0}:0{1}", timeLimit / 60, timeLimit % 60);
                 }
                 this.speedLabel.Content = UserSetting.Speed.ToString();
+                this.displayConsoleMessage("User settings changed!");
             }
         }
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MDPModel
 {
-    public class DFSNode:System.Object
+    public class DFSNode : IComparable<Node>
     {
         public int X { get; set; }
         public int Y { get; set; }
@@ -55,6 +55,11 @@ namespace MDPModel
         public bool hasChildren()
         {
             return (BottomChild != null) || (TopChild != null) || (LeftChild != null) || (RightChild != null); 
+        }
+
+        public int CompareTo(Node other)
+        {
+            throw new NotImplementedException();
         }
     }
 }

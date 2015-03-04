@@ -14,8 +14,12 @@ namespace MDPModel
     public class Robot
     {
         public delegate void RobotMovingHandler(int x, int y);
+        public delegate void RobotSendingMessage(string s);
         public event RobotMovingHandler ChangePosition;
+        public event RobotSendingMessage SendingMessage;
+        public double CurrentCoverage { get; set; }
         private int x, y;
+        public bool isExplored = false;
         public Node StartNode {get; set;}
         public Node GoalNode { get; set; }
         public DFSNode StartDFSNode { get; set; }
@@ -33,7 +37,6 @@ namespace MDPModel
                 OnPositionChanged();
             }
         }
-
         public Stack stack{get;set;}
         public List<DFSNode> DFSNodes{get;set;}
         public int Y 
@@ -84,9 +87,12 @@ namespace MDPModel
             this.YStart = 1;
             this.StartNode = new Node(this.XStart, this.YStart);
             this.GoalNode = new Node(this.XGoal, this.YGoal);
+            this.StartDFSNode = new DFSNode(this.XStart, this.YStart);
+            this.GoalDFSNode = new DFSNode(this.XGoal, this.YGoal);
             this.ShortestPath = new List<Node>();
             this.VirtualMap = new Map();
             this.DFSNodes = new List<DFSNode>();
+            this.CurrentCoverage = 0;
         }
 
 
@@ -165,6 +171,17 @@ namespace MDPModel
                 Console.WriteLine("Position changed!");
             }
         }
+        protected virtual void OnSendingMessage(string s)
+        {
+            if (SendingMessage != null)
+            {
+                SendingMessage(s);
+            }
+            else
+            {
+                Console.WriteLine(s);
+            }
+        }
         public void turnAround()
         {
             switch (this.Dir)
@@ -230,6 +247,7 @@ namespace MDPModel
                 }
                 Thread.Sleep(200);
             } while ((this.X != 1 || this.Y != 1) || !moved);
+            this.isExplored = true;
         }
 
         public bool scanFront()
@@ -454,12 +472,15 @@ namespace MDPModel
             }
             this.ShortestPath.Reverse();
             Console.WriteLine("========ShortestPath=========");
+            OnSendingMessage("Conducting fastest run!!!");
             foreach (Node item in this.ShortestPath)
             {
                 item.print();
                 this.X = item.XNode;
                 this.Y = item.YNode;
+                Thread.Sleep(1000 / UserSetting.Speed);
             }
+            OnSendingMessage("Fastest run finished!!!");
         }
         private List<Node> getNeighbors(Node currentNode, List<Node> L)
         {
@@ -583,20 +604,32 @@ namespace MDPModel
         public void exploreWithDFS()
         {
             this.stack = new Stack();
-            this.StartDFSNode = new DFSNode(StartNode.XNode, StartNode.YNode);
-            this.GoalDFSNode = new DFSNode(GoalNode.XNode, GoalNode.YNode);
             DFSNode currentNode = StartDFSNode;
             this.DFSNodes.Add(currentNode);
             try
             {
                 while (stack.Count > 0 || currentNode != null)
                 {
+                    if (CurrentCoverage >= UserSetting.CoverageLimit && UserSetting.CoverageLimit!=100)
+                    {
+                        Console.WriteLine("Coverage limit reached!");
+                        OnSendingMessage("Coverage limit reached!!!");
+                        Thread.CurrentThread.Abort();
+                    }
                     if (currentNode != null)
                     {
                         Console.WriteLine("Visiting node X = {0}, Y = {1}", currentNode.X, currentNode.Y);
                         currentNode.isVisited = true;
                         this.X = currentNode.X;
                         this.Y = currentNode.Y;
+                        computeCoverage();
+                        if (currentNode.Equals(this.GoalDFSNode))
+                        {
+                            Console.WriteLine("Reach goal!");
+                            OnSendingMessage("Reached goal zone!!!");
+                            //OnSendingMessage("X = " + GoalDFSNode.X);
+                            //OnSendingMessage("Y = " + GoalDFSNode.Y);
+                        }
                         getDFSChildren(currentNode);
                         if (currentNode.BottomChild != null)
                         {
@@ -631,15 +664,13 @@ namespace MDPModel
                                 break;
                             }
                         }
-                        printStack();
+                        //printStack();
                         if (stack.Count > 0)
                         {
                             currentNode = (DFSNode)stack.Pop();
                         }
                         else
                             break;
-                        //this.X = currentNode.X;
-                        //this.Y = currentNode.Y;
                     }
                     else
                     {
@@ -652,7 +683,9 @@ namespace MDPModel
                     }
                     Thread.Sleep(1000/UserSetting.Speed);
                 }
+                this.isExplored = true;
                 Console.WriteLine("Exploration finished!!!");
+                OnSendingMessage("Exploration finished!!!");
             }
             catch (Exception e)
             {
@@ -720,5 +753,24 @@ namespace MDPModel
             }
             Console.WriteLine("=======End stack========");
         }
+
+        public void computeCoverage()
+        {
+            int firstDm = Memory.Grid.GetLength(0);
+            int secondDm = Memory.Grid.GetLength(1);
+            int explored = 0;
+            for (int i = 0; i < firstDm; i++)
+            {
+                for (int j = 0; j < secondDm; j++)
+                {
+                    if (Memory.Grid[i, j].Status != 0)
+                    {
+                        explored++;
+                    }
+                }
+            }
+            this.CurrentCoverage = (double)explored / (firstDm * secondDm) * 100;
+        }
+
     }
 }
