@@ -20,9 +20,9 @@
             <Label Content="y-coordinate:" Height="38" Width="130" HorizontalContentAlignment="Right"/>
             <Label x:Name="yLabel" Content="1" Height="38" Width="122" Margin="10,0,0,0"/>
             <Label Content="Speed:" Height="38" Width="130" HorizontalContentAlignment="Right"/>
-            <Label x:Name="speedLabel" Content="0" Height="38" Width="122" Margin="10,0,0,0"/>
+            <Label x:Name="speedLabel" Content="3" Height="38" Width="122" Margin="10,0,0,0"/>
             <Label Content="Time limit:" Height="38" Width="130" HorizontalContentAlignment="Right"/>
-            <Label x:Name="timeLabel" Content="360" Height="38" Width="122" Margin="10,0,0,0"/>
+            <Label x:Name="timeLabel" Content="06:00" Height="38" Width="122" Margin="10,0,0,0"/>
         </WrapPanel>
 
     </DockPanel>

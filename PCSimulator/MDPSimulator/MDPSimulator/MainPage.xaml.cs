@@ -154,12 +154,12 @@ namespace MDPSimulator.View
             if (timeLimit > 10)
             {
                 timeLimit--;
-                timeLabel.Content = string.Format("00:0{0}:{1}", timeLimit / 60, timeLimit % 60);
+                timeLabel.Content = string.Format("0{0}:{1}", timeLimit / 60, timeLimit % 60);
             }
             else
             {
                 timeLimit--;
-                timeLabel.Content = string.Format("00:0{0}:0{1}", timeLimit / 60, timeLimit % 60);
+                timeLabel.Content = string.Format("0{0}:0{1}", timeLimit / 60, timeLimit % 60);
             }
             if (timeLimit == 0)
             {
@@ -277,7 +277,17 @@ namespace MDPSimulator.View
 
                 Console.WriteLine("Speed = " + settings.getSpeed());
                 Console.WriteLine("Time = " + settings.getTimeLimit());
-                Console.WriteLine("Coverage = " + settings.getCoverageLimit());       
+                Console.WriteLine("Coverage = " + settings.getCoverageLimit());
+                this.timeLimit = UserSetting.TimeLimit;
+                if (timeLimit > 10)
+                {
+                    timeLabel.Content = string.Format("0{0}:{1}", timeLimit / 60, timeLimit % 60);
+                }
+                else
+                {
+                    timeLabel.Content = string.Format("0{0}:0{1}", timeLimit / 60, timeLimit % 60);
+                }
+                this.speedLabel.Content = UserSetting.Speed.ToString();
             }
         }
 
