@@ -33,11 +33,13 @@ namespace MDPSimulator.View
         private int timeLimit;
         private double coverageLimit;
         private Thread exploreThread;
+        private WifiConnector Connector {set; get; }
         public MainPage()
         {
             InitializeComponent();
             setUpMap();
             this.timer = new DispatcherTimer();
+            this.Connector = new WifiConnector();
         }
         private void setUpMap()
         {
@@ -76,7 +78,6 @@ namespace MDPSimulator.View
         }
         private void loadMapClick(object sender, RoutedEventArgs e)
         {
-            //Array.Clear(arena, 0, arena.Length);
             string content = "";
             try
             {
@@ -136,7 +137,6 @@ namespace MDPSimulator.View
         private void exploreButton_Click(object sender, RoutedEventArgs e)
         {
             this.robot = new Robot();
-            //robot.RobotMoving += new EventHandler(updateRobotPosition);
             this.map = new Map(mapDescriptor);
             this.displayConsoleMessage("Exploring using wall follower!!!");
             this.robot.ChangePosition += new Robot.RobotMovingHandler(updateRobotPosition);
@@ -147,7 +147,6 @@ namespace MDPSimulator.View
             timer.Start();
             exploreThread = new Thread(this.simulator.simulateExplore);
             exploreThread.Start();
-            //this.simulator.simulateExplore() ;
         }
 
         private void timer_Tick(object sender, EventArgs e)
@@ -172,14 +171,11 @@ namespace MDPSimulator.View
         }
         public void updateRobotPosition(int x, int y)
         {
-            //Console.WriteLine("Inside main thread");
-            //Console.WriteLine("X: {0}", x);
-            //Console.WriteLine("Y: {0}", y);
             Application.Current.Dispatcher.BeginInvoke(
                 System.Windows.Threading.DispatcherPriority.Background,
                 new Action(delegate { drawMap(x, y); }));
         }
-        public void drawMap(int x, int y) 
+        public void drawMap(int x, int y)
         {
             var bc = new BrushConverter();
             this.mapGrid.Children.Clear();
@@ -192,20 +188,17 @@ namespace MDPSimulator.View
                 for (int j = 0; j < robotMemory.Grid.GetLength(1); j++)
                 {
                     Label label = new Label();
-                    if(i<3 && j < 3 || i>16 && j>11)
+                    if (i < 3 && j < 3 || i > 16 && j > 11)
                     {
-                        //Grid.SetColumn(label, j);
-                        //Grid.SetRow(label, 19 - i);
-                        //this.mapGrid.Children.Add(label);
                         continue;
                     }
                     if (robotMemory.Grid[i, j].Status == 1)
                     {
-                        label.Background = (Brush)bc.ConvertFrom("#FF952900");                        
+                        label.Background = (Brush)bc.ConvertFrom("#FF952900");
                     }
                     if (robotMemory.Grid[i, j].Status == 2)
                     {
-                        label.Background = (Brush)bc.ConvertFrom("#FF1EDED5");                        
+                        label.Background = (Brush)bc.ConvertFrom("#FF1EDED5");
                     }
                     Grid.SetColumn(label, j);
                     Grid.SetRow(label, 19 - i);
@@ -213,9 +206,9 @@ namespace MDPSimulator.View
                 }
             }
             //draw robot
-            for (int i = x-1; i <= x+1; i++)
+            for (int i = x - 1; i <= x + 1; i++)
             {
-                for (int j = y-1; j <= y+1; j++)
+                for (int j = y - 1; j <= y + 1; j++)
                 {
                     Label label = this.mapGrid.Children.Cast<Label>().First(e => Grid.GetRow(e) == 19 - j && Grid.GetColumn(e) == i);
                     label.Background = (Brush)bc.ConvertFrom("#FF171361");
@@ -226,18 +219,8 @@ namespace MDPSimulator.View
             this.yLabel.Content = this.robot.Y.ToString();
             this.speedLabel.Content = UserSetting.Speed.ToString();
             double currentCoverage = this.simulator.getCoverage();
-            this.coverageLabel.Content = String.Format("{0:0.00}", currentCoverage) +" %";
+            this.coverageLabel.Content = String.Format("{0:0.00}", currentCoverage) + " %";
         }
-        //private void robotMovingHandler(object sender, PropertyChangedEventArgs ev)
-        //{
-        //    Robot robot = (Robot)sender;
-        //    int x = robot.X;
-        //    int y = robot.Y;
-        //    //displayRobotPos(robot.X, robot.Y);
-        //    var bc = new BrushConverter();
-        //    Label label = mapGrid.Children.Cast<Label>().First(e => Grid.GetRow(e) == 19 - y && Grid.GetColumn(e) == x);
-        //    label.Background = (Brush)bc.ConvertFrom("#FF171361");
-        //}
 
         private void runButton_Click(object sender, RoutedEventArgs e)
         {
@@ -256,7 +239,6 @@ namespace MDPSimulator.View
         {
             this.displayConsoleMessage("Exploring using DFS...");
             this.robot = new Robot();
-            //robot.RobotMoving += new EventHandler(updateRobotPosition);
             this.map = new Map(mapDescriptor);
             this.robot.ChangePosition += new Robot.RobotMovingHandler(updateRobotPosition);
             this.robot.SendingMessage += new Robot.RobotSendingMessage(displayRobotMessage);
@@ -268,7 +250,6 @@ namespace MDPSimulator.View
             timer.Start();
             exploreThread = new Thread(this.simulator.test);
             exploreThread.Start();
-            //this.simulator.simulateExplore();
         }
         private void displayRobotMessage(string s)
         {
@@ -308,6 +289,19 @@ namespace MDPSimulator.View
                 this.speedLabel.Content = UserSetting.Speed.ToString();
                 this.displayConsoleMessage("User settings changed!");
             }
+        }
+
+        private void connectButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.Connector.connect())
+            {
+                this.displayConsoleMessage("Connected to RPI!");
+            }
+            else
+            {
+                this.displayConsoleMessage("Cannot establish connection!");
+            }
+
         }
 
     }

@@ -64,6 +64,7 @@
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserSetting.cs" />
+    <Compile Include="WifiConnector.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="models\Cell.cs" />
