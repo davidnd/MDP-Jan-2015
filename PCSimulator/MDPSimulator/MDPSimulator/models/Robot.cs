@@ -208,11 +208,13 @@ namespace MDPModel
             bool isBlockedLeft, isBlockedRight, isBlockedFront;
             //turnRight();
             bool moved = false;
-            do
+            try
             {
-                Console.WriteLine("Current X = {0}, Y = {1}", this.X, this.Y);
-                try
+                do
                 {
+                    computeCoverage();
+                    Console.WriteLine("Current X = {0}, Y = {1}", this.X, this.Y);
+                
                     isBlockedFront = scanFront();
                     isBlockedLeft = scanLeft();
                     isBlockedRight = scanRight();
@@ -239,14 +241,15 @@ namespace MDPModel
                         Console.WriteLine("Turn around");
                         turnAround();
                     }
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                    Console.WriteLine(e);
-                }
-                Thread.Sleep(200);
-            } while ((this.X != 1 || this.Y != 1) || !moved);
+                
+                    Thread.Sleep(200);
+                } while ((this.X != 1 || this.Y != 1) || !moved);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e);
+            }
             this.isExplored = true;
         }
 

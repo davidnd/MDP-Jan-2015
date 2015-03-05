@@ -43,5 +43,9 @@ namespace MDPModel
         {
             return this.Robot.isExplored;
         }
+        public void reset()
+        {
+
+        }
     }
 }

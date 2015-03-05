@@ -11,6 +11,7 @@
             <Button x:Name="loadButton" Content="Load map" Height="54" Margin="20,10" FontSize="20" Click="loadMapClick"/>
             <Button x:Name="testButton" Content="DFS Explore" Height="54" Margin="20,10" FontSize="20" Click="dfsExplore_Click"/>
             <Button x:Name="exportButton" Content="Export map" Height="54" Margin="20,10" FontSize="20" Click="exportButton_Click"/>
+            <Button x:Name="resetButton" Content="Reset" Height="54" Margin="20,10" FontSize="20" Click="resetButton_Click"/>
         </StackPanel>
         <Grid x:Name="mapGrid" Background="#FF645C5C" Height="600" Margin="10,20,10,0" Width="450" VerticalAlignment="Top"/>
         <WrapPanel x:Name="statusPanel" Height="206" Margin="20,20,20,0" VerticalAlignment="Top" Width="270" DockPanel.Dock="Top">

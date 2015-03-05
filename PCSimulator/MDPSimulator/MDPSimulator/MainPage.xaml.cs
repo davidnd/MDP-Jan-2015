@@ -26,7 +26,6 @@ namespace MDPSimulator.View
     {
         public int[,] mapDescriptor = new int[20, 15];
         public Map map;
-        public Robot robot;
         public Simulator simulator;
         public int testID = 0;
         private DispatcherTimer timer;
@@ -35,13 +34,21 @@ namespace MDPSimulator.View
         private Thread exploreThread;
         private bool isConnected;
         private WifiConnector Connector {set; get; }
+        Thread mappingThread;
         public MainPage()
         {
             InitializeComponent();
             setUpMap();
             this.timer = new DispatcherTimer();
-            this.Connector = new WifiConnector();
+            timer.Interval = new TimeSpan(0, 0, 1);
+            timer.Tick += new EventHandler(timer_Tick);
             this.isConnected = false;
+
+            this.Connector = new WifiConnector();
+            this.Connector.ReceivingDataHandler += new WifiConnector.ReceivingData(updateRealTime);
+            this.Connector.UpdatingConsoleHandler += new WifiConnector.UpdatingInfo(displayRobotMessage);
+            this.Connector.UpdatingConnectionHandler += new WifiConnector.UpdatingConnectionStatus(this.updateConnectionStatus);
+            this.mappingThread = new Thread(this.Connector.run);
         }
         private void setUpMap()
         {
@@ -138,14 +145,14 @@ namespace MDPSimulator.View
 
         private void exploreButton_Click(object sender, RoutedEventArgs e)
         {
-            this.robot = new Robot();
-            this.map = new Map(mapDescriptor);
             this.displayConsoleMessage("Exploring using wall follower!!!");
-            this.robot.ChangePosition += new Robot.RobotMovingHandler(updateRobotPosition);
+            Robot robot = new Robot();
+            this.map = new Map(mapDescriptor);
             this.simulator = new Simulator(robot, map);
+            this.simulator.Robot.ChangePosition += new Robot.RobotMovingHandler(updateRobotPosition);
+            this.simulator.Robot.SendingMessage += new Robot.RobotSendingMessage(displayRobotMessage);
             this.timeLimit = UserSetting.TimeLimit;
-            timer.Interval = new TimeSpan(0, 0, 1);
-            timer.Tick += new EventHandler(timer_Tick);
+            this.coverageLimit = UserSetting.CoverageLimit;
             timer.Start();
             exploreThread = new Thread(this.simulator.simulateExplore);
             exploreThread.Start();
@@ -184,7 +191,7 @@ namespace MDPSimulator.View
             this.mapGrid.RowDefinitions.Clear();
             this.mapGrid.ColumnDefinitions.Clear();
             setUpMap();
-            Map robotMemory = robot.Memory;
+            Map robotMemory = this.simulator.Robot.Memory;
             for (int i = 0; i < robotMemory.Grid.GetLength(0); i++)
             {
                 for (int j = 0; j < robotMemory.Grid.GetLength(1); j++)
@@ -217,8 +224,8 @@ namespace MDPSimulator.View
                 }
             }
             //update index
-            this.xLabel.Content = this.robot.X.ToString();
-            this.yLabel.Content = this.robot.Y.ToString();
+            this.xLabel.Content = this.simulator.Robot.X.ToString();
+            this.yLabel.Content = this.simulator.Robot.Y.ToString();
             this.speedLabel.Content = UserSetting.Speed.ToString();
             double currentCoverage = this.simulator.getCoverage();
             this.coverageLabel.Content = String.Format("{0:0.00}", currentCoverage) + " %";
@@ -240,16 +247,16 @@ namespace MDPSimulator.View
         private void dfsExplore_Click(object sender, RoutedEventArgs e)
         {
             this.displayConsoleMessage("Exploring using DFS...");
-            this.robot = new Robot();
+            Robot robot = new Robot();
             this.map = new Map(mapDescriptor);
-            this.robot.ChangePosition += new Robot.RobotMovingHandler(updateRobotPosition);
-            this.robot.SendingMessage += new Robot.RobotSendingMessage(displayRobotMessage);
             this.simulator = new Simulator(robot, map);
+            this.simulator.Robot.ChangePosition += new Robot.RobotMovingHandler(updateRobotPosition);
+            this.simulator.Robot.SendingMessage += new Robot.RobotSendingMessage(displayRobotMessage);
             this.timeLimit = UserSetting.TimeLimit;
             this.coverageLimit = UserSetting.CoverageLimit;
-            timer.Interval = new TimeSpan(0, 0, 1);
-            timer.Tick += new EventHandler(timer_Tick);
             timer.Start();
+            if (exploreThread!=null)
+                exploreThread.Abort();
             exploreThread = new Thread(this.simulator.test);
             exploreThread.Start();
         }
@@ -295,19 +302,31 @@ namespace MDPSimulator.View
 
         private void connectButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Connector.ReceivingDataHandler += updateRealTime;
-            Thread mappingThread = new Thread(this.Connector.run);
+            
+            
             mappingThread.Start();
+            
         }
 
         private void updateRealTime(string s)
         {
-            displayConsoleMessage(s);
+            Application.Current.Dispatcher.BeginInvoke(
+                System.Windows.Threading.DispatcherPriority.Background,
+                new Action(delegate { displayConsoleMessage(s); }));
         }
 
         private void exportButton_Click(object sender, RoutedEventArgs e)
         {
-            Map finalMap = this.simulator.Robot.Memory;
+            Map finalMap = null;
+            try
+            {
+                finalMap = this.simulator.Robot.Memory;
+            }
+            catch (Exception)
+            {
+                displayConsoleMessage("Failed to export map. Map not explored!");
+                return;
+            }
             bool result = finalMap.saveToHardDrive("E:/Git/MDP-Jan-2015/PCSimulator/MDPSimulator/");
             if (result)
             {
@@ -315,6 +334,35 @@ namespace MDPSimulator.View
             }
             else
                 displayConsoleMessage("Failed to export map descriptor!");
+        }
+
+        private void resetButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.mapGrid.Children.Clear();
+            this.mapGrid.RowDefinitions.Clear();
+            this.mapGrid.ColumnDefinitions.Clear();
+            Array.Clear(this.mapDescriptor, 0, this.mapDescriptor.Length);
+            this.coverageLabel.Content = "0%";
+            this.timeLabel.Content = "06:00";
+            this.xLabel.Content = "1";
+            this.yLabel.Content = "1";
+            this.speedLabel.Content = "3";
+            setUpMap();
+            timer.Stop();
+        }
+
+        public void updateConnectionStatus(bool b)
+        {
+            Application.Current.Dispatcher.BeginInvoke(
+                System.Windows.Threading.DispatcherPriority.Background,
+                new Action(delegate { this.isConnected = b;
+                if (b)
+                {
+                    this.connectButton.IsEnabled = false;
+                }
+                else
+                    this.connectButton.IsEnabled = true;
+                }));
         }
 
     }
