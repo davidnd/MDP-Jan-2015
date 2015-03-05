@@ -158,7 +158,7 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
  						"11111111111111111111";
 
 
- 	String newPuzzle = "GRID 15 20 1 1 2 1" +
+ 	String newPuzzle = "GRID 15 20 2 2 3 2" +
 	           " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" +
 	           " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" +
 	           " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" +
@@ -166,14 +166,17 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 	           " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" +
 	           " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" +
 	           " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" +
-	           " 0 0 0 0 0 0 0 1 1 1 0 0 0 0 1 0 0 0 0 0" +
-	           " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0" +
-	           " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0" +
-	           " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0" +
-	           " 0 0 0 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0" +
+	           " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" +
+	           " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" +
+	           " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" +
+	           " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" +
+	           " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" +
 	           " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" +
 	           " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" +
 	           " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0";
+ 	
+ 	boolean updateMapFlag = false;
+ 	
 	@Override	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -837,8 +840,8 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
         String androidMapString = sbf.toString();
         
         //final string
-        String androidFinalString = String.valueOf(amdIntegerArray[0]-2) + " " 
-                                  + String.valueOf(amdIntegerArray[1]-2) + " " 
+        String androidFinalString = String.valueOf(amdIntegerArray[0]) + " " 
+                                  + String.valueOf(amdIntegerArray[1]) + " " 
                                   + androidRobotDirectionString + " " 
                                   + androidMapString;
         
@@ -1017,24 +1020,28 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 						//sendMessage("Left");
 						sendMessage("a");
 						sendMessage("grid");
+						updateMapFlag=true;
 						break;
 						
 					case LEFT:
 						//sendMessage("Down");
 						sendMessage("s");
 						sendMessage("grid");
+						updateMapFlag=true;
 						break;
 						
 					case DOWN:
 						//sendMessage("Right");
 						sendMessage("d");
 						sendMessage("grid");
+						updateMapFlag=true;
 						break;
 						
 					case RIGHT:
 						//sendMessage("Up");
 						sendMessage("w");
 						sendMessage("grid");
+						updateMapFlag=true;
 						break;
 				}
 			}
@@ -1050,24 +1057,28 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 						//sendMessage("Right");
 						sendMessage("d");
 						sendMessage("grid");
+						updateMapFlag=true;
 						break;
 				
 					case LEFT:
 						//sendMessage("Up");
 						sendMessage("w");
 						sendMessage("grid");
+						updateMapFlag=true;
 						break;
 				
 					case DOWN:
 						//sendMessage("Left");
 						sendMessage("a");
 						sendMessage("grid");
+						updateMapFlag=true;
 						break;
 					
 					case RIGHT:
 						//sendMessage("Down");
 						sendMessage("s");
 						sendMessage("grid");
+						updateMapFlag=true;
 						break;
 				}
 			}
@@ -1083,24 +1094,28 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 						//sendMessage("Up");
 						sendMessage("w");
 						//sendMessage("grid");
+						//updateMapFlag=true;
 						break;
 						
 					case DOWN:
 						//sendMessage("Down");
 						sendMessage("s");
 						//sendMessage("grid");
+						//updateMapFlag=true;
 						break;
 						
 					case LEFT:
 						//sendMessage("Left");
 						sendMessage("a");
 						//sendMessage("grid");
+						//updateMapFlag=true;
 						break;
 						
 					case RIGHT:
 						//sendMessage("Right");
 						sendMessage("d");
 						//sendMessage("grid");
+						//updateMapFlag=true;
 						break;
 				}
 			}
@@ -1238,6 +1253,7 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 						//sendMessage("Up");
 						sendMessage("w");
 						//sendMessage("grid");
+						//updateMapFlag=true;
 						robotStatus.setText("Facing Up");
 						break;
 						
@@ -1245,6 +1261,7 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 						//sendMessage("Down");
 						sendMessage("s");
 						//sendMessage("grid");
+						//updateMapFlag=true;
 						robotStatus.setText("Facing Down");
 						break;
 						
@@ -1252,6 +1269,7 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 						//sendMessage("Left");
 						sendMessage("a");
 						//sendMessage("grid");
+						//updateMapFlag=true;
 						robotStatus.setText("Facing Left");
 						break;
 						
@@ -1259,6 +1277,7 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 						//sendMessage("Right");
 						sendMessage("d");
 						//sendMessage("grid");
+						//updateMapFlag=true;
 						robotStatus.setText("Facing Right");
 						break;
 				}				
@@ -1289,6 +1308,7 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 						//sendMessage("Left");
 						sendMessage("a");
 						sendMessage("grid");
+						updateMapFlag=true;
 						robotStatus.setText("Facing Left");
 						break;
 						
@@ -1296,6 +1316,7 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 						//sendMessage("Down");
 						sendMessage("s");
 						sendMessage("grid");
+						updateMapFlag=true;
 						robotStatus.setText("Facing Down");
 						break;
 						
@@ -1303,6 +1324,7 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 						//sendMessage("Right");
 						sendMessage("d");
 						sendMessage("grid");
+						updateMapFlag=true;
 						robotStatus.setText("Facing Right");
 						break;
 						
@@ -1310,6 +1332,7 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 						//sendMessage("Up");
 						sendMessage("w");
 						sendMessage("grid");
+						updateMapFlag=true;
 						robotStatus.setText("Facing Up");
 						break;
 				}				
@@ -1329,6 +1352,7 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 						//sendMessage("Right");
 						sendMessage("d");
 						sendMessage("grid");
+						updateMapFlag=true;
 						robotStatus.setText("Facing Right");
 						break;
 						
@@ -1336,6 +1360,7 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 						//sendMessage("Up");
 						sendMessage("w");
 						sendMessage("grid");
+						updateMapFlag=true;
 						robotStatus.setText("Facing Up");
 						break;
 						
@@ -1343,6 +1368,7 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 						//sendMessage("Left");
 						sendMessage("a");
 						sendMessage("grid");
+						updateMapFlag=true;
 						robotStatus.setText("Facing Left");
 						break;
 						
@@ -1350,6 +1376,7 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 						//sendMessage("Down");
 						sendMessage("s");
 						sendMessage("grid");
+						updateMapFlag=true;
 						robotStatus.setText("Facing Down");
 						break;
 				}
