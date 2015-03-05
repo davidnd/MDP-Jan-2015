@@ -12,6 +12,8 @@ namespace MDPSimulator
     {
         private TcpClient clientSocket;
         private string IpAddr {set;get;}
+        public delegate void ReceivingData(string s);
+        public event ReceivingData ReceivingDataHandler;
         public WifiConnector()
         {
             clientSocket = new TcpClient();
@@ -46,7 +48,7 @@ namespace MDPSimulator
             }
             else
             {
-                send("Hello");
+                send("Hey there");
                 return true;
             }
         }
@@ -68,6 +70,29 @@ namespace MDPSimulator
         }
         public void listen()
         {
+
+        }
+
+        public bool isConnected()
+        {
+            return clientSocket.Connected;
+        }
+
+        public void run()
+        {
+            this.connect();
+        }
+
+        protected virtual void OnReceivingData(string s)
+        {
+            if (ReceivingDataHandler != null)
+            {
+                ReceivingDataHandler(s);
+            }
+            else
+            {
+                Console.WriteLine("Receiving data but no event subscriber!");
+            }
         }
     }
 }

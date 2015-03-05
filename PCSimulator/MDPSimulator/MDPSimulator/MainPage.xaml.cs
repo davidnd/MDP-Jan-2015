@@ -33,6 +33,7 @@ namespace MDPSimulator.View
         private int timeLimit;
         private double coverageLimit;
         private Thread exploreThread;
+        private bool isConnected;
         private WifiConnector Connector {set; get; }
         public MainPage()
         {
@@ -40,6 +41,7 @@ namespace MDPSimulator.View
             setUpMap();
             this.timer = new DispatcherTimer();
             this.Connector = new WifiConnector();
+            this.isConnected = false;
         }
         private void setUpMap()
         {
@@ -293,15 +295,26 @@ namespace MDPSimulator.View
 
         private void connectButton_Click(object sender, RoutedEventArgs e)
         {
-            if (this.Connector.connect())
+            this.Connector.ReceivingDataHandler += updateRealTime;
+            Thread mappingThread = new Thread(this.Connector.run);
+            mappingThread.Start();
+        }
+
+        private void updateRealTime(string s)
+        {
+            displayConsoleMessage(s);
+        }
+
+        private void exportButton_Click(object sender, RoutedEventArgs e)
+        {
+            Map finalMap = this.simulator.Robot.Memory;
+            bool result = finalMap.saveToHardDrive("E:/Git/MDP-Jan-2015/PCSimulator/MDPSimulator/");
+            if (result)
             {
-                this.displayConsoleMessage("Connected to RPI!");
+                displayConsoleMessage("Map descriptor exported successfully!");
             }
             else
-            {
-                this.displayConsoleMessage("Cannot establish connection!");
-            }
-
+                displayConsoleMessage("Failed to export map descriptor!");
         }
 
     }
