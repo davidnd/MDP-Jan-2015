@@ -10,7 +10,7 @@ from interface import *
 class arduino_interface(interface):
 	def __init__(self):
 		self.ser = serial.Serial()
-		self.baudrate = 9600
+		self.baudrate = 115200
 		self.ser = None
 	
 	def connect(self):

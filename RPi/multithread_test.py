@@ -7,22 +7,27 @@ from pc_interface import *
 from android_interface import *
 from arduino_interface import *
 
+#algo 
+from Map import *
+from Robot import *
+
 class Main:
         def __init__(self):
-                #Initialise Queue
+                #Initialize Queues
                 self.toAndroid = Queue.Queue(maxsize=0)
                 self.toRobot = Queue.Queue(maxsize=0)
                 self.toPC = Queue.Queue(maxsize=0)
+                self.toAlgo = Queue.Queue(maxsize=0)
                 
                 #Create interface objects
                 self.bt = android_interface()
                 self.pc = pc_interface()
                 self.robot = arduino_interface()
 
+
         def connectBT(self):
                 #connect bluetooth
                 connected = 0
-                connected = self.bt.connect()
                 while connected == 0:
                         self.bt.disconnect()
                         time.sleep(1)
@@ -44,6 +49,22 @@ class Main:
                 while connected == 0:
                         time.sleep(1)
                         connected = self.robot.connect()
+
+
+        #sending data to algo from queue
+        def activateAlgo(self, algoQ, robotQ, androidQ):
+                robot = Robot(1,1,1,'U')
+                map=Map(15,20)
+                while 1:
+                        if not algoQ.empty():
+                                val = algoQ.get_nowait()
+                                #call algo
+                                out = robot.explore(val)
+                                #time.sleep(2)
+                                
+                                robotQ.put_nowait(out)
+                                #androidQ.put_nowait(out)
+
                 
         #sending data to android from queue
         def btWrite(self, androidQ):
@@ -53,12 +74,13 @@ class Main:
                                 self.bt.writetoBT(val)                             
 
         #reading android value, send data to arduino (and/or pc).
-        def btRead(self, robotQ, pcQ):
+        def btRead(self, robotQ, pcQ, algoQ):
                 while 1:
                         val = self.bt.readfromBT()
                         if val is not None:
-                                robotQ.put_nowait(val)
-                                pcQ.put_nowait(val) #testing
+                                #robotQ.put_nowait(val)
+                                #algoQ.put_nowait(val) #testing
+                                pcQ.put_nowait(val)
 
         #sending data to PC from PC msg queue.
         def pcWrite(self, pcQ):
@@ -77,29 +99,36 @@ class Main:
 
         #sending data to arduino from arduino msg queue.
         def robotWrite(self, robotQ):
+           time.sleep(2)
+           robotQ.put_nowait("h")
            while 1:
-                   #prioritize sending robot commands
-                  while not robotQ.empty():
+                  if not robotQ.empty():
                          val = robotQ.get_nowait()
                          self.robot.writetoSR(val + "\n")
                  
-        #reading data from arduino to pc & android.
-        def robotRead(self, pcQ, androidQ):
+        #reading data from arduino to ALGO & android.
+        def robotRead(self, pcQ, androidQ, algoQ):
+           #time.sleep(2)
+           #val = self.robot.readfromSR()
+           #val = self.robot.readfromSR()
            while 1:
                    val = self.robot.readfromSR()
                    if val is not None:
-                           androidQ.put_nowait(val)
+                           #androidQ.put_nowait(val)
+                           algoQ.put_nowait(val)
                            #pcQ.put(val)
                  
         #starting all thread.
         def startThread(self):
                 try:
-                        thread.start_new_thread( self.btWrite, (self.toAndroid,))
-                        thread.start_new_thread( self.btRead, (self.toRobot, self.toPC))
-                        thread.start_new_thread( self.pcWrite, (self.toPC,))
-                        thread.start_new_thread( self.pcRead, (self.toRobot,))
-                      #  thread.start_new_thread( self.robotWrite, (self.toRobot,))
-                      #  thread.start_new_thread( self.robotRead, (self.toPC, self.toAndroid,))
+                        #thread.start_new_thread( self.btWrite, (self.toAndroid,))
+                        #thread.start_new_thread( self.btRead, (self.toRobot, self.toPC, self.toAlgo))
+                        #thread.start_new_thread( self.pcWrite, (self.toPC,))
+                        #thread.start_new_thread( self.pcRead, (self.toRobot,))
+                        thread.start_new_thread( self.robotWrite, (self.toRobot,))
+                        thread.start_new_thread( self.robotRead, (self.toPC, self.toAndroid, self.toAlgo))
+                        thread.start_new_thread( self.activateAlgo, (self.toAlgo, self.toRobot, self.toAndroid))
+
                 except Exception, e:
                         print "Unable to start thread!"
                         print "Error: %s" %str(e) 
@@ -107,7 +136,7 @@ class Main:
                    pass
            
 test = Main()
-test.connectBT()
-#test.connectArduino()
-test.connectPC()
+#test.connectBT()
+test.connectArduino()
+#test.connectPC()
 test.startThread()
