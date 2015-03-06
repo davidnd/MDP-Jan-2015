@@ -1,7 +1,7 @@
 from bluetooth import *
 from interface import *
 import time
-
+#asfawefasdf
 class android_interface(interface):
   #  def __init__(self):
     
