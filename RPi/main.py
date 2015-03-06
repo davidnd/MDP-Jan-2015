@@ -12,12 +12,20 @@ map=Map(15,20)
 
 
 ArStr='100000'
+print ArStr
 print robot.explore(ArStr)
 ArStr='000011'
+print ArStr
 print robot.explore(ArStr)
 ArStr='000011'
+print ArStr
 print robot.explore(ArStr)
 ArStr='001011'
+print ArStr
+print robot.explore(ArStr)
+
+ArStr='110011'
+print ArStr
 print robot.explore(ArStr)
 
 print "finish"

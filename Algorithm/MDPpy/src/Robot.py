@@ -112,30 +112,30 @@ class Robot:
         moved = False
         while  ((self.X != 1 or self.Y != 1) or (not moved)):
             print "Current X = {0}, Y = {1}", self.X, self.Y
-        try:
-            isBlockedLeft = self.checkLeftSide(ArStr)
-            isBlockedFront = self.checkTopSide(ArStr)
-            isBlockedRight = self.checkRightSide(ArStr)
-            if (not isBlockedRight):
-                print("Turn right")
-                self.turnRight()
-                return '2'
-            elif (not isBlockedFront):
-                print("Move Forward");
-                moved = True
-                self.moveForward(1)
-                return '1'
-            elif (not isBlockedLeft)
-                print("turn left");
-                self.turnLeft();
-                return '3'
-            else:
-                print("Turn around")
-                self.turnAround()
-                return '4'
-        except ValueError as e:
-            print(e.Message)
-            print(e)
+            try:
+                isBlockedLeft = self.checkLeftSide(ArStr)
+                isBlockedFront = self.checkTopSide(ArStr)
+                isBlockedRight = self.checkRightSide(ArStr)
+                if (not isBlockedRight):
+                    print("Turn right")
+                    self.turnRight()
+                    return '2'
+                elif (not isBlockedFront):
+                    print("Move Forward");
+                    moved = True
+                    self.moveForward(1)
+                    return '1'
+                elif (not isBlockedLeft)
+                    print("turn left");
+                    self.turnLeft();
+                    return '3'
+                else:
+                    print("Turn around")
+                    self.turnAround()
+                    return '4'
+            except ValueError as e:
+                print(e.Message)
+                print(e)
     
     def checkLeftSide(self, ArStr):
         # left here
