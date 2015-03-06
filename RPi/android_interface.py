@@ -1,7 +1,7 @@
 from bluetooth import *
 from interface import *
 import time
- 
+
 class android_interface(interface):
   #  def __init__(self):
     
@@ -36,8 +36,12 @@ class android_interface(interface):
                     return 0
          
     def disconnect(self):
-        self.btsock.close()
-        self.server_sock.close()
+        try:
+            self.btsock.close()
+            self.server_sock.close()
+        except Exception, e:
+            print "Error@BTDisconnect: %s" %str(e)
+
         
     def writetoBT(self,msg):
                 try:
@@ -47,7 +51,6 @@ class android_interface(interface):
                     print "Error@BTWrite: %s" %str(e)
 
                     connected = 0
-                    connected = self.connect()
                     while connected == 0:
                         print "Attempting reconnection..."
                         self.disconnect()
@@ -63,7 +66,6 @@ class android_interface(interface):
                     print "Error@BTRead: %s" %str(e)
                     
                     connected = 0
-                    connected = self.connect()
                     while connected == 0:
                         print "Attempting reconnection..."
                         self.disconnect()

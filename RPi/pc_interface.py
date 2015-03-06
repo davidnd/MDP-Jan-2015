@@ -25,7 +25,10 @@ class pc_interface (interface):
                 print "Error@PCConnect: %s" %str(e)
     
     def disconnect(self):
-        self.socket.close()
+        try:
+            self.socket.close()
+        except Exception, e:
+            print "Error@PCDisconnect: %s" %str(e)
  
     def writetoPC(self,msg):
         try:
