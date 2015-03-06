@@ -125,6 +125,10 @@ class Robot:
                 moved = True
                 self.moveForward(1)
                 return '1'
+            elif (not isBlockedLeft)
+                print("turn left");
+                self.turnLeft();
+                return '3'
             else:
                 print("Turn around")
                 self.turnAround()
@@ -134,20 +138,32 @@ class Robot:
             print(e)
     
     def checkLeftSide(self, ArStr):
+        # left here
         isBlocked = False
-        if (self.X - self.Range - 1 < 0):
-            return True
-        x = self.X - self.Range - 1
+        if self.Dir == 'R':
+            if(self.Y + self.Range + 1 >= this.Memory.height)
+                return True;
+        if self.Dir == 'U':
+            if(self.X - self.Range - 1 < 0)
+                return True;
+        if self.Dir == 'L':
+            if(self.Y - self.Range - 1 < 0)
+                return True;
+        if self.Dir == 'D':
+            if(self.X + self.Range + 1 >= this.Memory.width)
+                return True;
+
+        #x = self.X - self.Range - 1
         if (ArStr[0] == '1'):
             isBlocked = True
             "explored and has obstacle"
-            self.Memory.grid[self.Y][x].Status = 1
+            #self.Memory.grid[self.Y][x].Status = 1
         elif (ArStr[0] == '2'):
             "map second block to have obstacle"
-            self.Memory.grid[][]
+            #self.Memory.grid[][]
         else:
             "empty cell"
-            self.Memory.grid[self.Y][x].Status = 2
+            #self.Memory.grid[self.Y][x].Status = 2
         print "Left", isBlocked
         return isBlocked
     
@@ -155,15 +171,28 @@ class Robot:
         isBlocked = False
         #if (self.Y + self.Range + 1 >= self.Env.Grid.GetLength(0))
         #    return True;
-        y = self.Y + self.Range + 1
+        # y = self.Y + self.Range + 1
+        if self.Dir == 'R':
+            if(self.X + self.Range + 1 >= this.Memory.width)
+                return True;
+        if self.Dir == 'U':
+            if(self.Y + self.Range + 1 >= this.Memory.height)
+                return True;
+        if self.Dir == 'L':
+            if(self.X - self.Range - 1 < 0)
+                return True;
+        if self.Dir == 'D':
+            if(self.Y - self.Range - 1 <0)
+                return True;
+
         for i in range(1,4):
             if (ArStr[i]=='1'):
                 isBlocked = True
                 "explored and has obstacle"
-                self.Memory.grid[y][i].Status = 1
+                #self.Memory.grid[y][i].Status = 1
             else:
                 "empty cell"
-                self.Memory.grid[y][i].Status = 2
+                #self.Memory.grid[y][i].Status = 2
         print "TOP", isBlocked
         return isBlocked
 
@@ -174,6 +203,18 @@ class Robot:
         #    return True;
         #x = self.X + self.Range + 1
 
+        if self.Dir == 'R':
+            if(self.Y - self.Range - 1 < 0)
+                return True;
+        if self.Dir == 'U':
+            if(self.X + self.Range + 1 >= this.Memory.width)
+                return True;
+        if self.Dir == 'L':
+            if(self.Y + self.Range + 1 >= this.Memory.height)
+                return True;
+        if self.Dir == 'D':
+            if(self.X - self.Range - 1 < 0)
+                return True;
         for i in range(4,6):
             if (ArStr[i] == '1'):
                 isBlocked = True
@@ -184,6 +225,8 @@ class Robot:
                 #self.Memory.grid[self.Y][x].Status = 2
         print "RIGHT", isBlocked
         return isBlocked
+
+    
 
   
 '''
