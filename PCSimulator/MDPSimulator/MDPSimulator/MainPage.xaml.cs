@@ -90,7 +90,7 @@ namespace MDPSimulator.View
             string content = "";
             try
             {
-                using (StreamReader sr = new StreamReader("E:/Git/MDP-Jan-2015/PCSimulator/MDPSimulator/map.txt"))
+                using (StreamReader sr = new StreamReader("C:/Users/Yiko/Documents/GitHub/MDP-Jan-2015/PCSimulator/MDPSimulator/map.txt"))
                 {
                     string line;
                     while ((line = sr.ReadLine()) != null)
@@ -327,7 +327,7 @@ namespace MDPSimulator.View
                 displayConsoleMessage("Failed to export map. Map not explored!");
                 return;
             }
-            bool result = finalMap.saveToHardDrive("E:/Git/MDP-Jan-2015/PCSimulator/MDPSimulator/");
+            bool result = finalMap.saveToHardDrive("C:/Users/Yiko/Documents/GitHub/MDP-Jan-2015/PCSimulator/MDPSimulator");
             if (result)
             {
                 displayConsoleMessage("Map descriptor exported successfully!");

@@ -110,8 +110,8 @@ class Robot:
 
     def explore(self,ArStr):
         moved = False
-       # while  ((self.X != 1 or self.Y != 1) or (not moved)):
-        #    print "Current X = {0}, Y = {1}", self.X, self.Y
+        while  ((self.X != 1 or self.Y != 1) or (not moved)):
+            print "Current X = {0}, Y = {1}", self.X, self.Y
         try:
             isBlockedLeft = self.checkLeftSide(ArStr)
             isBlockedFront = self.checkTopSide(ArStr)
@@ -125,10 +125,6 @@ class Robot:
                 moved = True
                 self.moveForward(1)
                 return '1'
-            elif (not isBlockedLeft):
-                print("Turn left")
-                self.turnLeft()
-                return '3'
             else:
                 print("Turn around")
                 self.turnAround()
@@ -139,14 +135,16 @@ class Robot:
     
     def checkLeftSide(self, ArStr):
         isBlocked = False
-     # if (self.X - self.Range - 1 < 0):
-      #    return True
+        if (self.X - self.Range - 1 < 0):
+            return True
         x = self.X - self.Range - 1
-    #  for i in range(self.Y - self.Range, self.Y + self.Range)
         if (ArStr[0] == '1'):
             isBlocked = True
             "explored and has obstacle"
             self.Memory.grid[self.Y][x].Status = 1
+        elif (ArStr[0] == '2'):
+            "map second block to have obstacle"
+            self.Memory.grid[][]
         else:
             "empty cell"
             self.Memory.grid[self.Y][x].Status = 2
@@ -251,3 +249,14 @@ class Robot:
             return True
 
 '''
+    def mapLeft(self):
+        if self.Dir == 'R':
+            self.Memory.grid[self.X][self.Y]
+        if self.Dir== 'L':
+            return self.checkTopSide(ArInQ);
+        elif self.Dir== 'U':
+            return self.checkRightSide(ArInQ);
+        elif self.Dir== 'D':
+            return self.checkLeftSide(ArInQ);
+        else:
+            return True
