@@ -127,7 +127,7 @@ class Robot:
                     print("Turn right")
                     self.turnRight()
                     self.moveForward(1)
-                    turned = True
+                    #turned = True
                     return "21"
                 elif (not isBlockedFront):
                     print("Move Forward")
@@ -138,7 +138,7 @@ class Robot:
                     print("turn left")
                     self.turnLeft()
                     self.moveForward(1)
-                    turned = True
+                    #turned = True
                     return "31"
                 else:
                     print("Turn around")
@@ -151,6 +151,7 @@ class Robot:
     
     def checkLeftSide(self, ArStr):
         # left here
+        print self.Dir
         isBlocked = False
         if self.Dir == 'R':
             if(self.Y + self.Range + 1 >= self.Memory.height):

@@ -20,7 +20,7 @@ print robot.explore(ArStr)
 ArStr='000011'
 print ArStr
 print robot.explore(ArStr)
-ArStr='001011'
+ArStr='011111'
 print ArStr
 print robot.explore(ArStr)
 
