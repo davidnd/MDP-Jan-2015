@@ -150,7 +150,7 @@ namespace MDPModel
                     this.Y-=dis;
                     break;
                 case 'R':
-                    this.X+=dis;
+                    this.X++;
                     break;
                 case 'L':
                     this.X-=dis;
@@ -213,8 +213,7 @@ namespace MDPModel
                 do
                 {
                     computeCoverage();
-                    Console.WriteLine("Current X = {0}, Y = {1}", this.X, this.Y);
-                
+                    OnSendingMessage("Current X = "+this.X + " Y = " + this.Y);
                     isBlockedFront = scanFront();
                     isBlockedLeft = scanLeft();
                     isBlockedRight = scanRight();
@@ -222,27 +221,24 @@ namespace MDPModel
                     {
                         Console.WriteLine("Turn right");
                         turnRight();
-                        moveForward(1);
                     }
                     else if (!isBlockedFront)
                     {
                         Console.WriteLine("Move");
                         moved = true;
-                        moveForward(1);
                     }
                     else if (!isBlockedLeft)
                     {
                         Console.WriteLine("Turn left");
                         turnLeft();
-                        moveForward(1);
                     }
                     else
                     {
                         Console.WriteLine("Turn around");
                         turnAround();
                     }
-                
-                    Thread.Sleep(200);
+                    Thread.Sleep(1000 / UserSetting.Speed);
+                    moveForward(1);                    
                 } while ((this.X != 1 || this.Y != 1) || !moved);
             }
             catch (Exception e)
