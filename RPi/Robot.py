@@ -22,6 +22,7 @@ class Robot:
        self.YGoal = 18;
        self.XStart = 1;
        self.YStart = 1;
+       self.turned = False
        self.StartNode = Node(self.XStart, self.YStart)
        self.GoalNode = Node(self.XGoal, self.YGoal)
        "self.ShortestPath = Node[]"
@@ -30,6 +31,7 @@ class Robot:
     def __init__(self, x, y, r, d):
         self.X = x
         self.Y = y
+        self.turned = False
         self.Range = r
         self.Dir = d
         "empty memory for robot"
@@ -111,8 +113,12 @@ class Robot:
     def explore(self,ArStr):
         moved = False
         while  ((self.X != 1 or self.Y != 1) or (not moved)):
-        
             print "Current X= ", self.X, " Current Y = ", self.Y
+            '''if (self.turned):
+                self.turned = False
+                self.moveForward(1)
+                continue
+            '''
             try:
                 isBlockedLeft = self.checkLeftSide(ArStr)
                 isBlockedFront = self.checkTopSide(ArStr)
@@ -120,20 +126,24 @@ class Robot:
                 if (not isBlockedRight):
                     print("Turn right")
                     self.turnRight()
-                    return '2'
+                    self.moveForward(1)
+                    turned = True
+                    return "21"
                 elif (not isBlockedFront):
                     print("Move Forward")
                     moved = True
                     self.moveForward(1)
-                    return '1'
+                    return "1"
                 elif (not isBlockedLeft):
                     print("turn left")
                     self.turnLeft()
-                    return '3'
+                    self.moveForward(1)
+                    turned = True
+                    return "31"
                 else:
                     print("Turn around")
                     self.turnAround()
-                    return '4'
+                    return "4"
             except ValueError as e:
                 print(e.Message)
                 print(e)
