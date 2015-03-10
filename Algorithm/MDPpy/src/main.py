@@ -11,13 +11,23 @@ map=Map(15,20)
 
 
 
-ArStr='100000'
+ArStr='1000000'
 print robot.explore(ArStr)
-ArStr='000011'
+ArStr='0000111'
 print robot.explore(ArStr)
-ArStr='000011'
+ArStr='0000111'
 print robot.explore(ArStr)
-ArStr='001011'
+ArStr='0010111'
+print robot.explore(ArStr)
+ArStr='0000001'
+print robot.explore(ArStr)
+ArStr='0000000'
+print robot.explore(ArStr)
+ArStr='0000010'
+print robot.explore(ArStr)
+ArStr='0000001'
+print robot.explore(ArStr)
+ArStr='0000000'
 print robot.explore(ArStr)
 
 print "finish"

@@ -111,46 +111,47 @@ class Robot:
     def explore(self,ArStr):
         moved = False
         while  ((self.X != 1 or self.Y != 1) or (not moved)):
-            print "Current X = {0}, Y = {1}", self.X, self.Y
-        try:
-            isBlockedLeft = self.checkLeftSide(ArStr)
-            isBlockedFront = self.checkTopSide(ArStr)
-            isBlockedRight = self.checkRightSide(ArStr)
-            if (not isBlockedRight):
-                print("Turn right")
-                self.turnRight()
-                return '2'
-            elif (not isBlockedFront):
-                print("Move Forward");
-                moved = True
-                self.moveForward(1)
-                return '1'
-            elif (not isBlockedLeft)
-                print("turn left");
-                self.turnLeft();
-                return '3'
-            else:
-                print("Turn around")
-                self.turnAround()
-                return '4'
-        except ValueError as e:
-            print(e.Message)
-            print(e)
+            print "Current X = ", self.X, "Y = ", self.Y
+            try:
+                isBlockedLeft = self.checkLeftSide(ArStr)
+                isBlockedFront = self.checkTopSide(ArStr)
+                isBlockedRight = self.checkRightSide(ArStr)
+                if (not isBlockedRight):
+                    print("Turn right")
+                    self.turnRight()
+                    self.moveForward(1)
+                    return '21'
+                elif (not isBlockedFront):
+                    print("Move Forward");
+                    moved = True
+                    self.moveForward(1)
+                    return '1'
+                elif (not isBlockedLeft):
+                    print("turn left");
+                    self.turnLeft();
+                    self.moveForward(1)
+                    return '31'
+                else:
+                    print("Turn around")
+                    self.turnAround()
+                    return '4'
+            except ValueError as e:
+                print(e.Message)
+                print(e)
     
     def checkLeftSide(self, ArStr):
-        # left here
         isBlocked = False
         if self.Dir == 'R':
-            if(self.Y + self.Range + 1 >= this.Memory.height)
+            if(self.Y + self.Range + 1 >= self.Memory.height):
                 return True;
         if self.Dir == 'U':
-            if(self.X - self.Range - 1 < 0)
+            if(self.X - self.Range - 1 < 0):
                 return True;
         if self.Dir == 'L':
-            if(self.Y - self.Range - 1 < 0)
+            if(self.Y - self.Range - 1 < 0):
                 return True;
         if self.Dir == 'D':
-            if(self.X + self.Range + 1 >= this.Memory.width)
+            if(self.X + self.Range + 1 >= self.Memory.width):
                 return True;
 
         #x = self.X - self.Range - 1
@@ -158,7 +159,7 @@ class Robot:
             isBlocked = True
             "explored and has obstacle"
             #self.Memory.grid[self.Y][x].Status = 1
-        elif (ArStr[0] == '2'):
+        #elif (ArStr[0] == '2'):
             "map second block to have obstacle"
             #self.Memory.grid[][]
         else:
@@ -173,16 +174,16 @@ class Robot:
         #    return True;
         # y = self.Y + self.Range + 1
         if self.Dir == 'R':
-            if(self.X + self.Range + 1 >= this.Memory.width)
+            if(self.X + self.Range + 1 >= self.Memory.width):
                 return True;
         if self.Dir == 'U':
-            if(self.Y + self.Range + 1 >= this.Memory.height)
+            if(self.Y + self.Range + 1 >= self.Memory.height):
                 return True;
         if self.Dir == 'L':
-            if(self.X - self.Range - 1 < 0)
+            if(self.X - self.Range - 1 < 0):
                 return True;
         if self.Dir == 'D':
-            if(self.Y - self.Range - 1 <0)
+            if(self.Y - self.Range - 1 <0):
                 return True;
 
         for i in range(1,4):
@@ -204,18 +205,18 @@ class Robot:
         #x = self.X + self.Range + 1
 
         if self.Dir == 'R':
-            if(self.Y - self.Range - 1 < 0)
+            if(self.Y - self.Range - 1 < 0):
                 return True;
         if self.Dir == 'U':
-            if(self.X + self.Range + 1 >= this.Memory.width)
+            if(self.X + self.Range + 1 >= self.Memory.width):
                 return True;
         if self.Dir == 'L':
-            if(self.Y + self.Range + 1 >= this.Memory.height)
+            if(self.Y + self.Range + 1 >= self.Memory.height):
                 return True;
         if self.Dir == 'D':
-            if(self.X - self.Range - 1 < 0)
+            if(self.X - self.Range - 1 < 0):
                 return True;
-        for i in range(4,6):
+        for i in range(4,7):
             if (ArStr[i] == '1'):
                 isBlocked = True
                 "explored and has obstacle"
@@ -291,7 +292,7 @@ class Robot:
         else:
             return True
 
-'''
+
     def mapLeft(self):
         if self.Dir == 'R':
             self.Memory.grid[self.X][self.Y]
@@ -303,3 +304,4 @@ class Robot:
             return self.checkLeftSide(ArInQ);
         else:
             return True
+'''
