@@ -7,7 +7,7 @@ from Robot import *
 
 
 robot = Robot(1,1,1,'U')
-map=Map(16,21)
+map=Map(15,20)
 
 
 ArStr='1000000'
@@ -32,5 +32,8 @@ print robot.explore(ArStr)
 print "finish"
 
 for i in range (0,3):
-    for j in range (0,7):
-        print robot.Memory.grid[i][j].status
+    for j in range(8):
+        print robot.Memory.grid[i][j].status,
+    print ''
+
+print robot.generateMap()
