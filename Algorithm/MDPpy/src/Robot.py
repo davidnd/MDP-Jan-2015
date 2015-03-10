@@ -159,11 +159,28 @@ class Robot:
             isBlocked = True
             "explored and has obstacle"
             #self.Memory.grid[self.Y][x].Status = 1
+            
+            if self.Dir =='R':
+                self.Memory.grid[self.Y+1][self.X+2].status=1
+            elif self.Dir=='U':
+                self.Memory.grid[self.Y+1][self.X-2].status=1
+            elif self.Dir=='L':
+                self.Memory.grid[self.Y-2][self.X-1].status = 1
+            else:
+                self.Memory.grid[self.Y-1][self.X+2].status=1
         #elif (ArStr[0] == '2'):
             "map second block to have obstacle"
             #self.Memory.grid[][]
         else:
             "empty cell"
+            if self.Dir =='R':
+                self.Memory.grid[self.Y+1][self.X+2].status=2
+            elif self.Dir=='U':
+                self.Memory.grid[self.Y+1][self.X-2].status=2
+            elif self.Dir=='L':
+                self.Memory.grid[self.Y-2][self.X-1].status = 2
+            else:
+                self.Memory.grid[self.Y-1][self.X+2].status=2
             #self.Memory.grid[self.Y][x].Status = 2
         print "Left", isBlocked
         return isBlocked
@@ -190,20 +207,30 @@ class Robot:
             if (ArStr[i]=='1'):
                 isBlocked = True
                 "explored and has obstacle"
-                #self.Memory.grid[y][i].Status = 1
+                if self.Dir =='R':
+                    self.Memory.grid[self.Y-i+2][self.X+2].status=1
+                elif self.Dir=='U':
+                    self.Memory.grid[self.Y+2][self.X+i-2].status=1
+                elif self.Dir=='L':
+                    self.Memory.grid[self.Y+i-2][self.X-2].status = 1
+                else:
+                    self.Memory.grid[self.Y-2][self.X-i+2].status=1
             else:
                 "empty cell"
-                #self.Memory.grid[y][i].Status = 2
+                if self.Dir =='R':
+                    self.Memory.grid[self.Y-i+2][self.X+2].status=2
+                elif self.Dir=='U':
+                    self.Memory.grid[self.Y+2][self.X+i-2].status=2
+                elif self.Dir=='L':
+                    self.Memory.grid[self.Y+i-2][self.X-2].status = 2
+                else:
+                    self.Memory.grid[self.Y-2][self.X-i+2].status=2
         print "TOP", isBlocked
         return isBlocked
 
 
     def checkRightSide(self, ArStr):
         isBlocked = False
-       # if (this.X + this.Range + 1 >= this.Env.Grid.GetLength(1))
-        #    return True;
-        #x = self.X + self.Range + 1
-
         if self.Dir == 'R':
             if(self.Y - self.Range - 1 < 0):
                 return True;
@@ -220,17 +247,35 @@ class Robot:
             if (ArStr[i] == '1'):
                 isBlocked = True
                 "explored and has obstacle"
-                #self.Memory.grid[self.Y][x].Status = 1
+                if self.Dir =='R':
+                    self.Memory.grid[self.Y-2][self.X-i+5].status=1
+                elif self.Dir=='U':
+                    self.Memory.grid[self.Y-i+5][self.X+2].status=1
+                elif self.Dir=='L':
+                    self.Memory.grid[self.Y+2][self.X+i-5].status=1
+                else:
+                    self.Memory.grid[self.Y+i-5][self.X-2].status = 1
             else:
                 "empty cell"
-                #self.Memory.grid[self.Y][x].Status = 2
+                if self.Dir=='R':
+                    self.Memory.grid[self.Y-2][self.X-i+5].status = 2
+                elif self.Dir=='U':
+                    self.Memory.grid[self.Y-i+5][self.X+2].status = 2
+                elif self.Dir=='L':
+                    self.Memory.grid[self.Y+2][self.X+i-5].status = 2
+                else:
+                    self.Memory.grid[self.Y+i-5][self.X-2].status = 2
         print "RIGHT", isBlocked
         return isBlocked
 
-    
+'''    
+        def updateMap(self, ArStr):
+            for i in range (self.X-1, self.X+2):
+                for j in range (self.Y-1, self.Y+2):
+                    self.Memory.grid[i][j] = 2
+            if self.Dir == 'U':
+                self.Memory.grid[]
 
-  
-'''
         public bool checkBottomSide()
         {
             bool isBlocked = False;
