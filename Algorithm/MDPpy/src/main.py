@@ -4,6 +4,7 @@
 import Queue
 from Map import *
 from Robot import *
+import sys
 
 
 robot = Robot(1,1,1,'U')
@@ -31,9 +32,14 @@ print robot.explore(ArStr)
 
 print "finish"
 
-for i in range (0,3):
-    for j in range(8):
-        print robot.Memory.grid[i][j].status,
-    print ''
+for i in range (0,20):
+    for j in range (15):
+        print robot.Memory.grid[i][j].status
 
-print robot.generateMap()
+robot.Memory.convertMap()
+print robot.Memory.map1
+print robot.Memory.map2
+#print robot.Memory.convertToHex(robot.Memory.map1)
+
+a= "000222200000000000221222000000000222222200000222000222200000002222222200000000222000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
+print sys.getsizeof(a)

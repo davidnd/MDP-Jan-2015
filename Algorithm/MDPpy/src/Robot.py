@@ -120,17 +120,13 @@ class Robot:
                     print("Turn right")
                     self.turnRight()
                     self.moveForward(1)
-                    return '21'
+                    return '5'
                 elif (not isBlockedFront):
                     print("Move Forward");
                     moved = True
                     self.moveForward(1)
                     return '1'
-                elif (not isBlockedLeft):
-                    print("turn left");
-                    self.turnLeft();
-                    self.moveForward(1)
-                    return '31'
+                
                 else:
                     print("Turn around")
                     self.turnAround()
@@ -159,7 +155,7 @@ class Robot:
             isBlocked = True
             "explored and has obstacle"
             #self.Memory.grid[self.Y][x].Status = 1
-            '''
+            
             if self.Dir =='R':
                 self.Memory.grid[self.Y+1][self.X+2].status=1
             elif self.Dir=='U':
@@ -168,13 +164,13 @@ class Robot:
                 self.Memory.grid[self.Y-2][self.X-1].status = 1
             else:
                 self.Memory.grid[self.Y-1][self.X+2].status=1
-            '''
+            
         #elif (ArStr[0] == '2'):
             "map second block to have obstacle"
             #self.Memory.grid[][]
         else:
             "empty cell"
-            '''
+            
             if self.Dir =='R':
                 self.Memory.grid[self.Y+1][self.X+2].status=2
             elif self.Dir=='U':
@@ -183,16 +179,13 @@ class Robot:
                 self.Memory.grid[self.Y-2][self.X-1].status = 2
             else:
                 self.Memory.grid[self.Y-1][self.X+2].status=2
-            #self.Memory.grid[self.Y][x].Status = 2
-            '''
+            
+            
         print "Left", isBlocked
         return isBlocked
     
     def checkTopSide(self, ArStr):
         isBlocked = False
-        #if (self.Y + self.Range + 1 >= self.Env.Grid.GetLength(0))
-        #    return True;
-        # y = self.Y + self.Range + 1
         if self.Dir == 'R':
             if(self.X + self.Range + 1 >= self.Memory.width):
                 return True;
@@ -210,7 +203,7 @@ class Robot:
             if (ArStr[i]=='1'):
                 isBlocked = True
                 "explored and has obstacle"
-                '''
+                
                 if self.Dir =='R':
                     self.Memory.grid[self.Y-i+2][self.X+2].status=1
                 elif self.Dir=='U':
@@ -219,10 +212,10 @@ class Robot:
                     self.Memory.grid[self.Y+i-2][self.X-2].status = 1
                 else:
                     self.Memory.grid[self.Y-2][self.X-i+2].status=1
-                '''
+                
             else:
                 "empty cell"
-                '''
+                
                 if self.Dir =='R':
                     self.Memory.grid[self.Y-i+2][self.X+2].status=2
                 elif self.Dir=='U':
@@ -231,7 +224,7 @@ class Robot:
                     self.Memory.grid[self.Y+i-2][self.X-2].status = 2
                 else:
                     self.Memory.grid[self.Y-2][self.X-i+2].status=2
-                '''
+                
         print "TOP", isBlocked
         return isBlocked
 
@@ -254,19 +247,19 @@ class Robot:
             if (ArStr[i] == '1'):
                 isBlocked = True
                 "explored and has obstacle"
-                '''
+                
                 if self.Dir =='R':
                     self.Memory.grid[self.Y-2][self.X-i+5].status=1
-                elif self.Dir=='U':
+                elif self.Dir=='U': 
                     self.Memory.grid[self.Y-i+5][self.X+2].status=1
                 elif self.Dir=='L':
                     self.Memory.grid[self.Y+2][self.X+i-5].status=1
                 else:
                     self.Memory.grid[self.Y+i-5][self.X-2].status = 1
-                '''
+            
             else:
                 "empty cell"
-                '''
+                
                 if self.Dir=='R':
                     self.Memory.grid[self.Y-2][self.X-i+5].status = 2
                 elif self.Dir=='U':
@@ -275,16 +268,24 @@ class Robot:
                     self.Memory.grid[self.Y+2][self.X+i-5].status = 2
                 else:
                     self.Memory.grid[self.Y+i-5][self.X-2].status = 2
-                '''
+                
         print "RIGHT", isBlocked
         return isBlocked
     
-    def generateMap(self):
+    def generateMapStr(self):
         string=''
         for i in range(0,20):
             for j in range (0,15):
-                string += str(self.Memory.grid[i][j].status)
+                string += str(self.Memory.grid[j][i].status)
         return string
+        
+    def generateMapDescriptorStr(self):
+        self.Memory.convertMap()
+        hex1 = self.Memory.convertToHex(self.Memory.map1)
+        hex2 = self.Memory.convertToHex(self.Memory.map2)
+        return hex1
+    
+    
 
 '''    
         def updateMap(self, ArStr):
