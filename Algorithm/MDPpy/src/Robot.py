@@ -12,26 +12,34 @@ from Cell import *
 class Robot:
     
     def __init__(self):
-       self.X = 1;
-       self.Y = 1;
-       self.Range = 1;
-       self.Dir = 'U';
-       "empty memory for robot"
-       self.Memory = Map(15,20);
-       self.XGoal = 13;
-       self.YGoal = 18;
-       self.XStart = 1;
-       self.YStart = 1;
-       self.StartNode = Node(self.XStart, self.YStart)
-       self.GoalNode = Node(self.XGoal, self.YGoal)
-       "self.ShortestPath = Node[]"
-       self.VirtualMap = Map(15,20)
-    
+        self.X = 1
+        self.Y = 1
+        self.Range = 1
+        self.Dir = 'U'
+        "empty memory for robot"
+        self.Memory = Map(15,20)
+        self.XGoal = 13
+        self.YGoal = 18
+        self.XStart = 1
+        self.YStart = 1
+        self.turnedRight = False
+        self.turnedAround = False
+        self.turnedLeft = False
+        self.StartNode = Node(self.XStart, self.YStart)
+        self.GoalNode = Node(self.XGoal, self.YGoal)
+        "self.ShortestPath = Node[]"
+        self.enteredGoal=False
+        self.mapStr = ''
+
     def __init__(self, x, y, r, d):
         self.X = x
         self.Y = y
+        self.turnedRight = False
+        self.turnedAround = False
+        self.turnedLeft = False
         self.Range = r
         self.Dir = d
+        self.lastDir = ''
         "empty memory for robot"
         self.Memory = Map(15,20)
         self.XGoal = 13
@@ -41,47 +49,56 @@ class Robot:
         self.StartNode = Node(self.XStart, self.YStart)
         self.GoalNode = Node(self.XGoal, self.YGoal)
         "self.ShortestPath = Node[]"
-        self.VirtualMap = Map(15,20)
-        self.enteredGoal=True
-    
-
-   
-    
-
+        self.enteredGoal=False
+        self.mapStr=''
 
     def turnLeft(self):
         if self.Dir=='U':
             self.Dir = 'L'
-          
+            self.lastDir = 'U' 
+            turnedLeft = True
         elif self.Dir=='D':
             self.Dir = 'R'
+            self.lastDir = 'D' 
+            turnedLeft = True
             
         elif self.Dir== 'R':
             self.Dir = 'U'
+            self.lastDir = 'R' 
+            turnedLeft = True
             
         elif self.Dir== 'L':
             self.Dir = 'D'
+            self.lastDir = 'L' 
+            turnedLeft = True
             
  
                 
     def turnRight(self):  
         if self.Dir== 'U':
             self.Dir = 'R'
+            self.lastDir = 'U'
+            self.turnedRight = True
             
         elif self.Dir== 'D':
             self.Dir = 'L'
+            self.lastDir = 'D' 
+            self.turnedRight = True
             
         elif self.Dir== 'R':
             self.Dir = 'D'
+            self.lastDir = 'R' 
+            self.turnedRight = True
             
         elif self.Dir== 'L':
             self.Dir = 'U'
-
+            self.lastDir = 'L' 
+            self.turnedRight = True
 
     def moveForward(self,dis):
         if self.Dir== 'U':
             self.Y+=dis
-            
+
         elif self.Dir== 'D':
             self.Y-=dis
             
@@ -97,102 +114,238 @@ class Robot:
     def turnAround(self):
         if self.Dir == 'U':
             self.Dir = 'D'
+            self.lastDir = 'U'
+            self.turnedAround = True
             
         elif self.Dir== 'D':
             self.Dir = 'U'
+            self.lastDir = 'D' 
+            self.turnedAround = True
             
         elif self.Dir== 'R':
             self.Dir = 'L'
-            
+            self.lastDir = 'R'
+            self.turnedAround = True
+
         elif self.Dir== 'L':
             self.Dir = 'R'
+            self.lastDir = 'L'
+            self.turnedAround = True
             
-            
-
     def explore(self,ArStr):
-        moved = False
-        while  ((self.X != 1 or self.Y != 1) or (not moved)):
-            print "Current X = {0}, Y = {1}", self.X, self.Y
-            try:
-                isBlockedLeft = self.checkLeftSide(ArStr)
-                isBlockedFront = self.checkTopSide(ArStr)
-                isBlockedRight = self.checkRightSide(ArStr)
-                if (not isBlockedRight):
-                    print("Turn right")
-                    self.turnRight()
-                    return '2'
-                elif (not isBlockedFront):
-                    print("Move Forward");
-                    moved = True
-                    self.moveForward(1)
-                    return '1'
-                elif (not isBlockedLeft):
-                    print("turn left");
-                    self.turnLeft();
-                    return '3'
-                else:
-                    print("Turn around")
-                    self.turnAround()
-                    return '4'
-            except ValueError as e:
-                print(e.Message)
-                print(e)
+        print "Current X= ", self.X, " Current Y = ", self.Y
+        try:
+            isBlockedLeft = self.checkLeftSide(ArStr)
+            isBlockedFront = self.checkTopSide(ArStr)
+            isBlockedRight = self.checkRightSide(ArStr)
+            if ((self.X == 12 or self.X==13 )and (self.Y==17 or self.Y==18)):
+                self.enteredGoal = True
+            if (self.X == 1 and self.Y == 1 and self.enteredGoal == True):
+                return 'F'
+            if (not isBlockedRight and  not self.turnedRight):
+                print("Turn right")
+                self.turnRight()
+                self.generateMapStr()
+                print self.Dir
+                return "2"
+            elif (not isBlockedFront):
+                print("Move Forward")
+                self.moveForward(1)
+                self.generateMapStr()
+                print self.Dir
+                self.turnedRight = False
+                return "1"
+            elif (not isBlockedLeft):
+                print("turn left")
+                self.turnedRight = False
+                self.turnLeft()
+                self.generateMapStr()
+                print self.Dir
+                return "3"
+            else:
+                print("Turn around")
+                self.turnAround()
+                self.generateMapStr()
+                print self.Dir
+                self.turnedRight = False
+                return "4"
+        except ValueError as e:
+            print(e.Message)
+            print(e)
+        print 
     
     def checkLeftSide(self, ArStr):
-        # left here
         isBlocked = False
-  
-
+        if self.Dir == 'R':
+            isBlocked = self.checkTop()
+        if self.Dir == 'U':
+            isBlocked = self.checkLeft()
+        if self.Dir == 'L':
+            isBlocked = self.checkBottom()
+        if self.Dir == 'D':
+            isBlocked = self.checkRight()
         #x = self.X - self.Range - 1
+        if (isBlocked):
+            return True
         if (ArStr[0] == '1'):
             isBlocked = True
-            "explored and has obstacle"
-            #self.Memory.grid[self.Y][x].Status = 1
-        elif (ArStr[0] == '2'):
-            "map second block to have obstacle"
-            #self.Memory.grid[][]
+            #explored and has obstacle
+            self.updateMap(0, 1)
         else:
-            "empty cell"
-            #self.Memory.grid[self.Y][x].Status = 2
+            #empty cell
+            self.updateMap(0, 2)
         print "Left", isBlocked
         return isBlocked
     
     def checkTopSide(self, ArStr):
         isBlocked = False
-        #if (self.Y + self.Range + 1 >= self.Env.Grid.GetLength(0))
-        #    return True;
-        # y = self.Y + self.Range + 1
-     
-
+        if self.Dir == 'R':
+            isBlocked = self.checkRight()
+        if self.Dir == 'U':
+            isBlocked = self.checkTop()
+        if self.Dir == 'L':
+            isBlocked = self.checkLeft()
+        if self.Dir == 'D':
+            isBlocked = self.checkBottom()
+        if (isBlocked):
+            return True
         for i in range(1,4):
             if (ArStr[i]=='1'):
                 isBlocked = True
-                "explored and has obstacle"
-                #self.Memory.grid[y][i].Status = 1
+                #explored and has obstacle 
+                self.updateMap(i, 1)
             else:
-                "empty cell"
-                #self.Memory.grid[y][i].Status = 2
+                #empty 
+                self.updateMap(i, 2)
         print "TOP", isBlocked
         return isBlocked
 
-
     def checkRightSide(self, ArStr):
         isBlocked = False
-       # if (this.X + this.Range + 1 >= this.Env.Grid.GetLength(1))
-        #    return True;
-        #x = self.X + self.Range + 1
-
-        for i in range(4,6):
+        if self.Dir == 'R':
+            isBlocked = self.checkBottom()
+        if self.Dir == 'U':
+            isBlocked = self.checkRight()
+        if self.Dir == 'L':
+            isBlocked = self.checkTop()
+        if self.Dir == 'D':
+            isBlocked = self.checkLeft()
+        if (isBlocked):
+            return True
+        for i in range(4,7):
             if (ArStr[i] == '1'):
                 isBlocked = True
-                "explored and has obstacle"
-                #self.Memory.grid[self.Y][x].Status = 1
+                #explored and has obstacle 
+                self.updateMap(i, 1)
             else:
-                "empty cell"
-                #self.Memory.grid[self.Y][x].Status = 2
-        print "RIGHT", isBlocked
+                #empty
+                self.updateMap(i, 2)
+        print "RIGHT ", isBlocked
         return isBlocked
 
+    #not done
+    def updateMap(self, pos, val):
+        if(self.Dir == 'U'):
+            if(pos == 0):
+                self.Memory.grid[self.X - 2][self.Y + 1] = val
+            if(pos == 1):
+                self.Memory.grid[self.X - 1][self.Y + 2] = val
+            if(pos == 2):
+                self.Memory.grid[self.X][self.Y + 2] = val
+            if(pos == 3):
+                self.Memory.grid[self.X + 1][self.Y + 2] = val
+            if(pos == 4):
+                self.Memory.grid[self.X + 2][self.Y + 1] = val
+            if(pos == 5):
+                self.Memory.grid[self.X + 2][self.Y] = val
+            if(pos == 6):
+                self.Memory.grid[self.X + 2][self.Y - 1] = val
+        elif(self.Dir == 'R'):
+            if(pos == 0):
+                self.Memory.grid[self.X + 1][self.Y + 2] = val
+            if(pos == 1):
+                self.Memory.grid[self.X + 2][self.Y + 1] = val
+            if(pos == 2):
+                self.Memory.grid[self.X + 2][self.Y] = val
+            if(pos == 3):
+                self.Memory.grid[self.X + 2][self.Y - 1] = val
+            if(pos == 4):
+                self.Memory.grid[self.X + 1][self.Y - 2] = val
+            if(pos == 5):
+                self.Memory.grid[self.X][self.Y - 2] = val
+            if(pos == 6):
+                self.Memory.grid[self.X - 1][self.Y - 2] = val
+        elif(self.Dir == 'D'):
+            if(pos == 0):
+                self.Memory.grid[self.X + 2][self.Y - 1] = val
+            if(pos == 1):
+                self.Memory.grid[self.X + 1][self.Y - 2] = val
+            if(pos == 2):
+                self.Memory.grid[self.X][self.Y - 2] = val
+            if(pos == 3):
+                self.Memory.grid[self.X - 1][self.Y - 2] = val
+            if(pos == 4):
+                self.Memory.grid[self.X - 2][self.Y - 1] = val
+            if(pos == 5):
+                self.Memory.grid[self.X - 2][self.Y] = val
+            if(pos == 6):
+                self.Memory.grid[self.X - 2][self.Y + 1] = val
+        elif(self.Dir == 'L'):
+            if(pos == 0):
+                self.Memory.grid[self.X - 1][self.Y - 2] = val
+            if(pos == 1):
+                self.Memory.grid[self.X - 2][self.Y - 1] = val
+            if(pos == 2):
+                self.Memory.grid[self.X - 2][self.Y] = val
+            if(pos == 3):
+                self.Memory.grid[self.X - 2][self.Y + 1] = val
+            if(pos == 4):
+                self.Memory.grid[self.X - 1][self.Y + 2] = val
+            if(pos == 5):
+                self.Memory.grid[self.X][self.Y + 2] = val
+            if(pos == 6):
+                self.Memory.grid[self.X + 1][self.Y + 2] = val
+
+    def checkTop(self):
+        if(self.Y + self.Range + 1 >= self.Memory.height):
+            return True
+        if(self.Memory.grid[self.X -1][self.Y + 2] == 1):
+            return True
+        if(self.Memory.grid[self.X][self.Y + 2] == 1):
+            return True
+        if(self.Memory.grid[self.X + 1][self.Y + 2] == 1):
+            return True
+        return False
+    def checkLeft(self):
+        if(self.X - self.Range - 1 < 0):
+            return True
+        if(self.Memory.grid[self.X - 2][self.Y + 1] == 1):
+            return True
+        if(self.Memory.grid[self.X - 2][self.Y] == 1):
+            return True
+        if(self.Memory.grid[self.X - 2][self.Y -1 ] == 1):
+            return True
+        return False
+    def checkRight(self):
+        if(self.X + self.Range + 1 >= self.Memory.width):
+            return True
+        if(self.Memory.grid[self.X + 2][self.Y + 1] == 1):
+            return True
+        if(self.Memory.grid[self.X+2][self.Y] == 1):
+            return True
+        if(self.Memory.grid[self.X + 2][self.Y -1] == 1):
+            return True
+        return False
+    def checkBottom(self):
+        if(self.Y - self.Range - 1 >= self.Memory.height):
+            return True
+        if(self.Memory.grid[self.X -1][self.Y - 2] == 1):
+            return True
+        if(self.Memory.grid[self.X][self.Y - 2] == 1):
+            return True
+        if(self.Memory.grid[self.X + 1][self.Y - 2] == 1):
+            return True
+        return False
 
     def generateMapStr(self):
         # first 5 characters: direction + current center position
@@ -204,12 +357,21 @@ class Robot:
             y = '0'+ str(self.Y)
         else:
             y = str(self.Y) 
-        mapStr = self.Dir + x + y
+        self.mapStr = self.Dir + x + y
         
         # iterate the map to add value to mapStr
         for i in range (20):
             for j in range (15):
-                mapStr += str(self.Memory.grid[i][j].status)
+                self.mapStr += str(self.Memory.grid[j][i])
         if (self.X == 1 and self.Y == 1 and self.enteredGoal):
-            mapStr += 'F'
-        return mapStr
+            self.mapStr += 'F'
+        
+    def startZoneRealign(self):
+        if self.Dir == 'D':
+            return '4'
+        elif self.Dir == 'L':
+            return '2'
+        elif self.Dir == 'R':
+            return '3'
+        else:
+            return
