@@ -55,13 +55,18 @@ class Main:
         def activateAlgo(self, algoQ, robotQ, androidQ):
                 robot = Robot(1,1,1,'U')
                 map=Map(15,20)
+                throw =0
                 while 1:
                         if not algoQ.empty():
                                 val = algoQ.get_nowait()
                                 #call algo
-                                out = robot.explore(val)
+                        out = robot.explore(val)
                                 #time.sleep(2)
-                                
+                        if len(out) == 2:
+                            throw  = 1
+                            robotQ.put_nowait(out[0])
+                            robotQ.put_nowait(out[1])
+                        else:        
                                 robotQ.put_nowait(out)
                                 #androidQ.put_nowait(out)
 
