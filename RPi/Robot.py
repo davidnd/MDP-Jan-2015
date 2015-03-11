@@ -28,6 +28,7 @@ class Robot:
         self.StartNode = Node(self.XStart, self.YStart)
         self.GoalNode = Node(self.XGoal, self.YGoal)
         "self.ShortestPath = Node[]"
+        self.enteredGoal=False
 
     def __init__(self, x, y, r, d):
         self.X = x
@@ -47,6 +48,7 @@ class Robot:
         self.StartNode = Node(self.XStart, self.YStart)
         self.GoalNode = Node(self.XGoal, self.YGoal)
         "self.ShortestPath = Node[]"
+        self.enteredGoal=False
 
     def turnLeft(self):
         if self.Dir=='U':
@@ -134,6 +136,8 @@ class Robot:
             isBlockedLeft = self.checkLeftSide(ArStr)
             isBlockedFront = self.checkTopSide(ArStr)
             isBlockedRight = self.checkRightSide(ArStr)
+            if (self.X==13 and self.Y==18):
+                self.enteredGoal = True
             if (not isBlockedRight and  not self.turnedRight):
                 print("Turn right")
                 self.turnRight()
@@ -340,6 +344,8 @@ class Robot:
         # iterate the map to add value to mapStr
         for i in range (20):
             for j in range (15):
-                mapStr += str(self.Memory.grid[j][i])
+                mapStr += str(self.Memory.grid[i][j])
+        if (self.X == 1 and self.Y == 1 and self.enteredGoal):
+            mapStr += 'F'
         return mapStr
         

@@ -42,6 +42,7 @@ class Robot:
         self.GoalNode = Node(self.XGoal, self.YGoal)
         "self.ShortestPath = Node[]"
         self.VirtualMap = Map(15,20)
+        self.enteredGoal=True
     
 
    
@@ -125,7 +126,7 @@ class Robot:
                     moved = True
                     self.moveForward(1)
                     return '1'
-                elif (not isBlockedLeft)
+                elif (not isBlockedLeft):
                     print("turn left");
                     self.turnLeft();
                     return '3'
@@ -140,18 +141,7 @@ class Robot:
     def checkLeftSide(self, ArStr):
         # left here
         isBlocked = False
-        if self.Dir == 'R':
-            if(self.Y + self.Range + 1 >= this.Memory.height)
-                return True;
-        if self.Dir == 'U':
-            if(self.X - self.Range - 1 < 0)
-                return True;
-        if self.Dir == 'L':
-            if(self.Y - self.Range - 1 < 0)
-                return True;
-        if self.Dir == 'D':
-            if(self.X + self.Range + 1 >= this.Memory.width)
-                return True;
+  
 
         #x = self.X - self.Range - 1
         if (ArStr[0] == '1'):
@@ -172,18 +162,7 @@ class Robot:
         #if (self.Y + self.Range + 1 >= self.Env.Grid.GetLength(0))
         #    return True;
         # y = self.Y + self.Range + 1
-        if self.Dir == 'R':
-            if(self.X + self.Range + 1 >= this.Memory.width)
-                return True;
-        if self.Dir == 'U':
-            if(self.Y + self.Range + 1 >= this.Memory.height)
-                return True;
-        if self.Dir == 'L':
-            if(self.X - self.Range - 1 < 0)
-                return True;
-        if self.Dir == 'D':
-            if(self.Y - self.Range - 1 <0)
-                return True;
+     
 
         for i in range(1,4):
             if (ArStr[i]=='1'):
@@ -203,18 +182,6 @@ class Robot:
         #    return True;
         #x = self.X + self.Range + 1
 
-        if self.Dir == 'R':
-            if(self.Y - self.Range - 1 < 0)
-                return True;
-        if self.Dir == 'U':
-            if(self.X + self.Range + 1 >= this.Memory.width)
-                return True;
-        if self.Dir == 'L':
-            if(self.Y + self.Range + 1 >= this.Memory.height)
-                return True;
-        if self.Dir == 'D':
-            if(self.X - self.Range - 1 < 0)
-                return True;
         for i in range(4,6):
             if (ArStr[i] == '1'):
                 isBlocked = True
@@ -226,80 +193,23 @@ class Robot:
         print "RIGHT", isBlocked
         return isBlocked
 
-    
 
-  
-'''
-        public bool checkBottomSide()
-        {
-            bool isBlocked = False;
-            if (this.Y - this.Range - 1 < 0)
-                return True;
-            int y = this.Y - this.Range - 1;
-            for (int i = this.X - this.Range; i <= this.X + this.Range; i++)
-            {
-                if (this.Env.Grid[y, i].Status == 1)
-                {
-                    isBlocked = True;
-                    //explored and has obstacle
-                    this.Memory.Grid[y, i].Status = 1;
-                }
-                else
-                {
-                    //empty cell
-                    this.Memory.Grid[y, i].Status = 2;
-                }
-            }
-            return isBlocked;
-        }
-        '''
-
-'''
-    def scanFront(self,ArInQ):
-        if self.Dir== 'R':
-            return self.checkRightSide(ArInQ);
-        elif self.Dir== 'L':
-            return self.checkLeftSide(ArInQ);
-        elif self.Dir== 'U':
-            return self.checkTopSide(ArInQ);
-        #elif self.Dir== 'D':
-         #   return self.checkBottomSide(ArInQ);
+    def generateMapStr(self):
+        # first 5 characters: direction + current center position
+        if (self.X < 10):
+            x = '0'+ str(self.X)
         else:
-            return True;
-
-    def scanLeft(self,ArInQ):
-        if self.Dir== 'R':
-            return self.checkTopSide(ArInQ);
-        #elif self.Dir== 'L':
-         #   return self.checkBottomSide(ArInQ);
-        elif self.Dir== 'U':
-            return self.checkLeftSide(ArInQ);
-        elif self.Dir== 'D':
-            return self.checkRightSide(ArInQ);
+            x = str(self.X)
+        if (self.Y < 10):
+            y = '0'+ str(self.Y)
         else:
-            return True
-
-    def scanRight(self,ArInQ):
-       # if self.Dir == 'R':
-        #    return self.checkBottomSide(ArInQ);
-        if self.Dir== 'L':
-            return self.checkTopSide(ArInQ);
-        elif self.Dir== 'U':
-            return self.checkRightSide(ArInQ);
-        elif self.Dir== 'D':
-            return self.checkLeftSide(ArInQ);
-        else:
-            return True
-
-'''
-    def mapLeft(self):
-        if self.Dir == 'R':
-            self.Memory.grid[self.X][self.Y]
-        if self.Dir== 'L':
-            return self.checkTopSide(ArInQ);
-        elif self.Dir== 'U':
-            return self.checkRightSide(ArInQ);
-        elif self.Dir== 'D':
-            return self.checkLeftSide(ArInQ);
-        else:
-            return True
+            y = str(self.Y) 
+        mapStr = self.Dir + x + y
+        
+        # iterate the map to add value to mapStr
+        for i in range (20):
+            for j in range (15):
+                mapStr += str(self.Memory.grid[i][j].status)
+        if (self.X == 1 and self.Y == 1 and self.enteredGoal):
+            mapStr += 'F'
+        return mapStr
