@@ -10,22 +10,34 @@ robot = Robot(1,1,1,'U')
 map=Map(15,20)
 
 
+'''
+ArStr='1000000'
+print ArStr
+print robot.explore(ArStr)
+ArStr='0000111'
+print ArStr
+print robot.explore(ArStr)
+ArStr='0000111'
+print ArStr
+print robot.explore(ArStr)
+ArStr='0111111'
+print ArStr
+print robot.explore(ArStr)
 
-ArStr='100000'
-print ArStr
-print robot.explore(ArStr)
-ArStr='000011'
-print ArStr
-print robot.explore(ArStr)
-ArStr='000011'
-print ArStr
-print robot.explore(ArStr)
-ArStr='011111'
+ArStr='0000111'
 print ArStr
 print robot.explore(ArStr)
 
-ArStr='110011'
+ArStr='0000011'
+print ArStr
+print robot.explore(ArStr)
+
+ArStr='0000001'
 print ArStr
 print robot.explore(ArStr)
 
 print "finish"
+'''
+while True:
+	ArStr = raw_input("Next sensor data: ")
+	robot.explore(ArStr)

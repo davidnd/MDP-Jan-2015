@@ -3,11 +3,17 @@
 # and open the template in the editor.
 from Cell import *
 class Map:
-    width = 15
-    height = 20
 
-    def __init__ (self, width, height):
-        self.grid = [[0 for x in range(width)] for x in range(height)] 
-        for i in range(0,height):
-            for j in range (0, width):
-                self.grid[i][j] = Cell()
+    def __init__ (self, w, h):
+    	self.width = w
+    	self.height = h
+        self.grid = [[0 for x in range(self.width)] for x in range(self.height)]
+        self.grid[0][0] = 2
+        self.grid[0][1] = 2
+        self.grid[0][2] = 2
+        self.grid[1][0] = 2
+        self.grid[1][1] = 2
+        self.grid[1][2] = 2
+        self.grid[2][0] = 2
+        self.grid[2][1] = 2
+        self.grid[2][2] = 2
