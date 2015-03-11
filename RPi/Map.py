@@ -7,7 +7,7 @@ class Map:
     def __init__ (self, w, h):
     	self.width = w
     	self.height = h
-        self.grid = [[0 for x in range(self.width)] for x in range(self.height)]
+        self.grid = [[0 for x in range(self.height)] for x in range(self.width)]
         self.grid[0][0] = 2
         self.grid[0][1] = 2
         self.grid[0][2] = 2

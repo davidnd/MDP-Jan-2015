@@ -324,3 +324,6 @@ class Robot:
         if(self.Memory.grid[self.X + 1][self.Y - 2] == 1):
             return True
         return False
+
+    def computeFastestPath(self):
+        
