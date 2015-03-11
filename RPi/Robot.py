@@ -325,5 +325,21 @@ class Robot:
             return True
         return False
 
-    def computeFastestPath(self):
+    def generateMapStr(self):
+        # first 5 characters: direction + current center position
+        if (self.X < 10):
+            x = '0'+ str(self.X)
+        else:
+            x = str(self.X)
+        if (self.Y < 10):
+            y = '0'+ str(self.Y)
+        else:
+            y = str(self.Y) 
+        mapStr = self.Dir + x + y
+        
+        # iterate the map to add value to mapStr
+        for i in range (20):
+            for j in range (15):
+                mapStr += str(self.Memory.grid[j][i])
+        return mapStr
         
