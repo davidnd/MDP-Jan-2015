@@ -334,6 +334,11 @@ namespace MDPSimulator.View
             }
             else
                 displayConsoleMessage("Failed to export map descriptor!");
+
+            //testing shortest path for real time
+            //Robot robot = new Robot();
+            //string shortestPath = robot.realTimeShortestPath("D0101222222222211222222222222222222222222222222222222221122222222222222022222212222222000222210222222002222212112222022222222222222012222222222222012222222222222112221122222222222222222222222222222222211222222222222001222202222222001222211222222002222222222222002222222222222001222222222222002222211222222");
+            //Console.WriteLine("Shortest path: "+shortestPath);
         }
 
         private void resetButton_Click(object sender, RoutedEventArgs e)

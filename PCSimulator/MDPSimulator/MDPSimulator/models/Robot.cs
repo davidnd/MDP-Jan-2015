@@ -429,6 +429,9 @@ namespace MDPModel
                     Console.WriteLine("Reached goal");
                     constructPath(currentNode);
                     break;
+                    //this command is for computing fastest path in real time
+                    //this.ShortestPath.Add(currentNode);
+                    //return;
                 }
                 openSet.RemoveAt(0);
                 closedSet.Add(currentNode);
@@ -770,7 +773,7 @@ namespace MDPModel
             }
             this.CurrentCoverage = (double)explored / (firstDm * secondDm) * 100;
         }
-        public string realTimeShortestPath(string input)
+        public string realTimeShortestPath(string s)
         {
             int[,] data = new int[20, 15];
             int pointer = 5;
@@ -781,7 +784,7 @@ namespace MDPModel
                 {
                     for (int j = 0; j < 15; j++)
                     {
-                        data[i, j] = input[pointer++];
+                        data[i, j] = (int)Char.GetNumericValue(s[pointer++]);
                     }
                 }
             }
@@ -791,6 +794,8 @@ namespace MDPModel
             }
 
             this.Memory = new Map(data);
+            Console.WriteLine("Data");
+            this.Memory.print();
             fastestRun();
             path = constructPathForRealTime();
             return path;
