@@ -44,3 +44,5 @@ while True:
 '''
 robot.generateMapStr()
 print robot.mapStr
+robot.generateAndroidMapStr()
+print robot.androidMapStr
