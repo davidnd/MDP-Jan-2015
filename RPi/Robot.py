@@ -571,22 +571,25 @@ class Robot:
     def startZoneRealign(self):
         if self.Dir == 'D':
             self.turnAround()
+            self.generateMapStr()
+            self.generateAndroidMapStr()
             return '4'
         elif self.Dir == 'L':
             self.turnRight()
+            self.generateMapStr()
+            self.generateAndroidMapStr()
             return '2'
         elif self.Dir == 'R':
             self.turnLeft()
+            self.generateMapStr()
+            self.generateAndroidMapStr()
             return '3'
         else:
             return
-
-    def printMemory(self):
-        for i in range(20):
-            for j in range (15):
-                print self.Memory.grid[19-i][j], ' ',
-            print 
+        
+          
     def fastestPathDecoder(self, pcStr):
+        pcStr = pcStr[1:len(pcStr)]
         for i in range (len(pcStr)):
             if pcStr[i] == 'M':
                 self.pathCommand += '1'
@@ -594,5 +597,27 @@ class Robot:
                 self.pathCommand += '2'
             elif pcStr[i] == 'L':
                 self.pathCommand += '3'
+            else:
+                return
+    
+    #not done
     def fastestRun(self, i, arStr):
-       return pathCommand[i]
+        if (self.pathCommand[i] == '1'):
+            self.moveForward(1)
+        elif (self.pathCommand[i] == '2'):
+            self.turnRight()
+        elif (self.pathCommand[i] == '3'):
+            self.turnLeft()
+        else:
+            return
+        self.generateMapStr()
+        self.generateAndroidMapStr() 
+        print "currrent position: X = ", self.X, "Y = ", self.Y, "Direction: ", self.Dir
+        return self.pathCommand[i]
+
+    def printMemory(self):
+        for i in range(20):
+            for j in range (15):
+                print self.Memory.grid[19-i][j], ' ',
+            print 
+
