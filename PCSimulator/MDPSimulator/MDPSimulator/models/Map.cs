@@ -37,14 +37,7 @@ namespace MDPModel
             {
                 for (int j = 0; j < data.GetLength(1); j++)
                 {
-                    if (data[i, j] == 0)
-                    {
-                        this.grid[i, j] = new Cell(0);
-                    }
-                    else
-                    {
-                        this.grid[i, j] = new Cell(1);
-                    }
+                    this.grid[i, j] = new Cell(data[i, j]);
                 }
             }
         }

@@ -6,18 +6,20 @@ using System.Threading.Tasks;
 using System.Net.Sockets;
 using System.Net;
 using System.IO;
+using MDPModel;
 namespace MDPSimulator
 {
     public class WifiConnector
     {
         private TcpClient clientSocket;
-        private string IpAddr {set;get;}
+        private string IpAddr { set; get; }
         public delegate void ReceivingData(string s);
         public delegate void UpdatingInfo(string s);
         public delegate void UpdatingConnectionStatus(bool isConnected);
         public event UpdatingConnectionStatus UpdatingConnectionHandler;
         public event ReceivingData ReceivingDataHandler;
         public event UpdatingInfo UpdatingConsoleHandler;
+        public string shortestPath;
         public WifiConnector()
         {
             clientSocket = new TcpClient();
@@ -30,7 +32,7 @@ namespace MDPSimulator
             IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse(IpAddr), 3000);
             bool isConnected = false;
             int trial = 3;
-            while (!isConnected && trial>0)
+            while (!isConnected && trial > 0)
             {
                 trial--;
                 try
@@ -40,26 +42,25 @@ namespace MDPSimulator
                     {
                         isConnected = true;
                         OnUpdatingConsole("Connected to RPI");
-                        OnConnectionStatusUpdating(true);
+                        OnStatusUpdating(true);
                     }
                 }
                 catch (Exception)
                 {
                     OnUpdatingConsole("Fail to establish connection.Trying...");
-                    OnConnectionStatusUpdating(false);
+                    OnStatusUpdating(false);
                 }
             }
             if (!isConnected && trial == 0)
             {
                 Console.WriteLine("Cannot connect to server!");
                 OnUpdatingConsole("Fail to establish connection!");
-                OnConnectionStatusUpdating(false);
+                OnStatusUpdating(false);
                 return false;
             }
             else
             {
                 send("Hey there");
-                OnUpdatingConsole("Ready for mapping!");
                 return true;
             }
         }
@@ -94,22 +95,26 @@ namespace MDPSimulator
         {
             NetworkStream nw = clientSocket.GetStream();
             clientSocket.ReceiveBufferSize = 38;
-            while (clientSocket.Connected)
+            while (true)
             {
                 byte[] data = new byte[clientSocket.ReceiveBufferSize];
                 int bytesRead = nw.Read(data, 0, clientSocket.ReceiveBufferSize);
-                OnReceivingData(Encoding.ASCII.GetString(data, 0, bytesRead));
-                Console.WriteLine(Encoding.ASCII.GetString(data, 0, bytesRead));
+                string desc = Encoding.ASCII.GetString(data, 0, bytesRead);
+                OnReceivingData(desc);
+                if (desc[desc.Length - 1] == 'F')
+                {
+                    Robot robot = new Robot();
+                    this.shortestPath = robot.realTimeShortestPath(desc);
+                    send(this.shortestPath);
+                }
             }
-            Console.WriteLine("connection lost!");
-            OnUpdatingConsole("Connection lost!");
-            OnConnectionStatusUpdating(false);
         }
 
         public void run()
         {
             this.connect();
-            this.listen();
+            if (clientSocket.Connected)
+                this.listen();
         }
 
         protected virtual void OnReceivingData(string s)
@@ -123,11 +128,14 @@ namespace MDPSimulator
                 Console.WriteLine("Receiving data but no event subscriber!");
             }
         }
-        protected virtual void OnConnectionStatusUpdating(bool b){
-            if(UpdatingConnectionHandler!=null){
+        protected virtual void OnStatusUpdating(bool b)
+        {
+            if (UpdatingConnectionHandler != null)
+            {
                 UpdatingConnectionHandler(b);
             }
-            else{
+            else
+            {
                 Console.WriteLine("No handler for connection status update!");
             }
         }

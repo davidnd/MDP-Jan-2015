@@ -770,6 +770,129 @@ namespace MDPModel
             }
             this.CurrentCoverage = (double)explored / (firstDm * secondDm) * 100;
         }
+        public string realTimeShortestPath(string input)
+        {
+            int[,] data = new int[20, 15];
+            int pointer = 5;
+            string path;
+            try
+            {
+                for (int i = 0; i < 20; i++)
+                {
+                    for (int j = 0; j < 15; j++)
+                    {
+                        data[i, j] = input[pointer++];
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("The map size may not be 300 chars");
+            }
 
+            this.Memory = new Map(data);
+            fastestRun();
+            path = constructPathForRealTime();
+            return path;
+        }
+
+        public string constructPathForRealTime()
+        {
+            this.X = 1;
+            this.Y = 1;
+            this.Dir = 'U';
+            string path = "";
+            Console.WriteLine("Size of shortest path" + this.ShortestPath.Count);
+            Node temp = this.ShortestPath[this.ShortestPath.Count - 1].CameFrom;
+            while (!temp.Equals(this.StartNode) && temp != null)
+            {
+                this.ShortestPath.Add(temp);
+                temp = temp.CameFrom;
+            }
+            this.ShortestPath.Reverse();
+            Node currentNode = this.ShortestPath[0];
+            foreach (Node item in this.ShortestPath)
+            {
+                switch (this.Dir)
+                {
+                    case 'U':
+                        if (item.XNode > this.X)
+                        {
+                            this.turnRight();
+                            this.moveForward(1);
+                            path += 'R';
+                        }
+                        else if (item.YNode > this.Y)
+                        {
+                            this.moveForward(1);
+                        }
+                        else if (item.XNode < this.X)
+                        {
+                            this.turnLeft();
+                            this.moveForward(1);
+                            path += 'L';
+                        }
+                        break;
+                    case 'R':
+                        if (item.XNode > this.X)
+                        {
+                            this.moveForward(1);
+                        }
+                        else if (item.YNode > this.Y)
+                        {
+                            this.turnLeft();
+                            this.moveForward(1);
+                            path += 'L';
+                        }
+                        else if (item.YNode < this.Y)
+                        {
+                            this.turnRight();
+                            this.moveForward(1);
+                            path += 'R';
+                        }
+                        break;
+                    case 'D':
+                        if (item.XNode > this.X)
+                        {
+                            this.turnLeft();
+                            this.moveForward(1);
+                            path += 'L';
+                        }
+                        else if (item.YNode < this.Y)
+                        {
+                            this.moveForward(1);
+                        }
+                        else if (item.XNode < this.X)
+                        {
+                            this.turnRight();
+                            this.moveForward(1);
+                            path += 'R';
+                        }
+                        break;
+                    case 'L':
+                        if (item.YNode > this.Y)
+                        {
+                            this.turnRight();
+                            this.moveForward(1);
+                            path += 'R';
+                        }
+                        else if (item.XNode < this.X)
+                        {
+                            this.moveForward(1);
+                        }
+                        else if (item.YNode < this.Y)
+                        {
+                            this.turnLeft();
+                            this.moveForward(1);
+                            path += 'L';
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                path += 'M';
+            }
+            return path;
+        }
     }
 }
