@@ -51,7 +51,13 @@ class Robot:
         "self.ShortestPath = Node[]"
         self.enteredGoal=False
         self.mapStr=''
-
+        self.reposFront = False
+        self.reposRight = False
+        self.reposLeft = False
+        self.resetError = False
+        self.isWall = False
+        self.threeObsHead = False
+        self.threeObs = False
     def turnLeft(self):
         if self.Dir=='U':
             self.Dir = 'L'
@@ -72,8 +78,6 @@ class Robot:
             self.lastDir = 'L' 
             turnedLeft = True
             
- 
-                
     def turnRight(self):  
         if self.Dir== 'U':
             self.Dir = 'R'
@@ -134,6 +138,7 @@ class Robot:
             
     def explore(self,ArStr):
         print "Current X= ", self.X, " Current Y = ", self.Y
+        print "Dir = ", self.Dir
         try:
             isBlockedLeft = self.checkLeftSide(ArStr)
             isBlockedFront = self.checkTopSide(ArStr)
@@ -142,17 +147,53 @@ class Robot:
                 self.enteredGoal = True
             if (self.X == 1 and self.Y == 1 and self.enteredGoal == True):
                 return 'F'
+            #repos front call
+            if(self.reposFront):
+                print "Realigning front"
+                self.isWall = False
+                self.reposLeft = False
+                self.reposRight = False
+                self.resetError = False
+                #in case there are some changes
+                self.generateMapStr();
+                self.printMemory()
+                return '5'
+            if(self.resetError):
+                print "Resetting error"
+                self.isWall = False
+                self.reposFront = False
+                self.reposLeft = False
+                self.reposRight = False
+                self.resetError = False
+                #in case there are some changes
+                self.generateMapStr();
+                self.printMemory()
+                return '7'
+            '''
+            if(self.reposFront):
+                self.isWall = False
+                self.reposFront = False
+                self.reposLeft = False
+                self.reposRight = False
+                self.resetError = False
+                #in case there are some changes
+                generateMapStr();
+                return '5'
+            '''
+            #for safety
+            if(self.isWall):
+                self.isWall = False
             if (not isBlockedRight and  not self.turnedRight):
                 print("Turn right")
                 self.turnRight()
                 self.generateMapStr()
-                print self.Dir
+                self.printMemory()
                 return "2"
             elif (not isBlockedFront):
                 print("Move Forward")
                 self.moveForward(1)
                 self.generateMapStr()
-                print self.Dir
+                self.printMemory()
                 self.turnedRight = False
                 return "1"
             elif (not isBlockedLeft):
@@ -160,13 +201,13 @@ class Robot:
                 self.turnedRight = False
                 self.turnLeft()
                 self.generateMapStr()
-                print self.Dir
+                self.printMemory()
                 return "3"
             else:
                 print("Turn around")
                 self.turnAround()
                 self.generateMapStr()
-                print self.Dir
+                self.printMemory()
                 self.turnedRight = False
                 return "4"
         except ValueError as e:
@@ -175,17 +216,29 @@ class Robot:
         print 
     
     def checkLeftSide(self, ArStr):
+        print "checking left side"
         isBlocked = False
+        memoryBlock = False
         if self.Dir == 'R':
-            isBlocked = self.checkTop()
+            memoryBlock = self.checkTop()
         if self.Dir == 'U':
-            isBlocked = self.checkLeft()
+            memoryBlock = self.checkLeft()
         if self.Dir == 'L':
-            isBlocked = self.checkBottom()
+            memoryBlock = self.checkBottom()
         if self.Dir == 'D':
-            isBlocked = self.checkRight()
+            memoryBlock = self.checkRight()
         #x = self.X - self.Range - 1
-        if(isBlocked):
+
+        #rarely used, called by arduino
+        if(memoryBlock and self.isWall):
+            self.reposLeft = True
+            self.isWall = False
+            return True
+        #rarely used
+        #dont update map for safety if robot return 0 but actually 1 for sure 
+        if(self.threeObs):
+            self.reposLeft = True
+            self.threeObs = False
             return True
         if (ArStr[0] == '1'):
             isBlocked = True
@@ -198,49 +251,96 @@ class Robot:
         return isBlocked
     
     def checkTopSide(self, ArStr):
+        print "checking top side"
         isBlocked = False
+        #try to repos
+        memoryBlock = False
         if self.Dir == 'R':
-            isBlocked = self.checkRight()
+            memoryBlock = self.checkRight()
         if self.Dir == 'U':
-            isBlocked = self.checkTop()
+            memoryBlock = self.checkTop()
         if self.Dir == 'L':
-            isBlocked = self.checkLeft()
+            memoryBlock = self.checkLeft()
         if self.Dir == 'D':
-            isBlocked = self.checkBottom()
-        if (isBlocked):
+            memoryBlock = self.checkBottom()
+        #put memoryBlock in condition for safety
+        if (memoryBlock and self.isWall):
+            if(self.reposFront):
+                self.reposFront = False
+            else:
+                print "require realign front when memory blocked or is wall"
+                self.reposFront = True
+            self.isWall = False
             return True
+        # three obstacles then dont care the readings
+        if(self.threeObs):
+            if(self.reposFront):
+                self.reposFront = False
+            else:
+                print "require realign front. Three obs in front"
+                self.reposFront = True
+            self.threeObs = False
+            return True
+        #all obstacles based on readings
+        allObj = False
         for i in range(1,4):
             if (ArStr[i]=='1'):
                 isBlocked = True
+                allObj = True
                 #explored and has obstacle 
                 self.updateMap(i, 1)
             else:
                 #empty 
+                allObj = False
                 self.updateMap(i, 2)
-        print "TOP", isBlocked
+        #detect 3 obstacles ahead, repos front
+        if(allObj):
+            if(self.reposFront):
+                self.reposFront = False
+            else:
+                self.reposFront = True
+        
+        print "TOP ", isBlocked
         return isBlocked
 
     def checkRightSide(self, ArStr):
+        print "checking right side"
         isBlocked = False
+        memoryBlock = False
         if self.Dir == 'R':
-            isBlocked = self.checkBottom()
+            memoryBlock = self.checkBottom()
         if self.Dir == 'U':
-            isBlocked = self.checkRight()
+            memoryBlock = self.checkRight()
         if self.Dir == 'L':
-            isBlocked = self.checkTop()
+            memoryBlock = self.checkTop()
         if self.Dir == 'D':
-            isBlocked = self.checkLeft()
-
-        if (isBlocked):
+            memoryBlock = self.checkLeft()
+        if(memoryBlock and self.isWall):
+            print 'hello'
+            self.reposRight = True
+            self.isWall = False
             return True
+        allObsSensor = False    
         for i in range(4,7):
             if (ArStr[i] == '1'):
                 isBlocked = True
-                #explored and has obstacle 
+                allObsSensor = True
+                #explored and has obstacle
+                if(self.threeObs):
+                    continue 
                 self.updateMap(i, 1)
             else:
                 #empty
+                allObsSensor = False
+                if(self.threeObs or i == 5):
+                    print 'i = 5 or 3 obs'
+                    continue
                 self.updateMap(i, 2)
+        # reset error when reading from robot conflict with the memory
+        if (allObsSensor == False and self.threeObs == True):
+            self.resetError = True
+            self.threeObs = False
+            print "check right side, readings not 3 obs but memory has 3 obs"
         print "RIGHT ", isBlocked
         return isBlocked
 
@@ -248,105 +348,171 @@ class Robot:
     def updateMap(self, pos, val):
         if(self.Dir == 'U'):
             if(pos == 0):
-                self.Memory.grid[self.X - 2][self.Y + 1] = val
+                self.Memory.grid[self.Y + 1][self.X -2] = val
             if(pos == 1):
-                self.Memory.grid[self.X - 1][self.Y + 2] = val
+                self.Memory.grid[self.Y + 2][self.X - 1] = val
             if(pos == 2):
-                self.Memory.grid[self.X][self.Y + 2] = val
+                self.Memory.grid[self.Y + 2][self.X] = val
             if(pos == 3):
-                self.Memory.grid[self.X + 1][self.Y + 2] = val
+                self.Memory.grid[self.Y + 2][self.X + 1] = val
             if(pos == 4):
-                self.Memory.grid[self.X + 2][self.Y + 1] = val
+                self.Memory.grid[self.Y + 1][self.X + 2] = val
             if(pos == 5):
-                self.Memory.grid[self.X + 2][self.Y] = val
+                self.Memory.grid[self.Y][self.X + 2] = val
             if(pos == 6):
-                self.Memory.grid[self.X + 2][self.Y - 1] = val
+                self.Memory.grid[self.Y-1][self.X + 2] = val
         elif(self.Dir == 'R'):
             if(pos == 0):
-                self.Memory.grid[self.X + 1][self.Y + 2] = val
+                self.Memory.grid[self.Y+2][self.X + 1] = val
             if(pos == 1):
-                self.Memory.grid[self.X + 2][self.Y + 1] = val
+                self.Memory.grid[self.Y+1][self.X + 2] = val
             if(pos == 2):
-                self.Memory.grid[self.X + 2][self.Y] = val
+                self.Memory.grid[self.Y][self.X+2] = val
             if(pos == 3):
-                self.Memory.grid[self.X + 2][self.Y - 1] = val
+                self.Memory.grid[self.Y-1][self.X +2] = val
             if(pos == 4):
-                self.Memory.grid[self.X + 1][self.Y - 2] = val
+                self.Memory.grid[self.Y-2][self.X+1] = val
             if(pos == 5):
-                self.Memory.grid[self.X][self.Y - 2] = val
+                self.Memory.grid[self.Y-2][self.X] = val
             if(pos == 6):
-                self.Memory.grid[self.X - 1][self.Y - 2] = val
+                self.Memory.grid[self.Y-2][self.X-1] = val
         elif(self.Dir == 'D'):
             if(pos == 0):
-                self.Memory.grid[self.X + 2][self.Y - 1] = val
+                self.Memory.grid[self.Y-1][self.X +2] = val
             if(pos == 1):
-                self.Memory.grid[self.X + 1][self.Y - 2] = val
+                self.Memory.grid[self.Y-2][self.X+1] = val
             if(pos == 2):
-                self.Memory.grid[self.X][self.Y - 2] = val
+                self.Memory.grid[self.Y-2][self.X] = val
             if(pos == 3):
-                self.Memory.grid[self.X - 1][self.Y - 2] = val
+                self.Memory.grid[self.Y-2][self.X-1] = val
             if(pos == 4):
-                self.Memory.grid[self.X - 2][self.Y - 1] = val
+                self.Memory.grid[self.Y-1][self.X- 2] = val
             if(pos == 5):
-                self.Memory.grid[self.X - 2][self.Y] = val
+                self.Memory.grid[self.Y][self.X-2] = val
             if(pos == 6):
-                self.Memory.grid[self.X - 2][self.Y + 1] = val
+                self.Memory.grid[self.Y+1][self.X -2] = val
         elif(self.Dir == 'L'):
             if(pos == 0):
-                self.Memory.grid[self.X - 1][self.Y - 2] = val
+                self.Memory.grid[self.Y-2][self.X - 1] = val
             if(pos == 1):
-                self.Memory.grid[self.X - 2][self.Y - 1] = val
+                self.Memory.grid[self.Y-1][self.X - 2] = val
             if(pos == 2):
-                self.Memory.grid[self.X - 2][self.Y] = val
+                self.Memory.grid[self.Y][self.X-2] = val
             if(pos == 3):
-                self.Memory.grid[self.X - 2][self.Y + 1] = val
+                self.Memory.grid[self.Y+1][self.X - 2] = val
             if(pos == 4):
-                self.Memory.grid[self.X - 1][self.Y + 2] = val
+                self.Memory.grid[self.Y+2][self.X - 1] = val
             if(pos == 5):
-                self.Memory.grid[self.X][self.Y + 2] = val
+                self.Memory.grid[self.Y+2][self.X] = val
             if(pos == 6):
-                self.Memory.grid[self.X + 1][self.Y + 2] = val
+                self.Memory.grid[self.Y+2][self.X + 1] = val
 
     def checkTop(self):
+        temp1 = False
+        temp2 = False
+        temp3 = False
+        isBlocked = False
         if(self.Y + self.Range + 1 >= self.Memory.height):
+            print "1"
+            self.threeObs = True
+            self.isWall = True
             return True
         if(self.Memory.grid[self.X -1][self.Y + 2] == 1):
-            return True
+            print "2"
+            isBlocked = True
+            temp1 = True
+        
         if(self.Memory.grid[self.X][self.Y + 2] == 1):
-            return True
+            print "3"
+            isBlocked = True
+            temp2 = True
+        
         if(self.Memory.grid[self.X + 1][self.Y + 2] == 1):
-            return True
-        return False
+            print "4" 
+            isBlocked = True
+            temp3 = True
+
+        #3 obstacles on top side
+        if(temp1 and temp2 and temp3):
+            self.threeObs = True
+        else:
+            self.threeObs = False
+        return isBlocked
+
     def checkLeft(self):
+        temp1 = False
+        temp2 = False
+        temp3 = False
+        isBlocked = False
         if(self.X - self.Range - 1 < 0):
+            self.isWall = True
+            self.threeObs = True
             return True
+        
         if(self.Memory.grid[self.X - 2][self.Y + 1] == 1):
-            return True
+            isBlocked = True
+            temp1 = True
+        
         if(self.Memory.grid[self.X - 2][self.Y] == 1):
-            return True
+            isBlocked = True
+            temp2 = True
+        
         if(self.Memory.grid[self.X - 2][self.Y -1 ] == 1):
-            return True
-        return False
+            isBlocked = True
+            temp3 = True
+
+        if(temp1 and temp2 and temp3):
+            self.threeObs = True
+        else:
+            self.threeObs = False
+        return isBlocked
     def checkRight(self):
+        isBlocked = False
+        temp1 = False
+        temp2 = False
+        temp3 = False
         if(self.X + self.Range + 1 >= self.Memory.width):
+            self.isWall = True
+            self.threeObs = True
             return True
         if(self.Memory.grid[self.X + 2][self.Y + 1] == 1):
-            return True
+            isBlocked = True
+            temp1 = True
         if(self.Memory.grid[self.X+2][self.Y] == 1):
-            return True
+            isBlocked = True
+            temp2 = True
         if(self.Memory.grid[self.X + 2][self.Y -1] == 1):
-            return True
-        return False
+            isBlocked = True
+            temp3 = True
+        if(temp1 and temp2 and temp3):
+            self.threeObs = True
+        else:
+            self.threeObs = False
+        return isBlocked
     def checkBottom(self):
-        if(self.Y - self.Range - 1 >= self.Memory.height):
+        temp1 = False
+        temp2 = False
+        temp3 = False
+        isBlocked = False
+        if(self.Y - self.Range - 1 < 0):
+            self.isWall = True
+            self.threeObs = True
             return True
+
         if(self.Memory.grid[self.X -1][self.Y - 2] == 1):
-            return True
+            isBlocked = True
+            temp1 = True
         if(self.Memory.grid[self.X][self.Y - 2] == 1):
-            return True
+            isBlocked = True
+            temp2 = True
         if(self.Memory.grid[self.X + 1][self.Y - 2] == 1):
-            return True
-        return False
+            isBlocked = True
+            temp3 = True
+        if(temp1 and temp2 and temp3):
+            self.threeObs = True
+        else:
+            self.threeObs = False
+        return isBlocked
 
     def generateMapStr(self):
         # first 5 characters: direction + current center position
@@ -363,7 +529,7 @@ class Robot:
         # iterate the map to add value to mapStr
         for i in range (20):
             for j in range (15):
-                self.mapStr += str(self.Memory.grid[j][i])
+                self.mapStr += str(self.Memory.grid[i][j])
         if (self.X == 1 and self.Y == 1 and self.enteredGoal):
             self.mapStr += 'F'
         
@@ -376,3 +542,9 @@ class Robot:
             return '3'
         else:
             return
+
+    def printMemory(self):
+        for i in range(20):
+            for j in range (15):
+                print self.Memory.grid[19-i][j], ' ',
+            print 
