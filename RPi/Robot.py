@@ -169,6 +169,8 @@ class Robot:
         if self.Dir == 'D':
             isBlocked = self.checkRight()
         #x = self.X - self.Range - 1
+        if(isBlocked):
+            return True
         if (ArStr[0] == '1'):
             isBlocked = True
             #explored and has obstacle
@@ -189,6 +191,8 @@ class Robot:
             isBlocked = self.checkLeft()
         if self.Dir == 'D':
             isBlocked = self.checkBottom()
+        if(isBlocked):
+            return True
         for i in range(1,4):
             if (ArStr[i]=='1'):
                 isBlocked = True
@@ -210,6 +214,8 @@ class Robot:
             isBlocked = self.checkTop()
         if self.Dir == 'D':
             isBlocked = self.checkLeft()
+        if(isBlocked):
+            return True
         for i in range(4,7):
             if (ArStr[i] == '1'):
                 isBlocked = True
@@ -324,6 +330,4 @@ class Robot:
         if(self.Memory.grid[self.X + 1][self.Y - 2] == 1):
             return True
         return False
-
-    def computeFastestPath(self):
-        
+    
