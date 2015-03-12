@@ -30,6 +30,7 @@ class Robot:
         "self.ShortestPath = Node[]"
         self.enteredGoal=False
         self.mapStr = ''
+        self.androidMapStr=''
 
     def __init__(self, x, y, r, d):
         self.X = x
@@ -51,6 +52,7 @@ class Robot:
         "self.ShortestPath = Node[]"
         self.enteredGoal=False
         self.mapStr=''
+        self.androidMapStr=''
 
     def turnLeft(self):
         if self.Dir=='U':
@@ -366,12 +368,53 @@ class Robot:
         if (self.X == 1 and self.Y == 1 and self.enteredGoal):
             self.mapStr += 'F'
         
+    def generateAndroidMapStr(self):
+        # first 9 characters: GRID + direction + current center position
+        if (self.X < 9):
+            x = '0'+ str(self.X+1)
+        else:
+            x = str(self.X+1)
+        if (self.Y < 9):
+            y = '0'+ str(self.Y+1)
+        else:
+            y = str(self.Y+1) 
+        self.androidMapStr = 'GRID' + self.Dir + x + y
+        
+        # iterate the map to add value to androidMapStr
+        for i in range (15):
+            for j in range (20):
+                self.androidMapStr += str(self.Memory.grid[i][j])
+        if (self.X == 1 and self.Y == 1 and self.enteredGoal):
+            self.androidMapStr += 'F'
+        else:
+            self.androidMapStr += 'P'
+        
     def startZoneRealign(self):
         if self.Dir == 'D':
+            self.turnAround()
             return '4'
         elif self.Dir == 'L':
+            self.turnRight()
             return '2'
         elif self.Dir == 'R':
+            self.turnLeft()
             return '3'
         else:
             return
+        
+          
+    def fastestPathDecoder(self, pcStr):
+        pathCommand = ''
+        for i in range (len(pcStr)):
+            if pcStr[i] == 'M':
+                pathCommand += '1'
+            elif pcStr[i] == 'R':
+                pathCommand += '2'
+            elif pcStr[i] == 'L':
+                pathCommand += '3'
+        return pathCommand
+    
+    #not done
+    def fastestRun(self, i, arStr):
+            
+        return pathCommand[i]

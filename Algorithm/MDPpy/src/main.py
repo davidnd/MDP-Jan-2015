@@ -37,7 +37,12 @@ print ArStr
 print robot.explore(ArStr)
 
 print "finish"
-'''
+
 while True:
 	ArStr = raw_input("Next sensor data: ")
 	robot.explore(ArStr)
+'''
+robot.generateMapStr()
+print robot.mapStr
+robot.generateAndroidMapStr()
+print robot.androidMapStr
