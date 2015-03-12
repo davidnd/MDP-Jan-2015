@@ -157,6 +157,7 @@ class Robot:
                 self.resetError = False
                 #in case there are some changes
                 self.generateMapStr();
+                self.generateAndroidMapStr()
                 self.printMemory()
                 return '5'
             if(self.resetError):
@@ -168,6 +169,7 @@ class Robot:
                 self.resetError = False
                 #in case there are some changes
                 self.generateMapStr();
+                self.generateAndroidMapStr()
                 self.printMemory()
                 return '7'
             '''
@@ -188,12 +190,14 @@ class Robot:
                 print("Turn right")
                 self.turnRight()
                 self.generateMapStr()
+                self.generateAndroidMapStr()
                 self.printMemory()
                 return "2"
             elif (not isBlockedFront):
                 print("Move Forward")
                 self.moveForward(1)
                 self.generateMapStr()
+                self.generateAndroidMapStr()
                 self.printMemory()
                 self.turnedRight = False
                 return "1"
@@ -202,12 +206,14 @@ class Robot:
                 self.turnedRight = False
                 self.turnLeft()
                 self.generateMapStr()
+                self.generateAndroidMapStr()
                 self.printMemory()
                 return "3"
             else:
                 print("Turn around")
                 self.turnAround()
                 self.generateMapStr()
+                self.generateAndroidMapStr()
                 self.printMemory()
                 self.turnedRight = False
                 return "4"
@@ -249,6 +255,8 @@ class Robot:
             #empty cell
             self.updateMap(0, 2)
         print "Left", isBlocked
+        if(memoryBlock):
+            return True
         return isBlocked
     
     def checkTopSide(self, ArStr):
@@ -302,6 +310,8 @@ class Robot:
                 self.reposFront = True
         
         print "TOP ", isBlocked
+        if(memoryBlock):
+            return True
         return isBlocked
 
     def checkRightSide(self, ArStr):
@@ -343,6 +353,8 @@ class Robot:
             self.threeObs = False
             print "check right side, readings not 3 obs but memory has 3 obs"
         print "RIGHT ", isBlocked
+        if(memoryBlock):
+            return True
         return isBlocked
 
     #not done
@@ -418,17 +430,17 @@ class Robot:
             self.threeObs = True
             self.isWall = True
             return True
-        if(self.Memory.grid[self.X -1][self.Y + 2] == 1):
+        if(self.Memory.grid[self.Y + 2][self.X -1] == 1):
             print "2"
             isBlocked = True
             temp1 = True
         
-        if(self.Memory.grid[self.X][self.Y + 2] == 1):
+        if(self.Memory.grid[self.Y + 2][self.X] == 1):
             print "3"
             isBlocked = True
             temp2 = True
         
-        if(self.Memory.grid[self.X + 1][self.Y + 2] == 1):
+        if(self.Memory.grid[self.Y + 2][self.X + 1]== 1):
             print "4" 
             isBlocked = True
             temp3 = True
@@ -450,15 +462,15 @@ class Robot:
             self.threeObs = True
             return True
         
-        if(self.Memory.grid[self.X - 2][self.Y + 1] == 1):
+        if(self.Memory.grid[self.Y + 1][self.X - 2] == 1):
             isBlocked = True
             temp1 = True
         
-        if(self.Memory.grid[self.X - 2][self.Y] == 1):
+        if(self.Memory.grid[self.Y][self.X - 2] == 1):
             isBlocked = True
             temp2 = True
         
-        if(self.Memory.grid[self.X - 2][self.Y -1 ] == 1):
+        if(self.Memory.grid[self.Y -1 ][self.X - 2]== 1):
             isBlocked = True
             temp3 = True
 
@@ -476,13 +488,13 @@ class Robot:
             self.isWall = True
             self.threeObs = True
             return True
-        if(self.Memory.grid[self.X + 2][self.Y + 1] == 1):
+        if(self.Memory.grid[self.Y + 1][self.X + 2] == 1):
             isBlocked = True
             temp1 = True
-        if(self.Memory.grid[self.X+2][self.Y] == 1):
+        if(self.Memory.grid[self.Y][self.X+2] == 1):
             isBlocked = True
             temp2 = True
-        if(self.Memory.grid[self.X + 2][self.Y -1] == 1):
+        if(self.Memory.grid[self.Y -1][self.X + 2] == 1):
             isBlocked = True
             temp3 = True
         if(temp1 and temp2 and temp3):
@@ -500,13 +512,13 @@ class Robot:
             self.threeObs = True
             return True
 
-        if(self.Memory.grid[self.X -1][self.Y - 2] == 1):
+        if(self.Memory.grid[self.Y-2][self.X - 1] == 1):
             isBlocked = True
             temp1 = True
-        if(self.Memory.grid[self.X][self.Y - 2] == 1):
+        if(self.Memory.grid[self.Y - 2][self.X] == 1):
             isBlocked = True
             temp2 = True
-        if(self.Memory.grid[self.X + 1][self.Y - 2] == 1):
+        if(self.Memory.grid[self.Y - 2][self.X + 1]== 1):
             isBlocked = True
             temp3 = True
         if(temp1 and temp2 and temp3):
@@ -549,7 +561,7 @@ class Robot:
         # iterate the map to add value to androidMapStr
         for i in range (15):
             for j in range (20):
-                self.androidMapStr += str(self.Memory.grid[i][j])
+                self.androidMapStr += str(self.Memory.grid[j][i])
         if (self.X == 1 and self.Y == 1 and self.enteredGoal):
             self.androidMapStr += 'F'
         else:
