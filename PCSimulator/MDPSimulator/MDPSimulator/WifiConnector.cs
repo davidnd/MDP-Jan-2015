@@ -60,7 +60,6 @@ namespace MDPSimulator
             }
             else
             {
-                send("Hey there");
                 return true;
             }
         }
