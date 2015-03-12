@@ -28,6 +28,8 @@ class Robot:
         self.StartNode = Node(self.XStart, self.YStart)
         self.GoalNode = Node(self.XGoal, self.YGoal)
         "self.ShortestPath = Node[]"
+        self.enteredGoal=False
+        self.mapStr = ''
 
     def __init__(self, x, y, r, d):
         self.X = x
@@ -47,6 +49,8 @@ class Robot:
         self.StartNode = Node(self.XStart, self.YStart)
         self.GoalNode = Node(self.XGoal, self.YGoal)
         "self.ShortestPath = Node[]"
+        self.enteredGoal=False
+        self.mapStr=''
 
     def turnLeft(self):
         if self.Dir=='U':
@@ -134,23 +138,35 @@ class Robot:
             isBlockedLeft = self.checkLeftSide(ArStr)
             isBlockedFront = self.checkTopSide(ArStr)
             isBlockedRight = self.checkRightSide(ArStr)
+            if ((self.X == 12 or self.X==13 )and (self.Y==17 or self.Y==18)):
+                self.enteredGoal = True
+            if (self.X == 1 and self.Y == 1 and self.enteredGoal == True):
+                return 'F'
             if (not isBlockedRight and  not self.turnedRight):
                 print("Turn right")
                 self.turnRight()
+                self.generateMapStr()
+                print self.Dir
                 return "2"
             elif (not isBlockedFront):
                 print("Move Forward")
                 self.moveForward(1)
+                self.generateMapStr()
+                print self.Dir
                 self.turnedRight = False
                 return "1"
             elif (not isBlockedLeft):
                 print("turn left")
                 self.turnedRight = False
                 self.turnLeft()
+                self.generateMapStr()
+                print self.Dir
                 return "3"
             else:
                 print("Turn around")
                 self.turnAround()
+                self.generateMapStr()
+                print self.Dir
                 self.turnedRight = False
                 return "4"
         except ValueError as e:
@@ -191,7 +207,7 @@ class Robot:
             isBlocked = self.checkLeft()
         if self.Dir == 'D':
             isBlocked = self.checkBottom()
-        if(isBlocked):
+        if (isBlocked):
             return True
         for i in range(1,4):
             if (ArStr[i]=='1'):
@@ -214,7 +230,8 @@ class Robot:
             isBlocked = self.checkTop()
         if self.Dir == 'D':
             isBlocked = self.checkLeft()
-        if(isBlocked):
+
+        if (isBlocked):
             return True
         for i in range(4,7):
             if (ArStr[i] == '1'):
@@ -330,4 +347,32 @@ class Robot:
         if(self.Memory.grid[self.X + 1][self.Y - 2] == 1):
             return True
         return False
-    
+
+    def generateMapStr(self):
+        # first 5 characters: direction + current center position
+        if (self.X < 10):
+            x = '0'+ str(self.X)
+        else:
+            x = str(self.X)
+        if (self.Y < 10):
+            y = '0'+ str(self.Y)
+        else:
+            y = str(self.Y) 
+        self.mapStr = self.Dir + x + y
+        
+        # iterate the map to add value to mapStr
+        for i in range (20):
+            for j in range (15):
+                self.mapStr += str(self.Memory.grid[j][i])
+        if (self.X == 1 and self.Y == 1 and self.enteredGoal):
+            self.mapStr += 'F'
+        
+    def startZoneRealign(self):
+        if self.Dir == 'D':
+            return '4'
+        elif self.Dir == 'L':
+            return '2'
+        elif self.Dir == 'R':
+            return '3'
+        else:
+            return
