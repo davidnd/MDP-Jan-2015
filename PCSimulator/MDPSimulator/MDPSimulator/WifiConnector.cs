@@ -104,7 +104,8 @@ namespace MDPSimulator
                 if (desc[desc.Length - 1] == 'F')
                 {
                     Robot robot = new Robot();
-                    this.shortestPath = robot.realTimeShortestPath(desc);
+                    this.shortestPath = "A";
+                    this.shortestPath += robot.realTimeShortestPath(desc);
                     send(this.shortestPath);
                 }
             }

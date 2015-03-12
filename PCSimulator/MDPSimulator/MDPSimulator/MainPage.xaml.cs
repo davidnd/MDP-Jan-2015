@@ -35,6 +35,7 @@ namespace MDPSimulator.View
         private bool isConnected;
         private WifiConnector Connector {set; get; }
         Thread mappingThread;
+        Robot realTimeRobot;
         public MainPage()
         {
             InitializeComponent();
@@ -49,6 +50,7 @@ namespace MDPSimulator.View
             this.Connector.UpdatingConsoleHandler += new WifiConnector.UpdatingInfo(displayRobotMessage);
             this.Connector.UpdatingConnectionHandler += new WifiConnector.UpdatingConnectionStatus(this.updateConnectionStatus);
             this.mappingThread = new Thread(this.Connector.run);
+            
         }
         private void setUpMap()
         {
@@ -302,19 +304,53 @@ namespace MDPSimulator.View
 
         private void connectButton_Click(object sender, RoutedEventArgs e)
         {
-            
-            
-            mappingThread.Start();
-            
+            this.realTimeRobot = new Robot();
+            this.realTimeRobot.ChangePosition += new Robot.RobotMovingHandler(updateRobotPosition);
+            this.realTimeRobot.SendingMessage += new Robot.RobotSendingMessage(displayRobotMessage);
+            this.simulator = new Simulator();
+            this.simulator.Robot = this.realTimeRobot;
+            mappingThread.Start();   
         }
 
         private void updateRealTime(string s)
         {
             Application.Current.Dispatcher.BeginInvoke(
                 System.Windows.Threading.DispatcherPriority.Background,
-                new Action(delegate { displayConsoleMessage(s); }));
+                new Action(delegate { updateRealTimeMap(s); }));
         }
+        private void updateRealTimeMap(string s)
+        {
+            int x, y;
+            bool result = Int32.TryParse(s.Substring(1,3), out x);
+            if (!result)
+                Console.WriteLine("String could not be parsed.");
+            result = Int32.TryParse(s.Substring(3, 5), out y);
+            if (!result)    
+                Console.WriteLine("String could not be parsed.");
+            Console.WriteLine("X = {0}, Y = {1}", x, y);
+            int[,] data = new int[20, 15];
+            int pointer = 5;
+            try
+            {
+                for (int i = 0; i < 20; i++)
+                {
+                    for (int j = 0; j < 15; j++)
+                    {
+                        data[i, j] = (int)Char.GetNumericValue(s[pointer++]);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("The map size may not be 300 chars");
+            }
 
+            Map memory = new Map(data);
+            this.realTimeRobot.Memory = memory;
+            this.realTimeRobot.X = x;
+            this.realTimeRobot.Y = y;
+
+        }
         private void exportButton_Click(object sender, RoutedEventArgs e)
         {
             Map finalMap = null;

@@ -15,6 +15,10 @@ namespace MDPModel
             this.Robot = new Robot(1, 1, 1,'U');
             this.Map = new Map();
         }
+        public Simulator(Robot r)
+        {
+            this.Robot = r;
+        }
         public Simulator(Robot r, Map m)
         {
             this.Robot = r;
