@@ -94,12 +94,13 @@ namespace MDPSimulator
         public void listen()
         {
             NetworkStream nw = clientSocket.GetStream();
-            clientSocket.ReceiveBufferSize = 38;
+            clientSocket.ReceiveBufferSize = 400;
             while (true)
             {
                 byte[] data = new byte[clientSocket.ReceiveBufferSize];
                 int bytesRead = nw.Read(data, 0, clientSocket.ReceiveBufferSize);
                 string desc = Encoding.ASCII.GetString(data, 0, bytesRead);
+                Console.WriteLine("receiving: " + desc);
                 OnReceivingData(desc);
                 if (desc[desc.Length - 1] == 'F')
                 {

@@ -321,13 +321,14 @@ namespace MDPSimulator.View
         private void updateRealTimeMap(string s)
         {
             int x, y;
-            bool result = Int32.TryParse(s.Substring(1,3), out x);
+            bool result = Int32.TryParse(s.Substring(1,2), out x);
             if (!result)
                 Console.WriteLine("String could not be parsed.");
-            result = Int32.TryParse(s.Substring(3, 5), out y);
+            result = Int32.TryParse(s.Substring(3, 2), out y);
             if (!result)    
                 Console.WriteLine("String could not be parsed.");
             Console.WriteLine("X = {0}, Y = {1}", x, y);
+            Console.WriteLine("String size: " + s.Length);
             int[,] data = new int[20, 15];
             int pointer = 5;
             try
@@ -346,6 +347,7 @@ namespace MDPSimulator.View
             }
 
             Map memory = new Map(data);
+            memory.print();
             this.realTimeRobot.Memory = memory;
             this.realTimeRobot.X = x;
             this.realTimeRobot.Y = y;
