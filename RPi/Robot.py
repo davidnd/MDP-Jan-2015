@@ -59,6 +59,7 @@ class Robot:
         self.threeObsHead = False
         self.threeObs = False
         self.androidMapStr=''
+        self.pathCommand = ''
     def turnLeft(self):
         if self.Dir=='U':
             self.Dir = 'L'
@@ -586,14 +587,12 @@ class Robot:
                 print self.Memory.grid[19-i][j], ' ',
             print 
     def fastestPathDecoder(self, pcStr):
-        pathCommand = ''
         for i in range (len(pcStr)):
             if pcStr[i] == 'M':
-                pathCommand += '1'
+                self.pathCommand += '1'
             elif pcStr[i] == 'R':
-                pathCommand += '2'
+                self.pathCommand += '2'
             elif pcStr[i] == 'L':
-                pathCommand += '3'
-        return pathCommand
+                self.pathCommand += '3'
     def fastestRun(self, i, arStr):
        return pathCommand[i]
