@@ -351,6 +351,13 @@ namespace MDPSimulator.View
             this.realTimeRobot.Memory = memory;
             this.realTimeRobot.X = x;
             this.realTimeRobot.Y = y;
+            bool saved = this.realTimeRobot.Memory.saveToHardDrive("E:/Git/MDP-Jan-2015/PCSimulator/MDPSimulator/");
+            if (saved)
+            {
+                displayConsoleMessage("Map descriptor exported successfully!");
+            }
+            else
+                displayConsoleMessage("Failed to export map descriptor!");
 
         }
         private void exportButton_Click(object sender, RoutedEventArgs e)
