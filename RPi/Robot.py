@@ -557,7 +557,7 @@ class Robot:
             y = '0'+ str(self.Y+1)
         else:
             y = str(self.Y+1) 
-        self.androidMapStr = 'GRID' + self.Dir + x + y
+        self.androidMapStr = 'GRID' + self.Dir + y + x
         
         # iterate the map to add value to androidMapStr
         for i in range (15):
