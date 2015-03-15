@@ -60,6 +60,8 @@ class Robot:
         self.threeObs = False
         self.androidMapStr=''
         self.pathCommand = ''
+        self.lastCorner = 0
+        self.justRF = False
     def turnLeft(self):
         if self.Dir=='U':
             self.Dir = 'L'
@@ -113,9 +115,6 @@ class Robot:
             
         elif self.Dir== 'L':
             self.X-=dis
-            
- 
-
 
     def turnAround(self):
         if self.Dir == 'U':
@@ -148,51 +147,63 @@ class Robot:
             if ((self.X == 12 or self.X==13 )and (self.Y==17 or self.Y==18)):
                 self.enteredGoal = True
             if (self.X == 1 and self.Y == 1 and self.enteredGoal == True):
+                self.generateMapStr()
+                self.generateAndroidMapStr()
                 return 'F'
             #repos front call
-            if(self.reposFront):
-                print "Realigning front"
-                self.isWall = False
-                self.reposLeft = False
-                self.reposRight = False
-                self.resetError = False
+            print 'ReposFront \t\t\t', self.reposFront
+            print 'ReposRight \t\t\t', self.reposRight
+            print 'ReposLeft \t\t\t', self.reposLeft
+            if(self.reposFront and self.reposRight and self.lastCorner == 0):
+                print 'Reseting error...'
+                self.lastCorner = 1
+                self.generateMapStr()
+                self.generateAndroidMapStr()
+                self.printMemory()
+                self.reset()
+                return '7'
+            if(self.lastCorner == 1):
+                print 'Realigning front...'
+                self.lastCorner = 2
+                self.printMemory()
+                self.reset()
+                return '5'
+            if(self.lastCorner == 2):
+                print 'Turn left'
+                self.lastCorner = 0
+                self.turnLeft()
+                self.printMemory()
+                self.reset()
+                return '3'
+            if(self.reposFront and not self.justRF):
+                print "Realigning front, not at corner... "
+                self.justRF = True
+                self.reset()
                 #in case there are some changes
                 self.generateMapStr();
                 self.generateAndroidMapStr()
                 self.printMemory()
                 return '5'
+            else:
+                self.justRF = False
+
+            # not using for now
             if(self.resetError):
-                print "Resetting error"
-                self.isWall = False
-                self.reposFront = False
-                self.reposLeft = False
-                self.reposRight = False
-                self.resetError = False
+                print "Resetting error, not at corner..."
+                self.reset()
                 #in case there are some changes
                 self.generateMapStr();
                 self.generateAndroidMapStr()
                 self.printMemory()
                 return '7'
-            '''
-            if(self.reposFront):
-                self.isWall = False
-                self.reposFront = False
-                self.reposLeft = False
-                self.reposRight = False
-                self.resetError = False
-                #in case there are some changes
-                generateMapStr();
-                return '5'
-            '''
-            #for safety
-            if(self.isWall):
-                self.isWall = False
+
             if (not isBlockedRight and  not self.turnedRight):
                 print("Turn right")
                 self.turnRight()
                 self.generateMapStr()
                 self.generateAndroidMapStr()
                 self.printMemory()
+                self.reset()
                 return "2"
             elif (not isBlockedFront):
                 print("Move Forward")
@@ -201,164 +212,119 @@ class Robot:
                 self.generateAndroidMapStr()
                 self.printMemory()
                 self.turnedRight = False
+                self.reset()
                 return "1"
             elif (not isBlockedLeft):
-                print("turn left")
+                print("Turn left")
                 self.turnedRight = False
                 self.turnLeft()
                 self.generateMapStr()
                 self.generateAndroidMapStr()
                 self.printMemory()
+                self.reset()
                 return "3"
             else:
-                print("Turn around")
-                self.turnAround()
+                # should turn left here in case it detects wrong obs
+                print("Turn left")
+                self.turnLeft()
                 self.generateMapStr()
                 self.generateAndroidMapStr()
                 self.printMemory()
+                self.reset()
                 self.turnedRight = False
-                return "4"
+                return "3"
         except ValueError as e:
             print(e.Message)
             print(e)
         print 
+    def reset(self):
+        self.isWall = False
+        self.threeObs = False
+        self.reposFront = False
+        self.reposLeft = False
+        self.reposRight = False
+        self.resetError = False
     
     def checkLeftSide(self, ArStr):
         print "checking left side"
-        isBlocked = False
-        memoryBlock = False
-        if self.Dir == 'R':
-            memoryBlock = self.checkTop()
-        if self.Dir == 'U':
-            memoryBlock = self.checkLeft()
-        if self.Dir == 'L':
-            memoryBlock = self.checkBottom()
-        if self.Dir == 'D':
-            memoryBlock = self.checkRight()
-        #x = self.X - self.Range - 1
-
-        #rarely used, called by arduino
-        if(memoryBlock and self.isWall):
-            self.reposLeft = True
-            self.isWall = False
-            return True
-        #rarely used
-        #dont update map for safety if robot return 0 but actually 1 for sure 
-        if(self.threeObs):
-            self.reposLeft = True
-            self.threeObs = False
-            return True
-        if (ArStr[0] == '1'):
-            isBlocked = True
-            #explored and has obstacle
+        if(ArStr[0] == '1'):
             self.updateMap(0, 1)
         else:
-            #empty cell
             self.updateMap(0, 2)
-        print "Left", isBlocked
-        if(memoryBlock):
+
+        isBlocked = False
+        if self.Dir == 'R':
+            isBlocked = self.checkTop()
+        if self.Dir == 'U':
+            isBlocked = self.checkLeft()
+        if self.Dir == 'L':
+            isBlocked = self.checkBottom()
+        if self.Dir == 'D':
+            isBlocked = self.checkRight()
+
+        if(self.isWall or self.threeObs):
+            self.reposLeft = True
+            isBlocked = True
+        self.isWall = False
+        self.threeObs = False
+        print "LEFT \t\t\t", isBlocked
+        if(isBlocked):
             return True
         return isBlocked
     
     def checkTopSide(self, ArStr):
         print "checking top side"
-        isBlocked = False
-        #try to repos
-        memoryBlock = False
-        if self.Dir == 'R':
-            memoryBlock = self.checkRight()
-        if self.Dir == 'U':
-            memoryBlock = self.checkTop()
-        if self.Dir == 'L':
-            memoryBlock = self.checkLeft()
-        if self.Dir == 'D':
-            memoryBlock = self.checkBottom()
-        #put memoryBlock in condition for safety
-        if (memoryBlock and self.isWall):
-            if(self.reposFront):
-                self.reposFront = False
-            else:
-                print "require realign front when memory blocked or is wall"
-                self.reposFront = True
-            self.isWall = False
-            return True
-        # three obstacles then dont care the readings
-        if(self.threeObs):
-            if(self.reposFront):
-                self.reposFront = False
-            else:
-                print "require realign front. Three obs in front"
-                self.reposFront = True
-            self.threeObs = False
-            return True
-        #all obstacles based on readings
-        allObj = False
         for i in range(1,4):
             if (ArStr[i]=='1'):
-                isBlocked = True
-                allObj = True
-                #explored and has obstacle 
                 self.updateMap(i, 1)
             else:
-                #empty 
-                allObj = False
                 self.updateMap(i, 2)
-        #detect 3 obstacles ahead, repos front
-        if(allObj):
-            if(self.reposFront):
-                self.reposFront = False
-            else:
-                self.reposFront = True
         
-        print "TOP ", isBlocked
-        if(memoryBlock):
-            return True
+        isBlocked = False
+        if self.Dir == 'R':
+            isBlocked = self.checkRight()
+        if self.Dir == 'U':
+            isBlocked = self.checkTop()
+        if self.Dir == 'L':
+            isBlocked = self.checkLeft()
+        if self.Dir == 'D':
+            isBlocked = self.checkBottom()
+        if (self.isWall or self.threeObs):
+            print 'setting repost front true'
+            self.reposFront = True
+
+        self.isWall = False
+        self.threeObs = False        
+        print "TOP \t\t\t", isBlocked
         return isBlocked
 
     def checkRightSide(self, ArStr):
         print "checking right side"
+        if(ArStr[4] == '1'):
+            self.updateMap(4, 1)
+        else:
+            self.updateMap(4, 2)
+        if(ArStr[6] == '1'):
+            self.updateMap(6, 1)
+        else:
+            self.updateMap(6, 2)
         isBlocked = False
-        memoryBlock = False
         if self.Dir == 'R':
-            memoryBlock = self.checkBottom()
+            isBlocked = self.checkBottom()
         if self.Dir == 'U':
-            memoryBlock = self.checkRight()
+            isBlocked = self.checkRight()
         if self.Dir == 'L':
-            memoryBlock = self.checkTop()
+            isBlocked = self.checkTop()
         if self.Dir == 'D':
-            memoryBlock = self.checkLeft()
-        if(memoryBlock and self.isWall):
-            print 'hello'
+            isBlocked = self.checkLeft()
+        if(self.isWall or self.threeObs):
             self.reposRight = True
-            self.isWall = False
-            return True
-        allObsSensor = False    
-        for i in range(4,7):
-            if (ArStr[i] == '1'):
-                isBlocked = True
-                allObsSensor = True
-                #explored and has obstacle
-                if(self.threeObs):
-                    continue 
-                self.updateMap(i, 1)
-            else:
-                #empty
-                allObsSensor = False
-                if(self.threeObs or i == 5):
-                    print 'i = 5 or 3 obs'
-                    continue
-                self.updateMap(i, 2)
-        # reset error when reading from robot conflict with the memory
-        if (allObsSensor == False and self.threeObs == True):
-            self.resetError = True
-            self.threeObs = False
-            print "check right side, readings not 3 obs but memory has 3 obs"
-        print "RIGHT ", isBlocked
-        if(memoryBlock):
-            return True
+        self.isWall = False
+        self.threeObs = False
+
+        print "RIGHT \t\t\t", isBlocked
         return isBlocked
 
-    #not done
     def updateMap(self, pos, val):
         if(self.Dir == 'U'):
             if(pos == 0):
@@ -426,23 +392,20 @@ class Robot:
         temp2 = False
         temp3 = False
         isBlocked = False
+        # wall
         if(self.Y + self.Range + 1 >= self.Memory.height):
-            print "1"
             self.threeObs = True
             self.isWall = True
             return True
         if(self.Memory.grid[self.Y + 2][self.X -1] == 1):
-            print "2"
             isBlocked = True
             temp1 = True
         
         if(self.Memory.grid[self.Y + 2][self.X] == 1):
-            print "3"
             isBlocked = True
             temp2 = True
         
         if(self.Memory.grid[self.Y + 2][self.X + 1]== 1):
-            print "4" 
             isBlocked = True
             temp3 = True
 
@@ -458,6 +421,7 @@ class Robot:
         temp2 = False
         temp3 = False
         isBlocked = False
+        # wall
         if(self.X - self.Range - 1 < 0):
             self.isWall = True
             self.threeObs = True
@@ -618,6 +582,9 @@ class Robot:
     def printMemory(self):
         for i in range(20):
             for j in range (15):
-                print self.Memory.grid[19-i][j], ' ',
+                if(self.X == j and self.Y == 19-i):
+                    print 'X', ' ',
+                else:
+                    print self.Memory.grid[19-i][j], ' ',
             print 
 
