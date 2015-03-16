@@ -13,6 +13,8 @@ namespace MDPModel
 {
     public class Robot
     {
+        private volatile bool _shouldStop;
+        private bool shortestPathComputed;
         public delegate void RobotMovingHandler(int x, int y);
         public delegate void RobotSendingMessage(string s);
         public event RobotMovingHandler ChangePosition;
@@ -20,7 +22,7 @@ namespace MDPModel
         public double CurrentCoverage { get; set; }
         private int x, y;
         public bool isExplored = false;
-        public Node StartNode {get; set;}
+        public Node StartNode { get; set; }
         public Node GoalNode { get; set; }
         public DFSNode StartDFSNode { get; set; }
         public DFSNode GoalDFSNode { get; set; }
@@ -30,25 +32,26 @@ namespace MDPModel
         public int YGoal { get; set; }
         public List<Node> ShortestPath { get; set; }
         public int X
-        {   get{return x;}
+        {
+            get { return x; }
             set
             {
                 x = value;
                 OnPositionChanged();
             }
         }
-        public Stack stack{get;set;}
-        public List<DFSNode> DFSNodes{get;set;}
-        public int Y 
-        { 
-            get {return this.y;} 
+        public Stack stack { get; set; }
+        public List<DFSNode> DFSNodes { get; set; }
+        public int Y
+        {
+            get { return this.y; }
             set
             {
                 this.y = value;
                 OnPositionChanged();
-            } 
+            }
         }
-        public int Dir{ get;set; }
+        public int Dir { get; set; }
 
         public int Range { get; set; }
 
@@ -144,16 +147,16 @@ namespace MDPModel
             switch (this.Dir)
             {
                 case 'U':
-                    this.Y+=dis;
+                    this.Y += dis;
                     break;
                 case 'D':
-                    this.Y-=dis;
+                    this.Y -= dis;
                     break;
                 case 'R':
                     this.X++;
                     break;
                 case 'L':
-                    this.X-=dis;
+                    this.X -= dis;
                     break;
                 default:
                     break;
@@ -203,48 +206,52 @@ namespace MDPModel
             }
         }
 
-        public void simulateExplore()
+        public void wallfollowerExplore()
         {
             bool isBlockedLeft, isBlockedRight, isBlockedFront;
             //turnRight();
             bool moved = false;
-            try
+            while (!_shouldStop)
             {
-                do
+                try
                 {
-                    computeCoverage();
-                    OnSendingMessage("Current X = "+this.X + " Y = " + this.Y);
-                    isBlockedFront = scanFront();
-                    isBlockedLeft = scanLeft();
-                    isBlockedRight = scanRight();
-                    if (!isBlockedRight)
+                    do
                     {
-                        Console.WriteLine("Turn right");
-                        turnRight();
-                    }
-                    else if (!isBlockedFront)
-                    {
-                        Console.WriteLine("Move");
-                        moved = true;
-                    }
-                    else if (!isBlockedLeft)
-                    {
-                        Console.WriteLine("Turn left");
-                        turnLeft();
-                    }
-                    else
-                    {
-                        Console.WriteLine("Turn around");
-                        turnAround();
-                    }
-                    Thread.Sleep(1000 / UserSetting.Speed);
-                    moveForward(1);                    
-                } while ((this.X != 1 || this.Y != 1) || !moved);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                Console.WriteLine(e);
+                        computeCoverage();
+                        OnSendingMessage("Current X = " + this.X + " Y = " + this.Y);
+                        isBlockedFront = scanFront();
+                        isBlockedLeft = scanLeft();
+                        isBlockedRight = scanRight();
+                        if (!isBlockedRight)
+                        {
+                            Console.WriteLine("Turn right");
+                            turnRight();
+                        }
+                        else if (!isBlockedFront)
+                        {
+                            Console.WriteLine("Move");
+                            moved = true;
+                        }
+                        else if (!isBlockedLeft)
+                        {
+                            Console.WriteLine("Turn left");
+                            turnLeft();
+                        }
+                        else
+                        {
+                            Console.WriteLine("Turn around");
+                            turnAround();
+                        }
+                        Thread.Sleep(1000 / UserSetting.Speed);
+                        moveForward(1);
+                    } while ((this.X != 1 || this.Y != 1) || !moved);
+                    this._shouldStop = true;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    Console.WriteLine(e);
+                }
             }
             this.isExplored = true;
         }
@@ -263,7 +270,7 @@ namespace MDPModel
                     return checkBottomSide();
                 default:
                     return true;
-            }    
+            }
         }
 
         public bool scanLeft()
@@ -324,7 +331,7 @@ namespace MDPModel
             return isBlocked;
         }
 
-        
+
         public bool checkRightSide()
         {
             bool isBlocked = false;
@@ -334,7 +341,7 @@ namespace MDPModel
             int x = this.X + this.Range + 1;
             for (int i = this.Y - this.Range; i <= this.Y + this.Range; i++)
             {
-                if (this.Env.Grid[i,x].Status == 1)
+                if (this.Env.Grid[i, x].Status == 1)
                 {
                     isBlocked = true;
                     //explored and has obstacle
@@ -394,7 +401,7 @@ namespace MDPModel
             }
             return isBlocked;
         }
-        
+
         public void fastestRun()
         {
             List<Node> closedSet = new List<Node>();
@@ -426,12 +433,15 @@ namespace MDPModel
                 currentNode.print();
                 if (currentNode.Equals(this.GoalNode))
                 {
-                    Console.WriteLine("Reached goal");
-                    constructPath(currentNode);
-                    break;
+                    //Console.WriteLine("Reached goal");
+                    //constructPath(currentNode);
+                    //this.shortestPathComputed = true;
+                    //break;
+
                     //this command is for computing fastest path in real time
-                    //this.ShortestPath.Add(currentNode);
-                    //return;
+                    this.ShortestPath.Add(currentNode);
+                    this.shortestPathComputed = true;
+                    return;
                 }
                 openSet.RemoveAt(0);
                 closedSet.Add(currentNode);
@@ -449,14 +459,19 @@ namespace MDPModel
                         neighbor.CameFrom = currentNode;
                         neighbor.GCost = tentativeGCost;
                         neighbor.FCost = neighbor.GCost + neighbor.HCost;
-                        if(!inOpenSet)
+                        if (!inOpenSet)
                             openSet.Add(neighbor);
                     }
                 }
             }
             Console.WriteLine("out of while loop");
+            if (!this.shortestPathComputed)
+            {
+                Console.WriteLine("This map has no solution");
+                OnSendingMessage("This map has no solution");
+            }
         }
-        public void printListNode(List<Node> nodes) 
+        public void printListNode(List<Node> nodes)
         {
             foreach (Node node in nodes)
             {
@@ -467,7 +482,7 @@ namespace MDPModel
         {
             this.ShortestPath.Add(node);
             Node temp = node.CameFrom;
-            while(!temp.Equals(this.StartNode) && temp !=null)
+            while (!temp.Equals(this.StartNode) && temp != null)
             {
                 this.ShortestPath.Add(temp);
                 temp = temp.CameFrom;
@@ -490,9 +505,9 @@ namespace MDPModel
             int y = currentNode.YNode;
             List<Node> neighbors = new List<Node>();
             //empty cell
-            if (this.VirtualMap.Grid[y,x+1].Status == 2)
+            if (this.VirtualMap.Grid[y, x + 1].Status == 2)
             {
-                Node neighbor = new Node(x+1, y);
+                Node neighbor = new Node(x + 1, y);
                 neighbor.HCost = computeH(neighbor);
                 Node temp = getNodeInSet(neighbor, L);
                 if (temp == null)
@@ -502,7 +517,7 @@ namespace MDPModel
                 else
                     neighbors.Add(temp);
             }
-            if (this.VirtualMap.Grid[y, x-1].Status == 2)
+            if (this.VirtualMap.Grid[y, x - 1].Status == 2)
             {
                 Node neighbor = new Node(x - 1, y);
                 neighbor.HCost = computeH(neighbor);
@@ -514,9 +529,9 @@ namespace MDPModel
                 else
                     neighbors.Add(temp);
             }
-            if (this.VirtualMap.Grid[y-1, x].Status == 2)
+            if (this.VirtualMap.Grid[y - 1, x].Status == 2)
             {
-                Node neighbor = new Node(x, y-1);
+                Node neighbor = new Node(x, y - 1);
                 neighbor.HCost = computeH(neighbor);
                 Node temp = getNodeInSet(neighbor, L);
                 if (temp == null)
@@ -526,9 +541,9 @@ namespace MDPModel
                 else
                     neighbors.Add(temp);
             }
-            if (this.VirtualMap.Grid[y+1, x].Status == 2)
+            if (this.VirtualMap.Grid[y + 1, x].Status == 2)
             {
-                Node neighbor = new Node(x, y+1);
+                Node neighbor = new Node(x, y + 1);
                 neighbor.HCost = computeH(neighbor);
                 Node temp = getNodeInSet(neighbor, L);
                 if (temp == null)
@@ -540,7 +555,7 @@ namespace MDPModel
             }
             return neighbors;
         }
-        
+
         private int computeH(Node node)
         {
             return (XGoal - node.XNode) + (YGoal - node.YNode);
@@ -576,7 +591,7 @@ namespace MDPModel
                             }
                         }
                     }
-                    if(this.VirtualMap.Grid[i, j].Status == 0)
+                    if (this.VirtualMap.Grid[i, j].Status == 0)
                         this.VirtualMap.Grid[i, j].Status = this.Memory.Grid[i, j].Status;
                 }
             }
@@ -610,90 +625,94 @@ namespace MDPModel
             this.DFSNodes.Add(currentNode);
             try
             {
-                while (stack.Count > 0 || currentNode != null)
+                while (!this._shouldStop)
                 {
-                    if (CurrentCoverage >= UserSetting.CoverageLimit && UserSetting.CoverageLimit!=100)
+
+                    while (stack.Count > 0 || currentNode != null)
                     {
-                        Console.WriteLine("Coverage limit reached!");
-                        OnSendingMessage("Coverage limit reached!!!");
-                        Thread.CurrentThread.Abort();
-                    }
-                    if (currentNode != null)
-                    {
-                        Console.WriteLine("Visiting node X = {0}, Y = {1}", currentNode.X, currentNode.Y);
-                        currentNode.isVisited = true;
-                        this.X = currentNode.X;
-                        this.Y = currentNode.Y;
-                        computeCoverage();
-                        if (currentNode.Equals(this.GoalDFSNode))
+                        if (CurrentCoverage >= UserSetting.CoverageLimit && UserSetting.CoverageLimit != 100)
                         {
-                            Console.WriteLine("Reach goal!");
-                            OnSendingMessage("Reached goal zone!!!");
-                            //OnSendingMessage("X = " + GoalDFSNode.X);
-                            //OnSendingMessage("Y = " + GoalDFSNode.Y);
+                            Console.WriteLine("Coverage limit reached!");
+                            OnSendingMessage("Coverage limit reached!!!");
+                            this._shouldStop = true;
+                            break;
                         }
-                        getDFSChildren(currentNode);
-                        if (currentNode.BottomChild != null)
+                        if (currentNode != null)
                         {
-                            stack.Push(currentNode.BottomChild);
-                            this.DFSNodes.Add(currentNode.BottomChild);
-                        }
-                        if (currentNode.LeftChild != null)
-                        {
-                            stack.Push(currentNode.LeftChild);
-                            this.DFSNodes.Add(currentNode.LeftChild);
-                        }
-                        if (currentNode.TopChild != null)
-                        {
-                            stack.Push(currentNode.TopChild);
-                            this.DFSNodes.Add(currentNode.TopChild);
-                        }
-                        if (currentNode.RightChild != null)
-                        {
-                            stack.Push(currentNode.RightChild);
-                            this.DFSNodes.Add(currentNode.RightChild);
-                        }
-                        while(currentNode.allChildrenVisited())
-                        {
-                            Console.WriteLine("No more children, backtracking!!!");
-                            //no more children, backtracking
-                            currentNode = currentNode.ParentNode;
-                            Thread.Sleep(1000 / UserSetting.Speed);
+                            Console.WriteLine("Visiting node X = {0}, Y = {1}", currentNode.X, currentNode.Y);
+                            currentNode.isVisited = true;
                             this.X = currentNode.X;
                             this.Y = currentNode.Y;
-                            if (currentNode == StartDFSNode)
+                            computeCoverage();
+                            if (currentNode.Equals(this.GoalDFSNode))
                             {
-                                break;
+                                Console.WriteLine("Reach goal!");
+                                OnSendingMessage("Reached goal zone!!!");
+                                //OnSendingMessage("X = " + GoalDFSNode.X);
+                                //OnSendingMessage("Y = " + GoalDFSNode.Y);
                             }
-                        }
-                        //printStack();
-                        if (stack.Count > 0)
-                        {
-                            currentNode = (DFSNode)stack.Pop();
+                            getDFSChildren(currentNode);
+                            if (currentNode.BottomChild != null)
+                            {
+                                stack.Push(currentNode.BottomChild);
+                                this.DFSNodes.Add(currentNode.BottomChild);
+                            }
+                            if (currentNode.LeftChild != null)
+                            {
+                                stack.Push(currentNode.LeftChild);
+                                this.DFSNodes.Add(currentNode.LeftChild);
+                            }
+                            if (currentNode.TopChild != null)
+                            {
+                                stack.Push(currentNode.TopChild);
+                                this.DFSNodes.Add(currentNode.TopChild);
+                            }
+                            if (currentNode.RightChild != null)
+                            {
+                                stack.Push(currentNode.RightChild);
+                                this.DFSNodes.Add(currentNode.RightChild);
+                            }
+                            while (currentNode.allChildrenVisited())
+                            {
+                                Console.WriteLine("No more children, backtracking!!!");
+                                //no more children, backtracking
+                                currentNode = currentNode.ParentNode;
+                                Thread.Sleep(1000 / UserSetting.Speed);
+                                this.X = currentNode.X;
+                                this.Y = currentNode.Y;
+                                if (currentNode == StartDFSNode)
+                                {
+                                    break;
+                                }
+                            }
+                            //printStack();
+                            if (stack.Count > 0)
+                            {
+                                currentNode = (DFSNode)stack.Pop();
+                            }
+                            else
+                                break;
                         }
                         else
-                            break;
-                    }
-                    else
-                    {
-                        if (stack.Count > 0)
                         {
-                            currentNode = (DFSNode)stack.Pop();
+                            if (stack.Count > 0)
+                            {
+                                currentNode = (DFSNode)stack.Pop();
+                            }
+                            else
+                                break;
                         }
-                        else
-                            break;
+                        Thread.Sleep(1000 / UserSetting.Speed);
                     }
-                    Thread.Sleep(1000/UserSetting.Speed);
+                    this.isExplored = true;
+                    Console.WriteLine("Exploration finished!!!");
+                    OnSendingMessage("Exploration finished!!!");
                 }
-                this.isExplored = true;
-                Console.WriteLine("Exploration finished!!!");
-                OnSendingMessage("Exploration finished!!!");
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
             }
-            
         }
         public void getDFSChildren(DFSNode node)
         {
@@ -724,7 +743,7 @@ namespace MDPModel
                 if (!checkDFSNodeInStack(leftChild))
                     node.LeftChild = leftChild;
             }
-            
+
             if (!checkBottomSide())
             {
                 DFSNode bottomChild = new DFSNode(x, y - 1);
@@ -797,8 +816,16 @@ namespace MDPModel
             Console.WriteLine("Data");
             this.Memory.print();
             fastestRun();
-            path = constructPathForRealTime();
-            return path;
+            if (this.shortestPathComputed)
+            {
+                path = constructPathForRealTime();
+                OnSendingMessage("The mapping has no solution for shortest path");
+                return path;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public string constructPathForRealTime()
@@ -898,6 +925,11 @@ namespace MDPModel
                 path += 'M';
             }
             return path;
+        }
+
+        public void requestStop()
+        {
+            this._shouldStop = true;
         }
     }
 }

@@ -34,7 +34,7 @@ namespace MDPSimulator.View
         private Thread exploreThread;
         private bool isConnected;
         private WifiConnector Connector {set; get; }
-        Thread mappingThread;
+        private Thread mappingThread;
         Robot realTimeRobot;
         public MainPage()
         {
@@ -156,7 +156,7 @@ namespace MDPSimulator.View
             this.timeLimit = UserSetting.TimeLimit;
             this.coverageLimit = UserSetting.CoverageLimit;
             timer.Start();
-            exploreThread = new Thread(this.simulator.simulateExplore);
+            exploreThread = new Thread(this.simulator.wallfollowerExplore);
             exploreThread.Start();
         }
 
@@ -259,7 +259,7 @@ namespace MDPSimulator.View
             timer.Start();
             if (exploreThread!=null)
                 exploreThread.Abort();
-            exploreThread = new Thread(this.simulator.test);
+            exploreThread = new Thread(this.simulator.dfsExplore);
             exploreThread.Start();
         }
         private void displayRobotMessage(string s)
@@ -351,7 +351,7 @@ namespace MDPSimulator.View
             this.realTimeRobot.Memory = memory;
             this.realTimeRobot.X = x;
             this.realTimeRobot.Y = y;
-            bool saved = this.realTimeRobot.Memory.saveToHardDrive("E:/Git/MDP-Jan-2015/PCSimulator/MDPSimulator/");
+            bool saved = this.realTimeRobot.Memory.saveToHardDriveRealTime("E:/Git/MDP-Jan-2015/PCSimulator/MDPSimulator/");
             if (saved)
             {
                 displayConsoleMessage("Map descriptor exported successfully!");
@@ -408,12 +408,44 @@ namespace MDPSimulator.View
                 new Action(delegate { this.isConnected = b;
                 if (b)
                 {
-                    this.connectButton.IsEnabled = false;
+                    this.disableAllButton();
                 }
                 else
-                    this.connectButton.IsEnabled = true;
+                    this.enableAllButton();
                 }));
         }
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+            if(this.exploreThread!=null)
+                this.exploreThread.Abort();
+            if(this.mappingThread!=null)
+                this.mappingThread.Abort();
+            Application.Current.Shutdown();
+        }
 
+        private void disableAllButton()
+        {
+            this.exportButton.IsEnabled = false;
+            this.exploreButton.IsEnabled = false;
+            this.loadButton.IsEnabled = false;
+            this.resetButton.IsEnabled = false;
+            this.testButton.IsEnabled = false;
+            this.settingsButton.IsEnabled = false;
+            this.runButton.IsEnabled = false;
+            this.connectButton.IsEnabled = false;
+        }
+
+        private void enableAllButton()
+        {
+            this.exportButton.IsEnabled = true;
+            this.exploreButton.IsEnabled = true;
+            this.loadButton.IsEnabled = true;
+            this.resetButton.IsEnabled = true;
+            this.testButton.IsEnabled = true;
+            this.settingsButton.IsEnabled = true;
+            this.runButton.IsEnabled = true;
+            this.connectButton.IsEnabled = true;
+        }
     }
 }

@@ -26,16 +26,16 @@ namespace MDPModel
             this.Robot.Env = this.Map;
         }
 
-        public void simulateExplore()
+        public void wallfollowerExplore()
         {
-            this.Robot.simulateExplore();
+            this.Robot.wallfollowerExplore();
             this.Robot.Memory.print();
         }
         public void simulateFastestRun()
         {
             this.Robot.fastestRun();
         }
-        public void test()
+        public void dfsExplore()
         {
             this.Robot.exploreWithDFS();
         }

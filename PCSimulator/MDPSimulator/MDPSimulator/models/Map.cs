@@ -72,6 +72,24 @@ namespace MDPModel
             }
             return true;
         }
+
+        public bool saveToHardDriveRealTime(string loc)
+        {
+            try
+            {
+                convertMap();
+                string hex1 = convertToHex(this.map1);
+                string hex2 = convertToHex(this.map2);
+                File.WriteAllText(@loc + "realtime1.txt", hex1);
+                File.WriteAllText(@loc + "realtime2.txt", hex2);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+            return true;
+        }
         public void draw()
         {
 

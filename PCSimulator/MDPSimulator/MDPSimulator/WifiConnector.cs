@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.Net;
 using System.IO;
 using MDPModel;
+using System.Windows.Threading;
 namespace MDPSimulator
 {
     public class WifiConnector
@@ -20,10 +21,24 @@ namespace MDPSimulator
         public event ReceivingData ReceivingDataHandler;
         public event UpdatingInfo UpdatingConsoleHandler;
         public string shortestPath;
+        public bool isShortestPathSent;
+        private DispatcherTimer timer;
+        private Socket testSocket;
+        private byte[] byteData = new byte[1024];
         public WifiConnector()
         {
             clientSocket = new TcpClient();
             IpAddr = "192.168.9.9";
+            this.timer = new DispatcherTimer();
+            timer.Interval = new TimeSpan(0, 0, 10);
+            //timer.Tick += new EventHandler(timer_Tick);
+        }
+
+        //not implemented yet
+        private void timer_Tick(object sender, EventArgs e)
+        {
+            connect();
+            listen();
         }
 
         public bool connect()
@@ -31,6 +46,7 @@ namespace MDPSimulator
             OnUpdatingConsole("Connecting to RPI");
             IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse(IpAddr), 3000);
             bool isConnected = false;
+            //try 3 times
             int trial = 3;
             while (!isConnected && trial > 0)
             {
@@ -41,13 +57,12 @@ namespace MDPSimulator
                     if (clientSocket.Connected)
                     {
                         isConnected = true;
-                        OnUpdatingConsole("Connected to RPI");
                         OnStatusUpdating(true);
+                        OnUpdatingConsole("Connected to rpi");
                     }
                 }
                 catch (Exception)
                 {
-                    OnUpdatingConsole("Fail to establish connection.Trying...");
                     OnStatusUpdating(false);
                 }
             }
@@ -71,7 +86,7 @@ namespace MDPSimulator
             }
             else
             {
-                Console.WriteLine("No handler for updating console!");
+                Console.WriteLine(s);
             }
         }
         public void send(string s)
@@ -92,32 +107,130 @@ namespace MDPSimulator
         }
         public void listen()
         {
-            NetworkStream nw = clientSocket.GetStream();
-            clientSocket.ReceiveBufferSize = 400;
-            while (true)
+            try
             {
-                byte[] data = new byte[clientSocket.ReceiveBufferSize];
-                int bytesRead = nw.Read(data, 0, clientSocket.ReceiveBufferSize);
-                string desc = Encoding.ASCII.GetString(data, 0, bytesRead);
-                Console.WriteLine("receiving: " + desc);
-                OnReceivingData(desc);
-                if (desc[desc.Length - 1] == 'F')
+                NetworkStream nw = clientSocket.GetStream();
+                clientSocket.ReceiveBufferSize = 400;
+                string desc = "";
+                byte[] data;
+                while (this.clientSocket.Connected)
                 {
-                    Robot robot = new Robot();
-                    this.shortestPath = "A";
-                    this.shortestPath += robot.realTimeShortestPath(desc);
-                    send(this.shortestPath);
+                    data = new byte[clientSocket.ReceiveBufferSize];
+                    int bytesRead = nw.Read(data, 0, clientSocket.ReceiveBufferSize);
+                    desc = Encoding.ASCII.GetString(data, 0, bytesRead);
+                    if (desc.Length == 0)
+                    {
+                        continue;
+                    }
+                    //message is not zero
+                    OnReceivingData(desc);
+                    //exploration finished, compute shortest path
+                    if (desc[desc.Length - 1] == 'F')
+                    {
+                        OnUpdatingConsole("Exploration finish, computing shortest path");
+                        Robot robot = new Robot();
+                        string path = robot.realTimeShortestPath(desc);
+                        this.shortestPath = "A";
+                        if (path != null)
+                        {
+                            this.shortestPath += path;
+                        }
+                        else
+                        {
+                            //no solution
+                            this.shortestPath = "B";
+                        }
+                        send(this.shortestPath);
+                    }
                 }
+                OnStatusUpdating(false);
+                OnUpdatingConsole("Connection lost");
             }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error in listening: " + e.Message);
+                OnStatusUpdating(false);
+            }
+
         }
 
         public void run()
         {
-            this.connect();
-            if (clientSocket.Connected)
-                this.listen();
+            //this.connect();
+            //if (clientSocket.Connected)
+            //    this.listen();
+
+            //a new connection, not tested
+            try
+            {
+                testSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                IPAddress ipAddress = IPAddress.Parse(IpAddr);
+                IPEndPoint ipEndPoint = new IPEndPoint(ipAddress, 3000);
+                //Connect to the server
+                testSocket.BeginConnect(ipEndPoint, new AsyncCallback(OnConnect), null);
+                testSocket.BeginReceive(byteData, 0, byteData.Length, SocketFlags.None,
+                    new AsyncCallback(OnReceive), testSocket);
+            }
+            catch (Exception ex)
+            {
+                OnUpdatingConsole("Failed to set up connection");
+                Console.WriteLine(ex.Message);
+            }
         }
 
+        private void OnReceive(IAsyncResult ar)
+        {
+            var socket = (Socket)ar.AsyncState;
+            int received = testSocket.EndReceive(ar);
+            var receivedData = new byte[received];
+            Array.Copy(byteData, receivedData, received);
+            string desc = Encoding.ASCII.GetString(receivedData, 0, received);
+            if (desc[desc.Length - 1] == 'F')
+            {
+                Robot robot = new Robot();
+                string path = robot.realTimeShortestPath(desc);
+                this.shortestPath = "A";
+                if (path != null)
+                {
+                    this.shortestPath += path;
+                }
+                else
+                {
+                    //no solution
+                    this.shortestPath = "B";
+                }
+                sendShortestPath(this.shortestPath);
+            }
+            if (desc.Length != 0) 
+            {
+                OnReceivingData(desc);
+            }
+            testSocket.BeginReceive(byteData, 0, byteData.Length, SocketFlags.None, OnReceive, testSocket);
+        }
+        private void OnSend(IAsyncResult ar)
+        {
+            var socket = (Socket)ar.AsyncState;
+            OnUpdatingConsole("Shortest path sent");
+            socket.EndSend(ar);
+        }
+        private void OnConnect(IAsyncResult ar)
+        {
+            OnStatusUpdating(true);
+            OnUpdatingConsole("Connected to rpi");
+        }
+        private void sendShortestPath(string s)
+        {
+            try
+            {
+                System.Buffer.BlockCopy(s.ToCharArray(), 0, byteData, 0, byteData.Length);
+                //Send it to the server
+                testSocket.BeginSend(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnSend), null);
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Cannot send shortest path");
+            }
+        }
         protected virtual void OnReceivingData(string s)
         {
             if (ReceivingDataHandler != null)
@@ -140,5 +253,6 @@ namespace MDPSimulator
                 Console.WriteLine("No handler for connection status update!");
             }
         }
+
     }
 }
