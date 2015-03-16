@@ -247,10 +247,6 @@ class Robot:
     
     def checkLeftSide(self, ArStr):
         print "checking left side"
-        if(ArStr[0] == '1'):
-            self.updateMap(0, 1)
-        else:
-            self.updateMap(0, 2)
 
         isBlocked = False
         if self.Dir == 'R':
@@ -262,6 +258,11 @@ class Robot:
         if self.Dir == 'D':
             isBlocked = self.checkRight()
 
+        if(not self.isWall):
+            if(ArStr[0] == '1'):
+                self.updateMap(0, 1)
+            else:
+                self.updateMap(0, 2)
         if(self.isWall or self.threeObs):
             self.reposLeft = True
             isBlocked = True
@@ -274,12 +275,6 @@ class Robot:
     
     def checkTopSide(self, ArStr):
         print "checking top side"
-        for i in range(1,4):
-            if (ArStr[i]=='1'):
-                self.updateMap(i, 1)
-            else:
-                self.updateMap(i, 2)
-        
         isBlocked = False
         if self.Dir == 'R':
             isBlocked = self.checkRight()
@@ -292,7 +287,12 @@ class Robot:
         if (self.isWall or self.threeObs):
             print 'setting repost front true'
             self.reposFront = True
-
+        if(not self.isWall):
+            for i in range(1,4):
+                if (ArStr[i]=='1'):
+                    self.updateMap(i, 1)
+                else:
+                    self.updateMap(i, 2)
         self.isWall = False
         self.threeObs = False        
         print "TOP \t\t\t", isBlocked
@@ -300,14 +300,7 @@ class Robot:
 
     def checkRightSide(self, ArStr):
         print "checking right side"
-        if(ArStr[4] == '1'):
-            self.updateMap(4, 1)
-        else:
-            self.updateMap(4, 2)
-        if(ArStr[6] == '1'):
-            self.updateMap(6, 1)
-        else:
-            self.updateMap(6, 2)
+        
         isBlocked = False
         if self.Dir == 'R':
             isBlocked = self.checkBottom()
@@ -317,6 +310,17 @@ class Robot:
             isBlocked = self.checkTop()
         if self.Dir == 'D':
             isBlocked = self.checkLeft()
+
+        if(not self.isWall):
+            if(ArStr[4] == '1'):
+                self.updateMap(4, 1)
+            else:
+                self.updateMap(4, 2)
+            if(ArStr[6] == '1'):
+                self.updateMap(6, 1)
+            else:
+                self.updateMap(6, 2)
+
         if(self.isWall or self.threeObs):
             self.reposRight = True
         self.isWall = False
