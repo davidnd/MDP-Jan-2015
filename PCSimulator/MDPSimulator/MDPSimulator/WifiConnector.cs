@@ -156,26 +156,26 @@ namespace MDPSimulator
 
         public void run()
         {
-            //this.connect();
-            //if (clientSocket.Connected)
-            //    this.listen();
+            this.connect();
+            if (clientSocket.Connected)
+                this.listen();
 
             //a new connection, not tested
-            try
-            {
-                testSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                IPAddress ipAddress = IPAddress.Parse(IpAddr);
-                IPEndPoint ipEndPoint = new IPEndPoint(ipAddress, 3000);
-                //Connect to the server
-                testSocket.BeginConnect(ipEndPoint, new AsyncCallback(OnConnect), null);
-                testSocket.BeginReceive(byteData, 0, byteData.Length, SocketFlags.None,
-                    new AsyncCallback(OnReceive), testSocket);
-            }
-            catch (Exception ex)
-            {
-                OnUpdatingConsole("Failed to set up connection");
-                Console.WriteLine(ex.Message);
-            }
+            //try
+            //{
+            //    testSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            //    IPAddress ipAddress = IPAddress.Parse(IpAddr);
+            //    IPEndPoint ipEndPoint = new IPEndPoint(ipAddress, 3000);
+            //    //Connect to the server
+            //    testSocket.BeginConnect(ipEndPoint, new AsyncCallback(OnConnect), null);
+            //    testSocket.BeginReceive(byteData, 0, byteData.Length, SocketFlags.None,
+            //        new AsyncCallback(OnReceive), testSocket);
+            //}
+            //catch (Exception ex)
+            //{
+            //    OnUpdatingConsole("Failed to set up connection");
+            //    Console.WriteLine(ex.Message);
+            //}
         }
 
         private void OnReceive(IAsyncResult ar)
