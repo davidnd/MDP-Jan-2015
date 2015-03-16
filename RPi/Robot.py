@@ -261,6 +261,7 @@ class Robot:
         if(not self.isWall):
             if(ArStr[0] == '1'):
                 self.updateMap(0, 1)
+                isBlocked = True
             else:
                 self.updateMap(0, 2)
         if(self.isWall or self.threeObs):
@@ -291,6 +292,7 @@ class Robot:
             for i in range(1,4):
                 if (ArStr[i]=='1'):
                     self.updateMap(i, 1)
+                    isBlocked = True
                 else:
                     self.updateMap(i, 2)
         self.isWall = False
@@ -314,10 +316,12 @@ class Robot:
         if(not self.isWall):
             if(ArStr[4] == '1'):
                 self.updateMap(4, 1)
+                isBlocked = True
             else:
                 self.updateMap(4, 2)
             if(ArStr[6] == '1'):
                 self.updateMap(6, 1)
+                isBlocked = True
             else:
                 self.updateMap(6, 2)
 
