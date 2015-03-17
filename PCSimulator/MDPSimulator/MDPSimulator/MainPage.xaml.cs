@@ -36,10 +36,12 @@ namespace MDPSimulator.View
         private WifiConnector Connector {set; get; }
         private Thread mappingThread;
         Robot realTimeRobot;
+        private bool fastestRuning;
         public MainPage()
         {
             InitializeComponent();
             setUpMap();
+            this.fastestRuning = false;
             this.timer = new DispatcherTimer();
             timer.Interval = new TimeSpan(0, 0, 1);
             timer.Tick += new EventHandler(timer_Tick);
@@ -351,13 +353,20 @@ namespace MDPSimulator.View
             this.realTimeRobot.Memory = memory;
             this.realTimeRobot.X = x;
             this.realTimeRobot.Y = y;
-            bool saved = this.realTimeRobot.Memory.saveToHardDriveRealTime("E:/Git/MDP-Jan-2015/PCSimulator/MDPSimulator/");
-            if (saved)
+            if (!this.fastestRuning) 
             {
-                displayConsoleMessage("Map descriptor exported successfully!");
+                bool saved = this.realTimeRobot.Memory.saveToHardDriveRealTime("E:/Git/MDP-Jan-2015/PCSimulator/MDPSimulator/");
+                if (saved)
+                {
+                    displayConsoleMessage("Map descriptor exported successfully!");
+                }
+                else
+                    displayConsoleMessage("Failed to export map descriptor!");
             }
-            else
-                displayConsoleMessage("Failed to export map descriptor!");
+            if (s[s.Length - 1] == 'F')
+            {
+                this.fastestRuning = true;
+            }
 
         }
         private void exportButton_Click(object sender, RoutedEventArgs e)
