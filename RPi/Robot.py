@@ -332,7 +332,6 @@ class Robot:
 
     def checkRightSide(self, ArStr):
         print "checking right side"
-        
         isBlocked = False
         if self.Dir == 'R':
             isBlocked = self.checkBottom()
@@ -343,6 +342,8 @@ class Robot:
         if self.Dir == 'D':
             isBlocked = self.checkLeft()
 
+        temp = self.threeObs
+        
         if(not self.isWall):
             if(ArStr[4] == '1'):
                 self.updateMap(4, 1)
