@@ -56,7 +56,6 @@ class Robot:
         self.reposLeft = False
         self.resetError = False
         self.isWall = False
-        self.threeObsHead = False
         self.threeObs = False
         self.androidMapStr=''
         self.pathCommand = ''
@@ -65,7 +64,7 @@ class Robot:
         self.startzone = False
         self.startzonepush = True
         self.run = 0
-        self.goalzone = False
+        self.goalzone = 0
     def turnLeft(self):
         if self.Dir=='U':
             self.Dir = 'L'
@@ -119,7 +118,7 @@ class Robot:
             
         elif self.Dir== 'L':
             self.X-=dis
-
+        self.enteredGoal = True
     def turnAround(self):
         if self.Dir == 'U':
             self.Dir = 'D'
@@ -657,9 +656,15 @@ class Robot:
 
     def goalzoneRealign(self):
         if self.Dir == 'R':
+            self.goalzone = 1
             return '5'
-        if not self.Dir == 'U':
+        if self.Dir == 'U':
+            self.turnRight()
+            return '2'
+        if self.goalzone == 1:
+            self.goalzone = 2
+            self.turnLeft()
             return '3'
-        if(self.Dir == 'U'):
-            self.goalzone = True
-            return '7'
+        if self.goalzone == 2:
+            self.goalzone = 3
+            return '5'
