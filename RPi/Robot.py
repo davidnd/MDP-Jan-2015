@@ -62,6 +62,7 @@ class Robot:
         self.pathCommand = ''
         self.lastCorner = 0
         self.justRF = False
+        self.startZoneRealigning = False
     def turnLeft(self):
         if self.Dir=='U':
             self.Dir = 'L'
@@ -578,10 +579,13 @@ class Robot:
         
     def startZoneRealign(self):
         if self.Dir == 'D':
-            self.turnAround()
+            self.turnRight()
             self.generateMapStr()
             self.generateAndroidMapStr()
             return '4'
+        elif (not self.startZoneRealigning and not self.Dir == 'R' and not self.Dir == 'U'):
+            self.startZoneRealigning = True
+            return '5'
         elif self.Dir == 'L':
             self.turnRight()
             self.generateMapStr()
