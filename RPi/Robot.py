@@ -65,6 +65,7 @@ class Robot:
         self.startzonepush = True
         self.run = 0
         self.goalzone = 0
+        self.loop = False
     def turnLeft(self):
         if self.Dir=='U':
             self.Dir = 'L'
@@ -342,8 +343,12 @@ class Robot:
         if self.Dir == 'D':
             isBlocked = self.checkLeft()
 
-        temp = self.threeObs
-        
+        if self.threeObs:
+            self.threeObs = False
+            self.isWall = False
+            self.reposRight = True
+            return True
+
         if(not self.isWall):
             if(ArStr[4] == '1'):
                 self.updateMap(4, 1)
@@ -687,7 +692,7 @@ class Robot:
             return 'C'
         if self.Dir == 'U' and self.goalzone != 1 and self.goalzone != 5:
             self.goalzone = 1
-            return '5'
+            return '6'
 
         if self.goalzone == 1:
             self.goalzone = 2
@@ -696,11 +701,11 @@ class Robot:
 
         if self.goalzone == 2:
             self.goalzone = 3
-            return '5'
+            return '6'
 
         if self.Dir == 'R' and self.goalzone != 4:
             self.goalzone = 4
-            return '5'
+            return '6'
         if self.goalzone == 4:
             self.goalzone = 5
             self.turnLeft()
@@ -708,6 +713,6 @@ class Robot:
 
         if self.goalzone == 5:
             self.goalzone = 6
-            return '5'
+            return '6'
         
         
