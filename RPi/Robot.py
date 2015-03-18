@@ -553,11 +553,34 @@ class Robot:
         self.mapStr = self.Dir + x + y
         
         # iterate the map to add value to mapStr
-        for i in range (20):
-            for j in range (15):
-                self.mapStr += str(self.Memory.grid[i][j])
         if (self.X == 1 and self.Y == 1 and self.enteredGoal):
+            self.clearGoalZone()
+            for i in range (20):
+                for j in range (15):
+                    self.mapStr += str(self.Memory.grid[i][j])
             self.mapStr += 'F'
+        else:
+            for i in range (20):
+                for j in range (15):
+                    self.mapStr += str(self.Memory.grid[i][j])
+     
+    def clearGoalZone(self):
+        if (self.Memory.grid[17][11]==1 or self.Memory.grid[18][11]==1 or self.Memory.grid[19][11]==1) and (self.Memory.grid[16][12]==1 or self.Memory.grid[16][13]==1 or self.Memory.grid[16][14]==1):
+            self.Memory.grid[16][12] = 2
+            self.Memory.grid[16][13] = 2
+            self.Memory.grid[16][14] = 2
+        if self.Memory.grid[16][11]==1 and (self.Memory.grid[17][11]==1 or self.Memory.grid[18][11]==1 or self.Memory.grid[19][11]==1) and (self.Memory.grid[16][12]==1 or self.Memory.grid[16][13]==1 or self.Memory.grid[16][14]==1):
+            self.Memory.grid[16][12] = 2
+            self.Memory.grid[16][13] = 2
+            self.Memory.grid[16][14] = 2
+        if (self.Memory.grid[17][14]==1) and (self.Memory.grid[16][14]==1):
+            self.Memory.grid[16][14] = 2
+        for i in range (17, 20):
+                for j in range (12, 15):
+                    self.Memory.grid[i][j] = 2
+        for i in range (0, 4):
+                for j in range (0, 4):
+                    self.Memory.grid[i][j] = 2
         
     def generateAndroidMapStr(self):
         # first 9 characters: GRID + direction + current center position
@@ -572,12 +595,16 @@ class Robot:
         self.androidMapStr = 'GRID' + self.Dir + y + x
         
         # iterate the map to add value to androidMapStr
-        for i in range (15):
-            for j in range (20):
-                self.androidMapStr += str(self.Memory.grid[j][i])
         if (self.X == 1 and self.Y == 1 and self.enteredGoal):
+            self.clearGoalZone()
+            for i in range (15):
+                for j in range (20):
+                    self.androidMapStr += str(self.Memory.grid[j][i])
             self.androidMapStr += 'F'
         else:
+            for i in range (15):
+                for j in range (20):
+                    self.androidMapStr += str(self.Memory.grid[j][i])
             self.androidMapStr += 'P'
     
     def startZoneRealign(self):
@@ -656,16 +683,31 @@ class Robot:
 
 
     def goalzoneRealign(self):
-        if self.Dir == 'R':
+        if(self.goalzone == 6 or self.goalzone == 3):
+            return 'C'
+        if self.Dir == 'U' and self.goalzone != 1 and self.goalzone != 5:
             self.goalzone = 1
             return '5'
-        if self.Dir == 'U':
-            self.turnRight()
-            return '2'
+
         if self.goalzone == 1:
             self.goalzone = 2
-            self.turnLeft()
-            return '3'
+            self.turnRight()
+            return '2'
+
         if self.goalzone == 2:
             self.goalzone = 3
             return '5'
+
+        if self.Dir == 'R' and self.goalzone != 4:
+            self.goalzone = 4
+            return '5'
+        if self.goalzone == 4:
+            self.goalzone = 5
+            self.turnLeft()
+            return '3'
+
+        if self.goalzone == 5:
+            self.goalzone = 6
+            return '5'
+        
+        
