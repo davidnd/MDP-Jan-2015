@@ -62,7 +62,10 @@ class Robot:
         self.pathCommand = ''
         self.lastCorner = 0
         self.justRF = False
-        self.startZoneRealigning = False
+        self.startzone = False
+        self.startzonepush = True
+        self.run = 0
+        self.goalzone = False
     def turnLeft(self):
         if self.Dir=='U':
             self.Dir = 'L'
@@ -576,15 +579,18 @@ class Robot:
             self.androidMapStr += 'F'
         else:
             self.androidMapStr += 'P'
-        
+    
     def startZoneRealign(self):
+        if(self.Dir == 'D' and self.startzonepush):
+            self.startzonepush = False
+            return '7'
         if self.Dir == 'D':
             self.turnRight()
             self.generateMapStr()
             self.generateAndroidMapStr()
-            return '4'
-        elif (not self.startZoneRealigning and not self.Dir == 'R' and not self.Dir == 'U'):
-            self.startZoneRealigning = True
+            return '2'
+        elif (not self.startzone and not self.Dir == 'R' and not self.Dir == 'U'):
+            self.startzone = True
             return '5'
         elif self.Dir == 'L':
             self.turnRight()
@@ -613,19 +619,29 @@ class Robot:
                 return
     
     #not done
-    def fastestRun(self, i, arStr):
-        if (self.pathCommand[i] == '1'):
-            self.moveForward(1)
-        elif (self.pathCommand[i] == '2'):
-            self.turnRight()
-        elif (self.pathCommand[i] == '3'):
-            self.turnLeft()
-        else:
-            return
+    def fastestRun(self,arStr):
+        if (self.run+1 < len(self.pathCommand)):
+            if (self.pathCommand[self.run] == '1'):
+                self.moveForward(1)
+            elif (self.pathCommand[self.run] == '2'):
+                self.turnRight()
+            elif (self.pathCommand[self.run] == '3'):
+                self.turnLeft()
+            elif (self.pathCommand [self.run] == 'a'):
+                self.moveForward(2)
+            elif (self.pathCommand[self.run] == 'b'):
+                self.moveForward(3)
+            elif (self.pathCommand[self.run] == 'c'):
+                self.moveForward(4)
+            elif (self.pathCommand[self.run] == 'd'):
+                self.moveForward(5)
+            self.run += 1
+        if(self.Y == 18 and self.X == 13):
+            return 'F'
         self.generateMapStr()
         self.generateAndroidMapStr() 
         print "currrent position: X = ", self.X, "Y = ", self.Y, "Direction: ", self.Dir
-        return self.pathCommand[i]
+        return self.pathCommand[self.run]
 
     def printMemory(self):
         for i in range(20):
@@ -636,3 +652,12 @@ class Robot:
                     print self.Memory.grid[19-i][j], ' ',
             print 
 
+
+    def goalzoneRealign(self):
+        if self.Dir == 'R':
+            return '5'
+        if not self.Dir == 'U':
+            return '3'
+        if(self.Dir == 'U'):
+            self.goalzone = True
+            return '7'
