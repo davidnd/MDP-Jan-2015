@@ -13,6 +13,8 @@ PCSimulator/fakemapstring.txt
 PCSimulator/progress.txt
 PCSimulator/MDPSimulator/map1.txt
 PCSimulator/MDPSimulator/map2.txt
+PCSimulator/MDPSimulator/realtime1.txt
+PCSimulator/MDPSimulator/realtime2.txt
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
