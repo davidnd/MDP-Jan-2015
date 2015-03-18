@@ -119,7 +119,6 @@ class Robot:
             
         elif self.Dir== 'L':
             self.X-=dis
-        self.enteredGoal = True
     def turnAround(self):
         if self.Dir == 'U':
             self.Dir = 'D'
@@ -140,7 +139,12 @@ class Robot:
             self.Dir = 'R'
             self.lastDir = 'L'
             self.turnedAround = True
-            
+    def inStartZone(self):
+        if self.X == 2 and self.Y == 1:
+            return True
+        if self.X == 1 and self.Y == 1:
+            return True
+
     def explore(self,ArStr):
         print "Current X= ", self.X, " Current Y = ", self.Y
         print "Dir = ", self.Dir
@@ -148,9 +152,13 @@ class Robot:
             isBlockedLeft = self.checkLeftSide(ArStr)
             isBlockedFront = self.checkTopSide(ArStr)
             isBlockedRight = self.checkRightSide(ArStr)
+
             if ((self.X == 12 or self.X==13 )and (self.Y==17 or self.Y==18)):
                 self.enteredGoal = True
-            if (self.X == 1 and self.Y == 1 and self.enteredGoal == True):
+
+            checkinStartzone = self.inStartZone()
+
+            if checkinStartzone == True and self.enteredGoal == True:
                 self.generateMapStr()
                 self.generateAndroidMapStr()
                 return 'F'
