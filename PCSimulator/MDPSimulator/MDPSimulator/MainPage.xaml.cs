@@ -311,6 +311,10 @@ namespace MDPSimulator.View
             this.realTimeRobot.SendingMessage += new Robot.RobotSendingMessage(displayRobotMessage);
             this.simulator = new Simulator();
             this.simulator.Robot = this.realTimeRobot;
+            if (this.mappingThread.IsAlive)
+            {
+                this.mappingThread.Abort();
+            }
             mappingThread.Start();   
         }
 
