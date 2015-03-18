@@ -620,7 +620,8 @@ class Robot:
     
     #not done
     def fastestRun(self,arStr):
-        if (self.run+1 < len(self.pathCommand)):
+        temp = 1
+        if (self.run < len(self.pathCommand)):
             if (self.pathCommand[self.run] == '1'):
                 self.moveForward(1)
             elif (self.pathCommand[self.run] == '2'):
@@ -635,13 +636,14 @@ class Robot:
                 self.moveForward(4)
             elif (self.pathCommand[self.run] == 'd'):
                 self.moveForward(5)
+            temp = self.pathCommand[self.run]
             self.run += 1
         if(self.Y == 18 and self.X == 13):
             return 'F'
         self.generateMapStr()
         self.generateAndroidMapStr() 
         print "currrent position: X = ", self.X, "Y = ", self.Y, "Direction: ", self.Dir
-        return self.pathCommand[self.run]
+        return temp
 
     def printMemory(self):
         for i in range(20):
