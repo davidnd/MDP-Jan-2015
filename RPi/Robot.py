@@ -645,7 +645,8 @@ class Robot:
         else:
             return
         
-          
+    # one by one grid      
+    '''
     def fastestPathDecoder(self, pcStr):
         pcStr = pcStr[1:len(pcStr)]
         for i in range (len(pcStr)):
@@ -657,8 +658,38 @@ class Robot:
                 self.pathCommand += '3'
             else:
                 return
-    
-    #not done
+    '''
+    #multiple grids
+    def fastestPathDecoder(self, pcStr):
+        pcStr = pcStr[1:len(pcStr)]
+        i=0
+        while (i<len(pcStr)):
+            if pcStr[i] == 'M':
+                countM = 0
+                while(pcStr[i] == 'M'):
+                    countM += 1
+                    if (i+1< len(pcStr)):
+                        i += 1
+                    else:
+                        break
+                for j in range (countM / 3):
+                    self.pathCommand += 'b'
+                if (countM%3==1):
+                    self.pathCommand += '1'
+                elif (countM%3==2):
+                    self.pathCommand += 'a'
+                '''
+                elif (countM%5==3):
+                    self.pathCommand += 'b'
+                elif (countM%5==4):
+                    self.pathCommand += 'c'
+                '''
+            if pcStr[i] == 'R':
+                self.pathCommand += '2'
+            if pcStr[i] == 'L':
+                self.pathCommand += '3'
+            i += 1
+            
     def fastestRun(self,arStr):
         temp = 1
         if (self.run < len(self.pathCommand)):
