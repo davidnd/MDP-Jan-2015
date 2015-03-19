@@ -687,6 +687,7 @@ class Robot:
         return temp
 
     def printMemory(self):
+        return
         for i in range(20):
             for j in range (15):
                 if(self.X == j and self.Y == 19-i):
