@@ -689,7 +689,61 @@ class Robot:
             if pcStr[i] == 'L':
                 self.pathCommand += '3'
             i += 1
-            
+    
+    def checkBeforeTurn(self, arStr):
+        if(self.pathCommand[self.run - 1] == '2'):
+            #ok to move
+            if(arStr[1] == '0' and arStr[2] == '0' and arStr[3] == '0'):
+                return 0
+            #short a bit <= 1 grid ()
+            if(arStr[1] == '0' and arStr[2] == '0' and arStr[3] == '1'):
+
+            #short x grids (1<x<=2) or exceed 3 grids (less likely)
+            if(arStr[1] == '0' and arStr[2] == '1' and arStr[3] == '1'):
+
+            # need to check with memory to determine where robot is currently is
+            if(arStr[1] == '1' and arStr[2] == '1' and arStr[3] == '1'):
+
+            #exceed 1 grid
+            if(arStr[1] == '1' and arStr[2] == '0' and arStr[3] == '0'):
+
+            #check with memory, short 2 or exceed 2, rarely happen
+            if(arStr[1] == '0' and arStr[2] == '1' and arStr[3] == '0'):
+
+            #short 3 or exceed 2, very rare
+            if(arStr[1] == '1' and arStr[2] == '1' and arStr[3] == '0'):
+
+            #short 3 or exceed 3, fucking rare
+            if(arStr[1] == '1' and arStr[2] == '0' and arStr[3] == '1'):
+
+
+        if(self.pathCommand[self.run - 1] == '3'):
+            #ok to move
+            if(arStr[1] == '0' and arStr[2] == '0' and arStr[3] == '0'):
+                return 0
+            #exceed 1 grid or less
+            if(arStr[1] == '0' and arStr[2] == '0' and arStr[3] == '1'):
+
+            #exceed 2 or short 3
+            if(arStr[1] == '0' and arStr[2] == '1' and arStr[3] == '1'):
+
+            # need to check with memory to determine where robot is currently is
+            if(arStr[1] == '1' and arStr[2] == '1' and arStr[3] == '1'):
+
+            #short 1
+            if(arStr[1] == '1' and arStr[2] == '0' and arStr[3] == '0'):
+
+            #check with memory, short 2 or exceed 2, rarely happen
+            if(arStr[1] == '0' and arStr[2] == '1' and arStr[3] == '0'):
+
+            #short 2 or exceed 3, very rare
+            if(arStr[1] == '1' and arStr[2] == '1' and arStr[3] == '0'):
+
+            #short 3 or exceed 3, fucking rare
+            if(arStr[1] == '1' and arStr[2] == '0' and arStr[3] == '1'):
+
+
+
     def fastestRun(self,arStr):
         temp = 1
         if (self.run < len(self.pathCommand)):
