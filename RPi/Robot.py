@@ -810,4 +810,52 @@ class Robot:
             self.goalzone = 6
             return '6'
         
-        
+    def fastestPathCompute(self):
+        closedSet = list()
+        openSet = list()
+        neighbors = list()
+        currentNode = Node(0, 0)
+        self.StartNode.GCost = 0
+        self.StartNode.FCost = self.StartNode.GCost + computeH(self.StartNode)
+        openSet.append(self.StartNode)
+        self.Dir = 'U'
+        for y in range(20):
+            for x in range(15):
+                if(self.Memory.grid[y][x] == 0):
+                    self.Memory.grid[y][x] = 1
+        self.processVirtualMap()
+        while(len(openSet) != 0):
+            self.sortOpenSet(openSet)
+            currrentNode = openSet[0]
+            if(currentNode.XNode == self.GoalNode.XNode and currentNode.YNode == self.GoalNode.YNode):
+                self.constructFastestPath(currentNode)
+                break
+            openSet.pop(0)
+            closedSet.append(currentNode)
+            neighbors = self.getNeighbors(currentNode, openSet)
+
+            for neighbor in neighbors:
+                if(self.checkNodeInSet(neighbor, closedSet)):
+                    continue
+                tentativeGCost = currentNode.GCost + 1
+                inOpenSet = self.checkNodeInSet(neighbor, openSet)
+                if(not inOpenSet or tentativeGCost < neighbor.GCost):
+                    neighbor.CameFrom = currentNode
+                    neighbor.GCost = tentativeGCost
+                    neighbor.FCost = neighbor.GCost + neighbor.HCost
+                    if(not inOpenSet):
+                        openSet.append(neighbor)
+
+        print 'out of while loop'        
+
+    def computeH(self, node):
+
+    def sortOpenSet(self, openSet):
+
+    def processVirtualMap(self):
+
+    def getNeighbors(self, currentNode, openSet):
+
+    def checkNodeInSet(self, node, set):
+
+    def constructFastestPath(self, node):
