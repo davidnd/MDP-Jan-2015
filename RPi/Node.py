@@ -10,5 +10,5 @@ class Node:
         GCost = 0
         HCost = 0
         FCost = 0
-        CameFrom
+        CameFrom = None
  	
