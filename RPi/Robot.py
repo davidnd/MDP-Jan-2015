@@ -67,6 +67,7 @@ class Robot:
 		self.loop = False
 		self.VirtualMap = Map(15, 20)
 		self.ShortestPath = list()
+		self.leftReposCount = 0
 	def turnLeft(self):
 		if self.Dir=='U':
 			self.Dir = 'L'
@@ -150,9 +151,10 @@ class Robot:
 		print "Current X= ", self.X, " Current Y = ", self.Y
 		print "Dir = ", self.Dir
 		try:
-			isBlockedLeft = self.checkLeftSide(ArStr)
+			#check front and right before checking left, avoid  conflict
 			isBlockedFront = self.checkTopSide(ArStr)
 			isBlockedRight = self.checkRightSide(ArStr)
+			isBlockedLeft = self.checkLeftSide(ArStr)
 
 			if ((self.X == 12 or self.X==13 )and (self.Y==17 or self.Y==18)):
 				self.enteredGoal = True
@@ -167,6 +169,8 @@ class Robot:
 			print 'ReposFront \t\t\t', self.reposFront
 			print 'ReposRight \t\t\t', self.reposRight
 			print 'ReposLeft \t\t\t', self.reposLeft
+
+			
 			if(self.reposFront and self.reposRight and self.lastCorner == 0):
 				print 'Reseting error...'
 				self.lastCorner = 1
@@ -175,6 +179,7 @@ class Robot:
 				self.printMemory()
 				self.reset()
 				return '7'
+			#need to confirm what 7 does
 			if(self.lastCorner == 1):
 				print 'Realigning front...'
 				self.lastCorner = 2
@@ -188,6 +193,21 @@ class Robot:
 				self.printMemory()
 				self.reset()
 				return '3'
+
+			#repost left
+			if(self.reposLeft):
+				self.leftReposCount +=1
+			else:
+				self.leftReposCount = 0
+			
+			#repos left after every 3 moves
+			if(self.leftReposCount == 4):
+				self.leftReposCount = 0
+			
+			#assume command 8
+			if(self.leftReposCount == 1 and not self.reposRight):
+				return '8'
+			
 			if(self.reposFront and not self.justRF):
 				print "Realigning front, not at corner... "
 				self.justRF = True
