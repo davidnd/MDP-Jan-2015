@@ -844,18 +844,17 @@ class Robot:
 		self.processVirtualMap()
 		while(len(openSet) != 0):
 			self.sortOpenSet(openSet)
-			currrentNode = openSet[0]
+			currrentNode = openSet.pop(0)
 			if(currentNode.XNode == self.GoalNode.XNode and currentNode.YNode == self.GoalNode.YNode):
 				self.constructFastestPath(currentNode)
 				break
-			openSet.pop(0)
 			closedSet.append(currentNode)
 			neighbors = self.getNeighbors(currentNode, openSet)
-
+			lastNode = currentNode.CameFrom
 			for neighbor in neighbors:
 				if(self.checkNodeInSet(neighbor, closedSet)):
 					continue
-				tentativeGCost = currentNode.GCost + 1
+				tentativeGCost = currentNode.GCost + 1 + self.turningCost(lastNode, neighbor)
 				inOpenSet = self.checkNodeInSet(neighbor, openSet)
 				if(not inOpenSet or tentativeGCost < neighbor.GCost):
 					neighbor.CameFrom = currentNode
@@ -933,6 +932,13 @@ class Robot:
 			if (node.XNode == item.XNode and node.YNode == item.YNode):
 				return True
 		return False
+
+	def turningCost(self, lastNode, nextNode):
+		if(lastNode == None):
+			return 0
+		if(lastNode.XNode != nextNode.XNode and lastNode.YNode != nextNode.YNode):
+			return 1
+		return 0
 	def constructFastestPath(self, node):
 		self.ShortestPath.append(node)
 		self.X = 1
