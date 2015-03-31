@@ -15,7 +15,7 @@ namespace MDPSimulator
         {
             TimeLimit = 360;
             CoverageLimit = 100;
-            Speed = 3;
+            Speed = 10;
         }
     }
 }

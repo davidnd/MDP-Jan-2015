@@ -433,10 +433,11 @@ namespace MDPModel
                 currentNode.print();
                 if (currentNode.Equals(this.GoalNode))
                 {
-                    //Console.WriteLine("Reached goal");
-                    //constructPath(currentNode);
-                    //this.shortestPathComputed = true;
-                    //break;
+                    //comment out this section when running real time mapping
+                    Console.WriteLine("Reached goal");
+                    constructPath(currentNode);
+                    this.shortestPathComputed = true;
+                    break;
 
                     //this command is for computing fastest path in real time
                     this.ShortestPath.Add(currentNode);
@@ -445,6 +446,7 @@ namespace MDPModel
                 }
                 openSet.RemoveAt(0);
                 closedSet.Add(currentNode);
+                Node lastNode = currentNode.CameFrom;
                 neighbors = getNeighbors(currentNode, openSet);
                 Console.WriteLine("==== neighbors =====");
                 printListNode(neighbors);
@@ -452,7 +454,7 @@ namespace MDPModel
                 {
                     if (checkNodeInSet(neighbor, closedSet))
                         continue;
-                    int tentativeGCost = currentNode.GCost + 1;
+                    int tentativeGCost = currentNode.GCost + 1 + turningCost(lastNode, neighbor);
                     bool inOpenSet = checkNodeInSet(neighbor, openSet);
                     if (!inOpenSet || tentativeGCost < neighbor.GCost)
                     {
@@ -470,6 +472,16 @@ namespace MDPModel
                 Console.WriteLine("This map has no solution");
                 OnSendingMessage("This map has no solution");
             }
+        }
+        public int turningCost(Node last, Node next)
+        {
+            if (last == null)
+            {
+                return 0;
+            }
+            if (last.XNode != next.XNode && last.YNode != next.YNode)
+                return 1;
+            else return 0;
         }
         public void printListNode(List<Node> nodes)
         {
@@ -558,6 +570,7 @@ namespace MDPModel
 
         private int computeH(Node node)
         {
+            return 0;
             return (XGoal - node.XNode) + (YGoal - node.YNode);
         }
 
