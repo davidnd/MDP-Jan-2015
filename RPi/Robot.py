@@ -69,6 +69,7 @@ class Robot:
                 self.VirtualMap = Map(15, 20)
                 self.ShortestPath = list()
                 self.leftReposCount = 0
+                self.rightReposCount = 0
         def turnLeft(self):
                 if self.Dir=='U':
                         self.Dir = 'L'
@@ -184,22 +185,38 @@ class Robot:
                         if(self.lastCorner == 1):
                                 print 'Turn left'
                                 self.lastCorner = 0
+                                #reset counter at corner
+                                self.rightReposCount = 3
+                                self.leftReposCount = 3
                                 self.turnLeft()
                                 self.printMemory()
                                 return '3'
-
-                        #repost left
+                                
                         if(self.reposLeft):
                                 self.leftReposCount +=1
                         else:
                                 self.leftReposCount = 0
                         
-                        #repos left after every 3 moves
+                        
                         if(self.leftReposCount == 4):
                                 self.leftReposCount = 0
+
+                        if(self.reposRight):
+                                self.rightReposCount +=1
+                        else:
+                                self.rightReposCount = 0
+
+                        if(self.rightReposCount == 4):
+                                self.rightReposCount = 0
+
+                        if(self.reposRight and self.rightReposCount == 1):
+                                print 'Repos right'
+                                return '9'
                         
-                        #assume command 8
+                        
+                        #repos left after every 3 moves
                         if(self.reposLeft and self.leftReposCount == 1):
+                                print 'Repos left'
                                 return '8'
                         
                         if(self.reposFront and not self.justRF):
