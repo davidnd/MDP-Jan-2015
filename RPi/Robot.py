@@ -365,16 +365,14 @@ class Robot:
                         self.isWall = False
                         self.reposRight = True
                         return True
-
+                #update memory
                 if(not self.isWall):
                         if(ArStr[4] == '1'):
                                 self.updateMap(4, 1)
-                                isBlocked = True
                         else:
                                 self.updateMap(4, 2)
                         if(ArStr[6] == '1'):
                                 self.updateMap(6, 1)
-                                isBlocked = True
                         else:
                                 self.updateMap(6, 2)
                 #after updating memory
@@ -406,10 +404,16 @@ class Robot:
                         if(pos == 3):
                                 self.Memory.grid[self.Y + 2][self.X + 1] = val
                         if(pos == 4):
+                                #dont update if there is an obs on the right in mem, prevent loop
+                                if(self.Memory.grid[self.Y + 1][self.X + 2] == 1):
+                                        return
                                 self.Memory.grid[self.Y + 1][self.X + 2] = val
                         if(pos == 5):
                                 self.Memory.grid[self.Y][self.X + 2] = val
                         if(pos == 6):
+                                #dont update if there is an obs on the right in mem, prevent loop
+                                if(self.Memory.grid[self.Y-1][self.X + 2] == 1):
+                                        return
                                 self.Memory.grid[self.Y-1][self.X + 2] = val
                 elif(self.Dir == 'R'):
                         if(pos == 0):
@@ -421,10 +425,14 @@ class Robot:
                         if(pos == 3):
                                 self.Memory.grid[self.Y-1][self.X +2] = val
                         if(pos == 4):
+                                if(self.Memory.grid[self.Y-2][self.X+1] == 1):
+                                        return
                                 self.Memory.grid[self.Y-2][self.X+1] = val
                         if(pos == 5):
                                 self.Memory.grid[self.Y-2][self.X] = val
                         if(pos == 6):
+                                if(self.Memory.grid[self.Y-2][self.X-1] == 1):
+                                        return
                                 self.Memory.grid[self.Y-2][self.X-1] = val
                 elif(self.Dir == 'D'):
                         if(pos == 0):
@@ -436,10 +444,14 @@ class Robot:
                         if(pos == 3):
                                 self.Memory.grid[self.Y-2][self.X-1] = val
                         if(pos == 4):
+                                if(self.Memory.grid[self.Y-1][self.X- 2] == 1):
+                                        return
                                 self.Memory.grid[self.Y-1][self.X- 2] = val
                         if(pos == 5):
                                 self.Memory.grid[self.Y][self.X-2] = val
                         if(pos == 6):
+                                if(self.Memory.grid[self.Y+1][self.X -2] == 1):
+                                        return
                                 self.Memory.grid[self.Y+1][self.X -2] = val
                 elif(self.Dir == 'L'):
                         if(pos == 0):
@@ -451,10 +463,14 @@ class Robot:
                         if(pos == 3):
                                 self.Memory.grid[self.Y+1][self.X - 2] = val
                         if(pos == 4):
+                                if(self.Memory.grid[self.Y+2][self.X - 1] == 1):
+                                        return
                                 self.Memory.grid[self.Y+2][self.X - 1] = val
                         if(pos == 5):
                                 self.Memory.grid[self.Y+2][self.X] = val
                         if(pos == 6):
+                                if(self.Memory.grid[self.Y+2][self.X + 1] == 1):
+                                        return
                                 self.Memory.grid[self.Y+2][self.X + 1] = val
 
         def checkTop(self):
