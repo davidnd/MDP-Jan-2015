@@ -8,36 +8,35 @@ from Robot import *
 
 robot = Robot(1,1,1,'U')
 map=Map(15,20)
+map.grid = [[0,0,0,0,0,0,0,0,0,0,1,1,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,1,1,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,1,1,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,1,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,1,1,1,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,1,1,1],
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,1,0,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,1,0,0,0,0,0,0,0,0,1,0,0,0],
+		[0,0,1,1,1,1,0,0,0,0,0,1,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,1,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,1,0,0,0,0,0],
+		[0,0,0,1,0,0,0,0,0,0,0,0,0,0,1],
+		[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,1,1,1,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0]]
+for i in range(20):
+	for j in range(15):
+		if(map.grid[i][j] == 0):
+			map.grid[i][j] = 2
+robot.Memory = map
+robot.fastestPathCompute()
+print robot.fastestRun('A')
+print robot.fastestRun('A')
+print robot.fastestRun('A')
+print robot.fastestRun('A')
+print robot.fastestRun('A')
 
-
-'''
-ArStr='1000000'
-print ArStr
-print robot.explore(ArStr)
-ArStr='0000111'
-print ArStr
-print robot.explore(ArStr)
-ArStr='0000111'
-print ArStr
-print robot.explore(ArStr)
-ArStr='0111111'
-print ArStr
-print robot.explore(ArStr)
-
-ArStr='0000111'
-print ArStr
-print robot.explore(ArStr)
-
-ArStr='0000011'
-print ArStr
-print robot.explore(ArStr)
-
-ArStr='0000001'
-print ArStr
-print robot.explore(ArStr)
-
-print "finish"
-'''
-while True:
-	ArStr = raw_input("Next sensor data: ")
-	robot.explore(ArStr)
