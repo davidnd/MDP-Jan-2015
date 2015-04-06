@@ -434,10 +434,10 @@ namespace MDPModel
                 if (currentNode.Equals(this.GoalNode))
                 {
                     //comment out this section when running real time mapping
-                    Console.WriteLine("Reached goal");
-                    constructPath(currentNode);
-                    this.shortestPathComputed = true;
-                    break;
+                    //Console.WriteLine("Reached goal");
+                    //constructPath(currentNode);
+                    //this.shortestPathComputed = true;
+                    //break;
 
                     //this command is for computing fastest path in real time
                     this.ShortestPath.Add(currentNode);
