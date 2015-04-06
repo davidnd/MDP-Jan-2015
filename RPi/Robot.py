@@ -182,11 +182,6 @@ class Robot:
                                 return '7'
                         #need to confirm what 7 does
                         if(self.lastCorner == 1):
-                                print 'Realigning front...'
-                                self.lastCorner = 2
-                                self.printMemory()
-                                return '5'
-                        if(self.lastCorner == 2):
                                 print 'Turn left'
                                 self.lastCorner = 0
                                 self.turnLeft()
