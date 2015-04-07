@@ -211,6 +211,7 @@ class Robot:
 
                         if(self.reposRight and self.rightReposCount == 1):
                                 print 'Repos right'
+                                self.leftReposCount = 1
                                 return '9'
                         
                         
