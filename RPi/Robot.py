@@ -785,6 +785,8 @@ class Robot:
                                 return 0
         def fastestRun(self,arStr):
                 temp = 1
+                if(self.Y == 18 and self.X == 13):
+                        return 'F'
                 if (self.run < len(self.decodedPathCmd)):
                         if (self.decodedPathCmd[self.run] == '1'):
                                 self.moveForward(1)
@@ -806,8 +808,6 @@ class Robot:
                 self.generateMapStr()
                 self.generateAndroidMapStr() 
                 print "currrent position: X = ", self.X, "Y = ", self.Y, "Direction: ", self.Dir
-                if(self.Y == 18 and self.X == 13):
-                        return 'F'
                 return temp
 
         def printMemory(self):
