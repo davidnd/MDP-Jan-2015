@@ -125,23 +125,23 @@ namespace MDPSimulator
                     //message is not zero
                     OnReceivingData(desc);
                     //exploration finished, compute shortest path
-                    if (desc[desc.Length - 1] == 'F')
-                    {
-                        OnUpdatingConsole("Exploration finish, computing shortest path");
-                        Robot robot = new Robot();
-                        string path = robot.realTimeShortestPath(desc);
-                        this.shortestPath = "A";
-                        if (path != null)
-                        {
-                            this.shortestPath += path;
-                        }
-                        else
-                        {
-                            //no solution
-                            this.shortestPath = "B";
-                        }
-                        send(this.shortestPath);
-                    }
+                    //if (desc[desc.Length - 1] == 'F')
+                    //{
+                    //    OnUpdatingConsole("Exploration finish, computing shortest path");
+                    //    Robot robot = new Robot();
+                    //    string path = robot.realTimeShortestPath(desc);
+                    //    this.shortestPath = "A";
+                    //    if (path != null)
+                    //    {
+                    //        this.shortestPath += path;
+                    //    }
+                    //    else
+                    //    {
+                    //        //no solution
+                    //        this.shortestPath = "B";
+                    //    }
+                    //    send(this.shortestPath);
+                    //}
                 }
                 OnStatusUpdating(false);
                 OnUpdatingConsole("Connection lost");
