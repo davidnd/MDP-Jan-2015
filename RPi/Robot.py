@@ -144,8 +144,6 @@ class Robot:
                         self.lastDir = 'L'
                         self.turnedAround = True
         def inStartZone(self):
-                if self.X == 2 and self.Y == 1:
-                        return True
                 if self.X == 1 and self.Y == 1:
                         return True
 
@@ -165,6 +163,7 @@ class Robot:
                         checkinStartzone = self.inStartZone()
 
                         if checkinStartzone == True and self.enteredGoal == True:
+                                self.clearGoalZone()
                                 self.generateMapStr()
                                 self.generateAndroidMapStr()
                                 return 'F'
@@ -173,6 +172,14 @@ class Robot:
                         print 'ReposRight \t\t\t', self.reposRight
                         print 'ReposLeft \t\t\t', self.reposLeft
 
+                        if(self.justRF):
+                                self.leftReposCount = 2
+                                self.rightReposCount = 2
+
+                        if(self.reposFront):
+                                self.justRF = True
+                        else:
+                                self.justRF = False
                         
                         if(self.reposFront and self.reposRight and self.lastCorner == 0):
                                 print 'Reseting error...'
@@ -609,8 +616,8 @@ class Robot:
                 self.mapStr = self.Dir + x + y
                 
                 # iterate the map to add value to mapStr
-                if (self.X == 1 and self.Y == 1 and self.enteredGoal):
-                        self.clearGoalZone()
+                if (self.inStartZone() and self.enteredGoal):
+                        # self.clearGoalZone()
                         for i in range (20):
                                 for j in range (15):
                                         self.mapStr += str(self.Memory.grid[i][j])
@@ -651,8 +658,8 @@ class Robot:
                 self.androidMapStr = 'GRID' + self.Dir + y + x
                 
                 # iterate the map to add value to androidMapStr
-                if (self.X == 1 and self.Y == 1 and self.enteredGoal):
-                        self.clearGoalZone()
+                if (self.inStartZone() and self.enteredGoal):
+                        #self.clearGoalZone()
                         for i in range (15):
                                 for j in range (20):
                                         self.androidMapStr += str(self.Memory.grid[j][i])
