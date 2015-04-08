@@ -783,10 +783,152 @@ class Robot:
                         #short 3 or exceed 3, fucking rare
                         if(arStr[1] == '1' and arStr[2] == '0' and arStr[3] == '1'):
                                 return 0
+        def getExpectedReadings(self):
+                expected = ""
+                if(self.Dir == 'U'):
+                        #0
+                        if(self.Memory.grid[self.Y+1][self.X-2] == 1):
+                                expected +='1'
+                        else:
+                                expected +='0'
+                        #1
+                        if(self.Memory.grid[self.Y+2][self.X-1] == 1):
+                                expected +='1'
+                        else:
+                                expected +='0'
+                        #2
+                        if(self.Memory.grid[self.Y+2][self.X] == 1):
+                                expected +='1'
+                        else:
+                                expected +='0'
+                        #3
+                        if(self.Memory.grid[self.Y+2][self.X+1] == 1):
+                                expected +='1'
+                        else:
+                                expected +='0'
+                        #4
+                        if(self.Memory.grid[self.Y+1][self.X+2] == 1):
+                                expected +='1'
+                        else:
+                                expected +='0'
+                        #5
+                        expected += '0'
+                        #6
+                        if(self.Memory.grid[self.Y-1][self.X+2] == 1):
+                                expected +='1'
+                        else:
+                                expected +='0'
+                if(self.Dir == 'R'):
+                        #0
+                        if(self.Memory.grid[self.Y+2][self.X+1] == 1):
+                                expected +='1'
+                        else:
+                                expected +='0'
+                        #1
+                        if(self.Memory.grid[self.Y+1][self.X+2] == 1):
+                                expected +='1'
+                        else:
+                                expected +='0'
+                        #2
+                        if(self.Memory.grid[self.Y][self.X+2] == 1):
+                                expected +='1'
+                        else:
+                                expected +='0'
+                        #3
+                        if(self.Memory.grid[self.Y-1][self.X+2] == 1):
+                                expected +='1'
+                        else:
+                                expected +='0'
+                        #4
+                        if(self.Memory.grid[self.Y-2][self.X+1] == 1):
+                                expected +='1'
+                        else:
+                                expected +='0'
+                        #5
+                        expected += '0'
+                        #6
+                        if(self.Memory.grid[self.Y-2][self.X-1] == 1):
+                                expected +='1'
+                        else:
+                                expected +='0'
+
+                if(self.Dir == 'L'):
+                        #0
+                        if(self.Memory.grid[self.Y-2][self.X-1] == 1):
+                                expected +='1'
+                        else:
+                                expected +='0'
+                        #1
+                        if(self.Memory.grid[self.Y-1][self.X-2] == 1):
+                                expected +='1'
+                        else:
+                                expected +='0'
+                        #2
+                        if(self.Memory.grid[self.Y][self.X-2] == 1):
+                                expected +='1'
+                        else:
+                                expected +='0'
+                        #3
+                        if(self.Memory.grid[self.Y+1][self.X-2] == 1):
+                                expected +='1'
+                        else:
+                                expected +='0'
+                        #4
+                        if(self.Memory.grid[self.Y+2][self.X-1] == 1):
+                                expected +='1'
+                        else:
+                                expected +='0'
+                        #5
+                        expected += '0'
+                        #6
+                        if(self.Memory.grid[self.Y+2][self.X+1] == 1):
+                                expected +='1'
+                        else:
+                                expected +='0'
+                if(self.Dir == 'D'):
+                        #0
+                        if(self.Memory.grid[self.Y-1][self.X+2] == 1):
+                                expected +='1'
+                        else:
+                                expected +='0'
+                        #1
+                        if(self.Memory.grid[self.Y-2][self.X+1] == 1):
+                                expected +='1'
+                        else:
+                                expected +='0'
+                        #2
+                        if(self.Memory.grid[self.Y-2][self.X] == 1):
+                                expected +='1'
+                        else:
+                                expected +='0'
+                        #3
+                        if(self.Memory.grid[self.Y-2][self.X-1] == 1):
+                                expected +='1'
+                        else:
+                                expected +='0'
+                        #4
+                        if(self.Memory.grid[self.Y-1][self.X-2] == 1):
+                                expected +='1'
+                        else:
+                                expected +='0'
+                        #5
+                        expected += '0'
+                        #6
+                        if(self.Memory.grid[self.Y+1][self.X-2] == 1):
+                                expected +='1'
+                        else:
+                                expected +='0'
+                return expected
+        def checkSensorReadings(self, arStr):
+                expected = getExpectedReadings()
+                #about to move forward
+                #if(self.decodedPathCmd[self.run + 1] == '1'):
+                        
         def fastestRun(self,arStr):
                 temp = 1
                 if(self.Y == 18 and self.X == 13):
                         return 'F'
+                #if(arStr[2] == '1'):
                 if (self.run < len(self.decodedPathCmd)):
                         if (self.decodedPathCmd[self.run] == '1'):
                                 self.moveForward(1)
