@@ -23,6 +23,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -65,6 +66,7 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 	private ToggleButton tbAutoManual;
 	private SensorManager senSensorManager;
     private Sensor senAccelerometer;
+    private Vibrator v;
     
 	boolean initalized = false;
     boolean up = false;
@@ -154,31 +156,36 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
  						"11101101111111110111" + "11101101111111110111" +
  						"11111111111111110111" + "11111111111111111111" +
  						"11111111111111111111";
+
+
+ 	String newPuzzle = "GRID 15 20 2 2 3 2" +
+	           " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" +
+	           " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" +
+	           " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" +
+	           " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" +
+	           " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" +
+	           " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" +
+	           " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" +
+	           " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" +
+	           " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" +
+	           " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" +
+	           " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" +
+	           " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" +
+	           " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" +
+	           " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" +
+	           " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0";
  	
- 	String newPuzzle = "0 0 0 " + "22200000000200022100"
-                                + "00000000000000000000"
-                                + "01000221000000001000"
-                                + "00000001000000022100"
-                                + "00000000002010000000"
-                                + "00000000000000001002"
-                                + "00000000000111200000"
-                                + "00000000002010000000"
-                                + "00000001000000000000"
-                                + "20100000000000011100"
-                                + "00111001020000000000"
-                                + "00202000000000000002"
-                                + "00000000000020200000"
-                                + "00001222020000000000"
-                                + "00102000000000000102" ;
+ 	boolean updateMapFlag = false;
  	
- 	@Override	
+	@Override	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_task_c1);	
 				
 		//Task C.3 - C.5
 		draw = (Draw) findViewById(R.id.map);
-		draw.setPuzzle(newPuzzle);
+		//draw.setPuzzle(newPuzzle);
+		draw.setPuzzle(convertFromAmdToAndroid(newPuzzle));
 
 		robot = draw.robot;
 		initalized = false;				
@@ -214,7 +221,7 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 		textViewYcoord = (TextView)findViewById(R.id.textViewYcoord);
 		editTextYcoord = (EditText)findViewById(R.id.editTextYcoord);
 		
-		btnSetCoordinate.setOnClickListener(new OnClickListener(){				
+		btnSetCoordinate.setOnClickListener(new android.view.View.OnClickListener(){				
 			public void onClick(View v) {	
 				EditText xcoord = (EditText) findViewById(R.id.editTextXcoord);
 				String message1 = xcoord.getText().toString();
@@ -223,9 +230,10 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 				String message2 = ycoord.getText().toString();
 				int ycoordinate = Integer.parseInt(message2);
 				//Set to map
-				Robot r1 = new Robot();
-				r1.setX(xcoordinate);
-				r1.setY(ycoordinate);	
+				robot.setX(xcoordinate);
+				robot.setY(ycoordinate);	
+				sendMessage("GRID 15 20 " + xcoordinate +" " + ycoordinate + " ");
+				draw.refreshPuzzle();
 			}
 		});				
 		
@@ -280,6 +288,7 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 		senSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);		
 		
 		mdHandler = new Handler();		
+		v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
 		
 		//navigate to MainMenu.java
 		goMainMenu = (Button)findViewById(R.id.btnMainMenu);
@@ -758,7 +767,8 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
             		if (readMessage.startsWith("GRID")) {
     					if (tbAutoManual.isChecked()) {
     						// go push message to draw
-    						draw.setPuzzle(readMessage);
+    						//draw.setPuzzle(readMessage);
+    						draw.setPuzzle(convertFromAmdToAndroid(readMessage));
     					}
     					else{
     						btnUpdateMap.setOnClickListener(new OnClickListener(){
@@ -766,7 +776,8 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
     							public void onClick(View v) {
     								//String map;
     								//map = draw.getCurrentMap();
-    								draw.setPuzzle(readMessage);
+    								//draw.setPuzzle(readMessage);
+    								draw.setPuzzle(convertFromAmdToAndroid(readMessage));
     							}    							
     						});
     					}
@@ -787,7 +798,96 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
             }
         }
     };
-    
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    private String convertFromAmdToAndroid(String amdString) {
+		// TODO Auto-generated method stub
+		
+    	String[] amdStringArray = amdString.split(" ");
+		int[] amdIntegerArray = new int[amdStringArray.length-3];
+		for(int i=0;i<amdIntegerArray.length;i++)
+		{
+			amdIntegerArray[i] = Integer.parseInt(amdStringArray[i+3]);
+		}
+		
+		//convert robot direction string
+		String androidRobotDirectionString="";
+		if((amdIntegerArray[0]==amdIntegerArray[2]) && (amdIntegerArray[1]==amdIntegerArray[3]+1))
+		{
+			androidRobotDirectionString=String.valueOf(UP);
+		}
+		else if((amdIntegerArray[0]==amdIntegerArray[2]-1) && (amdIntegerArray[1]==amdIntegerArray[3]))
+		{
+			androidRobotDirectionString=String.valueOf(RIGHT);
+		}
+		else if((amdIntegerArray[0]==amdIntegerArray[2]) && (amdIntegerArray[1]==amdIntegerArray[3]-1))
+		{
+			androidRobotDirectionString=String.valueOf(DOWN);
+		}
+		else if((amdIntegerArray[0]==amdIntegerArray[2]+1) && (amdIntegerArray[1]==amdIntegerArray[3]))
+		{
+			androidRobotDirectionString=String.valueOf(LEFT);
+		}
+		
+		//convert android map string
+		StringBuffer sbf = new StringBuffer();        
+        if(amdStringArray.length > 8){
+        	sbf.append(amdStringArray[7]);
+            for(int i=8; i < amdStringArray.length; i++)
+            {
+            	sbf.append(amdStringArray[i]);
+            }
+        }
+        String androidMapString = sbf.toString();
+        
+        //final string
+        String androidFinalString = String.valueOf(amdIntegerArray[0]) + " " 
+                                  + String.valueOf(amdIntegerArray[1]) + " " 
+                                  + androidRobotDirectionString + " " 
+                                  + androidMapString;
+        
+        return androidFinalString;
+        
+		
+    	/*
+    	String amdStringTrimed = amdString.replaceAll("\\s","");
+		String androidStringFull = amdStringTrimed.substring(8);
+		
+		
+		String part1String = androidStringFull.substring(0,4);//5545
+		
+		int[] part1Array=new int[4];
+		for(int i=0;i<4;i++)
+		{
+			part1Array[i] = Integer.parseInt(String.valueOf(part1String.charAt(i)));
+		}
+		
+		String part2String = androidStringFull.substring(4);//map...
+		String direction="";
+		
+		if((part1Array[0]==part1Array[2]) && (part1Array[1]==part1Array[3]+1))
+		{
+			direction=String.valueOf(UP);
+		}
+		else if((part1Array[0]==part1Array[2]-1) && (part1Array[1]==part1Array[3]))
+		{
+			direction=String.valueOf(RIGHT);
+		}
+		else if((part1Array[0]==part1Array[2]) && (part1Array[1]==part1Array[3]-1))
+		{
+			direction=String.valueOf(DOWN);
+		}
+		else if((part1Array[0]==part1Array[2]+1) && (part1Array[1]==part1Array[3]))
+		{
+			direction=String.valueOf(LEFT);
+		}
+		
+		String androidStringFinal = String.valueOf(part1Array[0]-2) + " " + String.valueOf(part1Array[1]-2) + " " + direction + " " 
+		                                                            + part2String;
+		
+		return androidStringFinal;
+		*/
+	}
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private void connectDevice(Intent data, boolean secure) {
     	// Get the device MAC address
     	String address = "test";
@@ -858,7 +958,7 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
         }        	
     }
     
-    //Task C.9 - tilt direction
+    //Task C.10 - tilt direction
     @Override
 	public void onSensorChanged(SensorEvent event) {
     	if (!initalized) {
@@ -873,12 +973,15 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 
 			if (x >= 2.9) {
 				sendDirection(0); // left
+				v.vibrate(50);
 			} 
 			else if (x <= -2.9) {
 				sendDirection(1);// right
+				v.vibrate(50);
 			} 
 			else if (y <= -2.2) {
 				sendDirection(2);// up
+				v.vibrate(50);
 			} 
 			/*
 			else if (y >= 3.9) {
@@ -907,26 +1010,38 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
     	}			
 	}
     
- 	public void sendDirection(int direction) {
+    public void sendDirection(int direction) {
  		if (direction == 0) {
  			tiltDirection.setText("Left");
 
 			if (myBTservice.getState() == myBTservice.STATE_CONNECTED) {
 				switch (robot.getDirection()) {
 					case UP:
-						sendMessage("Left");		
+						//sendMessage("Left");
+						sendMessage("a");
+						sendMessage("grid");
+						updateMapFlag=true;
 						break;
 						
 					case LEFT:
-						sendMessage("Down");
+						//sendMessage("Down");
+						sendMessage("s");
+						sendMessage("grid");
+						updateMapFlag=true;
 						break;
 						
 					case DOWN:
-						sendMessage("Right");
+						//sendMessage("Right");
+						sendMessage("d");
+						sendMessage("grid");
+						updateMapFlag=true;
 						break;
 						
 					case RIGHT:
-						sendMessage("Up");
+						//sendMessage("Up");
+						sendMessage("w");
+						sendMessage("grid");
+						updateMapFlag=true;
 						break;
 				}
 			}
@@ -939,19 +1054,31 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 			if (myBTservice.getState() == myBTservice.STATE_CONNECTED) {
 				switch (robot.getDirection()) {
 					case UP:
-						sendMessage("Right");
+						//sendMessage("Right");
+						sendMessage("d");
+						sendMessage("grid");
+						updateMapFlag=true;
 						break;
 				
 					case LEFT:
-						sendMessage("Up");
+						//sendMessage("Up");
+						sendMessage("w");
+						sendMessage("grid");
+						updateMapFlag=true;
 						break;
 				
 					case DOWN:
-						sendMessage("Left");
+						//sendMessage("Left");
+						sendMessage("a");
+						sendMessage("grid");
+						updateMapFlag=true;
 						break;
 					
 					case RIGHT:
-						sendMessage("Down");
+						//sendMessage("Down");
+						sendMessage("s");
+						sendMessage("grid");
+						updateMapFlag=true;
 						break;
 				}
 			}
@@ -964,19 +1091,31 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 			if (myBTservice.getState() == myBTservice.STATE_CONNECTED) {
 				switch (robot.getDirection()) {
 					case UP:
-						sendMessage("Up");
+						//sendMessage("Up");
+						sendMessage("w");
+						//sendMessage("grid");
+						//updateMapFlag=true;
 						break;
 						
 					case DOWN:
-						sendMessage("Down");
+						//sendMessage("Down");
+						sendMessage("s");
+						//sendMessage("grid");
+						//updateMapFlag=true;
 						break;
 						
 					case LEFT:
-						sendMessage("Left");
+						//sendMessage("Left");
+						sendMessage("a");
+						//sendMessage("grid");
+						//updateMapFlag=true;
 						break;
 						
 					case RIGHT:
-						sendMessage("Right");
+						//sendMessage("Right");
+						sendMessage("d");
+						//sendMessage("grid");
+						//updateMapFlag=true;
 						break;
 				}
 			}
@@ -1098,7 +1237,7 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 		return true;
     }
            
-    Runnable mAction = new Runnable() {
+	Runnable mAction = new Runnable() {
 		@Override
 		public void run() {
 			//robot speed
@@ -1111,22 +1250,34 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 
 				switch (robot.getDirection()) {
 					case UP:
-						sendMessage("Up");
+						//sendMessage("Up");
+						sendMessage("w");
+						//sendMessage("grid");
+						//updateMapFlag=true;
 						robotStatus.setText("Facing Up");
 						break;
 						
 					case DOWN:
-						sendMessage("Down");
+						//sendMessage("Down");
+						sendMessage("s");
+						//sendMessage("grid");
+						//updateMapFlag=true;
 						robotStatus.setText("Facing Down");
 						break;
 						
 					case LEFT:
-						sendMessage("Left");
+						//sendMessage("Left");
+						sendMessage("a");
+						//sendMessage("grid");
+						//updateMapFlag=true;
 						robotStatus.setText("Facing Left");
 						break;
 						
 					case RIGHT:
-						sendMessage("Right");
+						//sendMessage("Right");
+						sendMessage("d");
+						//sendMessage("grid");
+						//updateMapFlag=true;
 						robotStatus.setText("Facing Right");
 						break;
 				}				
@@ -1154,22 +1305,34 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 				
 				switch (robot.getDirection()) {
 					case UP:
-						sendMessage("Left");
+						//sendMessage("Left");
+						sendMessage("a");
+						sendMessage("grid");
+						updateMapFlag=true;
 						robotStatus.setText("Facing Left");
 						break;
 						
 					case LEFT:
-						sendMessage("Down");
+						//sendMessage("Down");
+						sendMessage("s");
+						sendMessage("grid");
+						updateMapFlag=true;
 						robotStatus.setText("Facing Down");
 						break;
 						
 					case DOWN:
-						sendMessage("Right");
+						//sendMessage("Right");
+						sendMessage("d");
+						sendMessage("grid");
+						updateMapFlag=true;
 						robotStatus.setText("Facing Right");
 						break;
 						
 					case RIGHT:
-						sendMessage("Up");
+						//sendMessage("Up");
+						sendMessage("w");
+						sendMessage("grid");
+						updateMapFlag=true;
 						robotStatus.setText("Facing Up");
 						break;
 				}				
@@ -1186,22 +1349,34 @@ public class TaskC1 extends Activity implements OnTouchListener, SensorEventList
 				
 				switch (robot.getDirection()) {
 					case UP:
-						sendMessage("Right");
+						//sendMessage("Right");
+						sendMessage("d");
+						sendMessage("grid");
+						updateMapFlag=true;
 						robotStatus.setText("Facing Right");
 						break;
 						
 					case LEFT:
-						sendMessage("Up");
+						//sendMessage("Up");
+						sendMessage("w");
+						sendMessage("grid");
+						updateMapFlag=true;
 						robotStatus.setText("Facing Up");
 						break;
 						
 					case DOWN:
-						sendMessage("Left");
+						//sendMessage("Left");
+						sendMessage("a");
+						sendMessage("grid");
+						updateMapFlag=true;
 						robotStatus.setText("Facing Left");
 						break;
 						
 					case RIGHT:
-						sendMessage("Down");
+						//sendMessage("Down");
+						sendMessage("s");
+						sendMessage("grid");
+						updateMapFlag=true;
 						robotStatus.setText("Facing Down");
 						break;
 				}

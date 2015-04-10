@@ -121,6 +121,6 @@
             	    tools:ignore="ContentDescription" />
       
         	</LinearLayout>    	
-    	</TableRow>
+    	</TableRow> 
     </TableLayout>
 </RelativeLayout>

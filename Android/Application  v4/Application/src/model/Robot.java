@@ -2,6 +2,7 @@ package model;
 
 import entity.Cell;
 import observer.RobotObserver;
+import com.example.application.TaskC1;
 
 public class Robot {
 	private static final Robot robot = new Robot();
@@ -82,14 +83,29 @@ public class Robot {
 	       int newX = x + dx[direction] * numberOfMove;
 	       int newY = y + dy[direction] * numberOfMove;
 	        
-	       boolean check = true;
+	       boolean check1 = true;
+	       /*///
 	       for (int i = 0; i < SIZE; i++)
 	           for (int j = 0; j < SIZE; j++) {
+	           ///*/
+	       for (int i = -1; i <= 1; i++)
+	       {
+	           for (int j = -1; j <= 1; j++) 
+	           {
 	               if (!Arena.getInstance().insideArena(new Cell(newX + i, newY +j)))
-	                   check = false;
+	               {
+	                   check1 = false;
+	               }
 	           }
-	        
-	       if (check) {
+	       }
+	       
+	       boolean check2=true;
+	       if(Arena.getInstance().checkObstacles(new Cell(newX, newY)) == true)
+	       {
+	    	   check2 = false;
+	       }
+	       
+	       if (check1 && check2) {
 	           this.setX(newX);
 	           this.setY(newY);
 	           RobotObserver.getInstance().noticeView();

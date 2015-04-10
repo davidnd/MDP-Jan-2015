@@ -1,7 +1,10 @@
 package draw;
 
+import model.Arena;
 import model.Robot;
 import com.example.application.TaskC1;
+
+import entity.Cell;
 
 import android.R;
 import android.content.Context;
@@ -132,9 +135,12 @@ public class Draw extends View {
         painter.setColor(getResources().getColor(R.color.black));
         painter.setStyle(Style.STROKE);
  
-        int x = (int) (robot.getX() * width + 3 * width / 2);
-        int y = (int) (robot.getY() * width + 3 * width / 2);
- 
+        ///int x = (int) (robot.getX() * width + 3 * width / 2);
+        ///int y = (int) (robot.getY() * width + 3 * width / 2);
+        
+        int x = (int) (robot.getX() * width - width / 2);
+        int y = (int) (robot.getY() * width - width / 2);
+        
         canvas.drawCircle(x, y, width, painter); 
         painter.setStyle(Style.FILL);
         
@@ -168,6 +174,7 @@ public class Draw extends View {
         
         // Horizontal lines
         for (int i = 0; i <= gridY; i++) {
+            //canvas.drawLine(0, i * height, getWidth(), i * height, painter);
             canvas.drawLine(0, i * height, gridX * width, i * height, painter);
         }
         
@@ -180,27 +187,38 @@ public class Draw extends View {
         
         // blocks - vertical @ outer loop, horizontal @ inner loop
         painter.setStyle(Style.FILL);
-        for (int i = 0; i < gridY; i++) 
+        for (int y = 1; y <= gridY; y++) 
         {
-            for (int j = 0; j < gridX; j++)
+            for (int x = 1; x <= gridX; x++)
             {
-                if (this.getTileString(i, j) == 1) // 1: block, 0:empty
+            	/*
+            	if (this.getTileString(x, y) == 0)
+            	{
+            		Arena.getInstance().addEmptyCell(new Cell(x, y));
+            	}
+            	*/
+            	
+            	if (this.getTileString(x, y) == 1) // 1: block, 0:empty
                 {
                     // Log.i("draw","grid@"+i+" "+j);
-                    canvas.drawRect(new RectF(j * width, i * height, (j + 1) * width, (i + 1) * height), painter);
+                    canvas.drawRect(new RectF((x-1) * width, (y-1) * height, x * width, y * height), painter);
+                    //Arena.getInstance().addObstacleCell(new Cell(x, y));
+                    //Arena.puzzle=this.puzzle;
                 }
-                else if(this.getTileString(i, j) == 2){
-                	canvas.drawRect(new RectF(j * width, i * height, (j + 1) * width, (i + 1) * height), painterUn);
+                
+                else if(this.getTileString(x, y) == 2){
+                	canvas.drawRect(new RectF((x-1) * width, (y-1) * height, x * width, y * height), painterUn);
                 }
             }
         }
+        Arena.puzzle=this.puzzle;
  
         // print start and end point
         Paint painter1 = new Paint();
         painter1.setColor(getResources().getColor(R.color.holo_red_light));
         painter1.setStyle(Style.FILL);
-        canvas.drawRect(new RectF(0 * width, 0 * height, 1 * width, 1 * height), painter1);
-        canvas.drawRect(new RectF((gridX - 1) * width, (gridY - 1) * height, gridX * width, gridY * height), painter1);
+        canvas.drawRect(new RectF(0 * width, 0 * height, 3 * width, 3 * height), painter1);
+        canvas.drawRect(new RectF((gridX - 3) * width, (gridY - 3) * height, gridX * width, gridY * height), painter1);
  
         Log.d("painting", "paint arena");
     }
@@ -215,7 +233,8 @@ public class Draw extends View {
  
     private int getTile(int x, int y) { 
    
-        return this.puzzle[x * gridX + y];
+        //return this.puzzle[y * gridX + x];
+        return this.puzzle[(y-1) * gridX + (x-1)];
     }
  
     public String getCurrentMap() {

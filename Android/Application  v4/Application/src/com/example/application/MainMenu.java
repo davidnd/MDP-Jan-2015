@@ -37,7 +37,7 @@ public class MainMenu extends ActionBarActivity {
         		Intent i=new Intent(MainMenu.this,TaskC8.class);
         		startActivity(i);
         	}
-        });    
+        }); 
 	}
 
 	@Override
@@ -63,11 +63,16 @@ public class MainMenu extends ActionBarActivity {
   	//display pop-up
   	public void infoc1(View view)
   	{
-  	    Toast.makeText(this, "Task C.1 - Transmit & receive text strings over the Bluetooth comm link." + "\n" + "Task C.2 - Scan, select & connect with Bluetooth device." + "\n" + "Task C.3 - Navigate robot Up, Down, Left, Right." + "\n" + "Task C.4 - Indicate current status of robot." + "\n" + "Task C.5 - 2D display of maze environment." + "\n" + "Task C.6 - Manual / Auto graphical update to maze." + "\n" + "Task C.8 - Robust connectivity with Bluetooth device." + "\n" + "Task C.9 - Extras: Continuous touch control & Tilt sensing", Toast.LENGTH_LONG).show();
+  		Toast.makeText(this, "Task C.1 - Transmit & receive text strings over the Bluetooth comm link." + "\n" + "Task C.2 - Scan, select & connect with Bluetooth device." + "\n" + "Task C.3 - Navigate robot Forward, Left and Right." + "\n" + "Task C.4 - Indicate current status of robot." + "\n" + "Task C.5 - Update Robot Start Coordinates to PC." + "\n" + "Task C.6 - 2D display of maze environment." + "\n" + "Task C.7 - Manual / Auto graphical update to maze." + "\n" + "Task C.9 - Robust connectivity with Bluetooth device.", Toast.LENGTH_LONG).show();
   	}
 
   	public void infoc2(View view)
   	{
-  	    Toast.makeText(this, "Task C.7 - Persistent user-configurable commands to Robot", Toast.LENGTH_LONG).show();
+  		Toast.makeText(this, "Task C.8 - Persistent user-configurable commands to Robot", Toast.LENGTH_LONG).show();
+  	}
+  	
+  	public void infoc3(View view)
+  	{
+  		Toast.makeText(this, "Task C.10 - Extension beyond the basics (tilt sensing).", Toast.LENGTH_LONG).show();
   	}
 }
