@@ -1112,7 +1112,7 @@ class Robot:
                 if(lastNode == None):
                         return 0
                 if(lastNode.XNode != nextNode.XNode and lastNode.YNode != nextNode.YNode):
-                        return 1
+                        return 10
                 return 0
         def constructFastestPath(self, node):
                 self.ShortestPath.append(node)

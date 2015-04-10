@@ -4,8 +4,9 @@
 import Queue
 from Map import *
 from Robot import *
+from temp import *
 
-
+'''
 robot = Robot(1,1,1,'U')
 map=Map(15,20)
 map.grid = [[0,0,0,0,0,0,0,0,0,0,1,1,0,0,0],
@@ -39,4 +40,7 @@ print robot.fastestRun('A')
 print robot.fastestRun('A')
 print robot.fastestRun('A')
 print robot.fastestRun('A')
+'''
+a = temp()
+a.fastestPathDecoder()
 
