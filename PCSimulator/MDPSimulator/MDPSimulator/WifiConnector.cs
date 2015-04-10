@@ -113,6 +113,7 @@ namespace MDPSimulator
                 clientSocket.ReceiveBufferSize = 400;
                 string desc = "";
                 byte[] data;
+                //while (this.checkConnectionStatus)
                 while (this.clientSocket.Connected)
                 {
                     data = new byte[clientSocket.ReceiveBufferSize];
@@ -152,6 +153,18 @@ namespace MDPSimulator
                 OnStatusUpdating(false);
             }
 
+        }
+        public bool checkConnectionStatus()
+        {
+            if (this.clientSocket.Connected && clientSocket.Client.Poll(01, SelectMode.SelectRead))
+            {
+                byte [] buff = new byte[1];
+                if (clientSocket.Client.Receive(buff, SocketFlags.Peek) == 0)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         public void run()
