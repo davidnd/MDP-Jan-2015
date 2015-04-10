@@ -5,9 +5,9 @@
 
 class Node:
     def __init__(self, x, y):
-        XNode = x
-        YNode = y
-        GCost = 0
-        HCost = 0
-        FCost = 0
- 
+        self.XNode = x
+        self.YNode = y
+        self.GCost = 0
+        self.HCost = 0
+        self.FCost = 0
+        self.CameFrom = None
