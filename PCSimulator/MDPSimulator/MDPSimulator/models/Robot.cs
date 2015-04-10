@@ -42,6 +42,7 @@ namespace MDPModel
         }
         public Stack stack { get; set; }
         public List<DFSNode> DFSNodes { get; set; }
+        public List<Node> priorityNodes { get; set; }
         public int Y
         {
             get { return this.y; }
@@ -95,6 +96,7 @@ namespace MDPModel
             this.ShortestPath = new List<Node>();
             this.VirtualMap = new Map();
             this.DFSNodes = new List<DFSNode>();
+            this.priorityNodes = new List<Node>();
             this.CurrentCoverage = 0;
         }
 
@@ -434,10 +436,10 @@ namespace MDPModel
                 if (currentNode.Equals(this.GoalNode))
                 {
                     //comment out this section when running real time mapping
-                    //Console.WriteLine("Reached goal");
-                    //constructPath(currentNode);
-                    //this.shortestPathComputed = true;
-                    //break;
+                    Console.WriteLine("Reached goal");
+                    constructPath(currentNode);
+                    this.shortestPathComputed = true;
+                    break;
 
                     //this command is for computing fastest path in real time
                     this.ShortestPath.Add(currentNode);
@@ -454,7 +456,11 @@ namespace MDPModel
                 {
                     if (checkNodeInSet(neighbor, closedSet))
                         continue;
-                    int tentativeGCost = currentNode.GCost + 1 + turningCost(lastNode, neighbor);
+                    bool check = this.checkPriority(neighbor);
+                    int benefit = 0;
+                    if (check)
+                        benefit = 2;
+                    int tentativeGCost = currentNode.GCost + 1 + turningCost(lastNode, neighbor) - benefit;
                     bool inOpenSet = checkNodeInSet(neighbor, openSet);
                     if (!inOpenSet || tentativeGCost < neighbor.GCost)
                     {
@@ -517,6 +523,7 @@ namespace MDPModel
             int y = currentNode.YNode;
             List<Node> neighbors = new List<Node>();
             //empty cell
+            bool priority = false;
             if (this.VirtualMap.Grid[y, x + 1].Status == 2)
             {
                 Node neighbor = new Node(x + 1, y);
@@ -567,7 +574,45 @@ namespace MDPModel
             }
             return neighbors;
         }
+        private void constructPriorityNodes()
+        {
 
+        }
+        private bool checkPriority(Node node)
+        {
+            bool r1, r2, r3, d1, d2, d3;
+            try
+            {
+                r1 = (this.Memory.Grid[node.YNode + 1, node.XNode + 2].Status == 1);
+                r2 = (this.Memory.Grid[node.YNode, node.XNode +2].Status == 1);
+                r3 = (this.Memory.Grid[node.YNode -1, node.XNode +2].Status == 1);
+
+            }
+            catch (Exception)
+            {
+                r1 = true;
+                r2 = true;
+                r3 = true;
+            }
+            try
+            {
+                d1 = (this.Memory.Grid[node.YNode - 2, node.XNode + 1].Status == 1);
+                d2 = (this.Memory.Grid[node.YNode - 2, node.XNode].Status == 1);
+                d3 = (this.Memory.Grid[node.YNode - 2, node.XNode - 1].Status == 1);
+            }
+            catch (Exception)
+            {
+                d1 = true;
+                d2 = true;
+                d3 = true;
+            }
+            
+            if (r1 && r2 && r3 || d1 && d2 && d3)
+            {
+                return true;
+            }
+            return false;
+        }
         private int computeH(Node node)
         {
             return 0;
