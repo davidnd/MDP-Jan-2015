@@ -1,46 +1,52 @@
-# To change this license header, choose License Headers in Project Properties.
-# To change this template file, choose Tools | Templates
-# and open the template in the editor.
+import thread
+import time
 import Queue
-from Map import *
-from Robot import *
-from temp import *
+import os
+import sys
 
-'''
-robot = Robot(1,1,1,'U')
-map=Map(15,20)
-map.grid = [[0,0,0,0,0,0,0,0,0,0,1,1,0,0,0],
-		[0,0,0,0,0,0,0,0,0,0,1,1,0,0,0],
-		[0,0,0,0,0,0,0,0,0,0,1,1,0,0,0],
-		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-		[0,0,0,0,1,0,0,0,0,0,0,0,0,0,0],
-		[0,0,0,1,1,1,0,0,0,0,0,0,0,0,0],
-		[0,0,0,0,0,0,0,0,0,0,0,0,1,1,1],
-		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-		[0,0,1,0,0,0,0,0,0,0,0,0,0,0,0],
-		[0,0,1,0,0,0,0,0,0,0,0,1,0,0,0],
-		[0,0,1,1,1,1,0,0,0,0,0,1,0,0,0],
-		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-		[0,0,0,0,0,0,0,0,0,1,0,0,0,0,0],
-		[0,0,0,0,0,0,0,0,0,1,0,0,0,0,0],
-		[0,0,0,1,0,0,0,0,0,0,0,0,0,0,1],
-		[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0],
-		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-		[0,0,0,0,0,0,1,1,1,0,0,0,0,0,0],
-		[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0]]
-for i in range(20):
-	for j in range(15):
-		if(map.grid[i][j] == 0):
-			map.grid[i][j] = 2
-robot.Memory = map
-robot.fastestPathCompute()
-print robot.fastestRun('A')
-print robot.fastestRun('A')
-print robot.fastestRun('A')
-print robot.fastestRun('A')
-print robot.fastestRun('A')
-'''
-a = temp()
-a.fastestPathDecoder()
+#from interface import *
+from arduino_interface import *
 
+class Main:
+        def __init__(self):
+
+                #Create interface objects
+                self.robot = arduino_interface()
+
+        def connectArduino(self):    
+                #connect arduino
+                connected = 0
+                connected = self.robot.connect()
+                while connected == 0:
+                        time.sleep(1)
+                        connected = self.robot.connect()
+                        
+
+        #sending data to arduino from arduino msg queue.
+        def robotWrite(self):
+           self.robot.flush()
+           while 1:
+                   x = (raw_input())
+                   self.robot.writetoSR(x + "\n")
+                 
+        #reading data from arduino
+        def robotRead(self):
+           while 1:
+                   val = self.robot.readfromSR()
+                   if val is not None:
+                           time.sleep(0)
+                 
+        #starting all thread.
+        def startThread(self):
+                try:
+                        thread.start_new_thread( self.robotWrite,())
+                        thread.start_new_thread( self.robotRead,())
+                except Exception, e:
+                        print "Unable to start thread!"
+                        print "Error: %s" %str(e) 
+                while 1:
+                   pass
+           
+test = Main()
+test.connectArduino()
+test.startThread()
